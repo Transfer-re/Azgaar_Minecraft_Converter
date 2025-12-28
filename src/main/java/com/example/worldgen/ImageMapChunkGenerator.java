@@ -166,6 +166,49 @@ public final class ImageMapChunkGenerator extends ChunkGenerator {
                     continue;
                 }
 
+                // Height-driven water/land decision: if the sampled FMG
+                // height (which is terrain for land or seabed for water)
+                // is strictly below sea level, we treat this whole column
+                // as water with a floor at 'target' and a flat surface at
+                // Y=seaLevel, regardless of biome. This prevents hard
+                // edges where biomes change but the heightfield says
+                // "ocean".
+                if (target < seaLevel) {
+                    int floorY = target;
+
+                    // Clamp the floor to be safely below sea level.
+                    if (floorY >= seaLevel) {
+                        floorY = seaLevel - 1;
+                    }
+                    if (floorY <= minY + 1) {
+                        continue;
+                    }
+
+                    // Seabed block (keep it simple: sand).
+                    mutable.set(worldX, floorY, worldZ);
+                    chunk.setBlockState(mutable, Blocks.SAND.getDefaultState(), false);
+
+                    // Optional few layers of sandstone underneath for
+                    // nicer ocean walls.
+                    for (int y = floorY - 1; y >= floorY - 3 && y > minY; y--) {
+                        mutable.set(worldX, y, worldZ);
+                        if (!chunk.getBlockState(mutable).isAir()) {
+                            chunk.setBlockState(mutable, Blocks.SANDSTONE.getDefaultState(), false);
+                        }
+                    }
+
+                    // Fill water up to exactly sea level; don't care about
+                    // existing biome here, we want a flat ocean surface.
+                    for (int y = floorY + 1; y <= seaLevel && y < maxY; y++) {
+                        mutable.set(worldX, y, worldZ);
+                        chunk.setBlockState(mutable, Blocks.WATER.getDefaultState(), false);
+                    }
+                    continue;
+                }
+
+                // From here on, this is land (target >= seaLevel). We do
+                // not place any water or touch sea-level blocks.
+
                 // Biome-aware surface placement similar to vanilla palettes.
                 int biomeX = worldX >> 2;
                 int biomeZ = worldZ >> 2;
@@ -176,29 +219,6 @@ public final class ImageMapChunkGenerator extends ChunkGenerator {
                 boolean isSnowy = isBiome(biome, BiomeKeys.SNOWY_PLAINS) || isBiome(biome, BiomeKeys.SNOWY_TAIGA)
                         || isBiome(biome, BiomeKeys.SNOWY_SLOPES) || isBiome(biome, BiomeKeys.FROZEN_PEAKS);
                 boolean isTaiga = isBiome(biome, BiomeKeys.TAIGA);
-                boolean isOcean = isBiome(biome, BiomeKeys.OCEAN) || isBiome(biome, BiomeKeys.DEEP_OCEAN);
-
-                // Oceans: sand floor and water up to sea level.
-                if (target < seaLevel - 2 && isOcean) {
-                    // Ocean floor
-                    mutable.set(worldX, target, worldZ);
-                    chunk.setBlockState(mutable, Blocks.SAND.getDefaultState(), false);
-
-                    // A few layers of sandstone under the floor
-                    for (int y = target - 1; y >= target - 3 && y > minY; y--) {
-                        mutable.set(worldX, y, worldZ);
-                        if (!chunk.getBlockState(mutable).isAir()) {
-                            chunk.setBlockState(mutable, Blocks.SANDSTONE.getDefaultState(), false);
-                        }
-                    }
-
-                    // Water column
-                    for (int y = target + 1; y <= seaLevel && y < maxY; y++) {
-                        mutable.set(worldX, y, worldZ);
-                        chunk.setBlockState(mutable, Blocks.WATER.getDefaultState(), false);
-                    }
-                    continue;
-                }
 
                 // Land surface palettes.
                 mutable.set(worldX, target, worldZ);

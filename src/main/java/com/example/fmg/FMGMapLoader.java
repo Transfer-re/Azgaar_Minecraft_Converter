@@ -47,6 +47,10 @@ public class FMGMapLoader {
                     mapData.setCells(parseCells(pack.getAsJsonArray("cells")));
                 }
 
+                if (pack.has("vertices")) {
+                    mapData.setVertices(parseVertices(pack.getAsJsonArray("vertices")));
+                }
+
                 if (pack.has("burgs")) {
                     mapData.setBurgs(parseBurgs(pack.getAsJsonArray("burgs")));
                 }
@@ -113,6 +117,24 @@ public class FMGMapLoader {
                 p[1] = pArray.get(1).getAsDouble();
                 cell.setP(p);
             }
+
+            if (cellObj.has("v")) {
+                JsonArray vArray = cellObj.getAsJsonArray("v");
+                int[] v = new int[vArray.size()];
+                for (int idx = 0; idx < vArray.size(); idx++) {
+                    v[idx] = vArray.get(idx).getAsInt();
+                }
+                cell.setV(v);
+            }
+
+            if (cellObj.has("c")) {
+                JsonArray cArray = cellObj.getAsJsonArray("c");
+                int[] c = new int[cArray.size()];
+                for (int idx = 0; idx < cArray.size(); idx++) {
+                    c[idx] = cArray.get(idx).getAsInt();
+                }
+                cell.setC(c);
+            }
             
             if (cellObj.has("h")) cell.setH(cellObj.get("h").getAsInt());
             if (cellObj.has("biome")) cell.setBiome(cellObj.get("biome").getAsInt());
@@ -136,6 +158,47 @@ public class FMGMapLoader {
         }
         
         return cells;
+    }
+
+    private static List<FMGVertex> parseVertices(JsonArray verticesArray) {
+        List<FMGVertex> vertices = new ArrayList<>();
+
+        for (JsonElement elem : verticesArray) {
+            JsonObject vObj = elem.getAsJsonObject();
+            FMGVertex vertex = new FMGVertex();
+
+            if (vObj.has("i")) vertex.setI(vObj.get("i").getAsInt());
+
+            if (vObj.has("p")) {
+                JsonArray pArray = vObj.getAsJsonArray("p");
+                double[] p = new double[2];
+                p[0] = pArray.get(0).getAsDouble();
+                p[1] = pArray.get(1).getAsDouble();
+                vertex.setP(p);
+            }
+
+            if (vObj.has("c")) {
+                JsonArray cArray = vObj.getAsJsonArray("c");
+                int[] c = new int[cArray.size()];
+                for (int idx = 0; idx < cArray.size(); idx++) {
+                    c[idx] = cArray.get(idx).getAsInt();
+                }
+                vertex.setC(c);
+            }
+
+            if (vObj.has("v")) {
+                JsonArray vArray = vObj.getAsJsonArray("v");
+                int[] v = new int[vArray.size()];
+                for (int idx = 0; idx < vArray.size(); idx++) {
+                    v[idx] = vArray.get(idx).getAsInt();
+                }
+                vertex.setV(v);
+            }
+
+            vertices.add(vertex);
+        }
+
+        return vertices;
     }
     
     private static List<FMGBurg> parseBurgs(JsonArray burgsArray) {

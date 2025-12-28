@@ -9,6 +9,8 @@ import java.util.Map;
 public class FMGCell {
     private int i;           // Cell ID
     private double[] p;      // Position [x, y]
+    private int[] v;         // Vertex indices around the cell (pack.cells.v)
+    private int[] c;         // Neighboring cell indices (pack.cells.c)
     private int h;           // Height/elevation
     private int biome;       // Biome ID
     private int fl;          // Flux (water flow)
@@ -28,6 +30,12 @@ public class FMGCell {
     
     public double getPx() { return p != null && p.length > 0 ? p[0] : 0; }
     public double getPy() { return p != null && p.length > 1 ? p[1] : 0; }
+
+    public int[] getV() { return v; }
+    public void setV(int[] v) { this.v = v; }
+
+    public int[] getC() { return c; }
+    public void setC(int[] c) { this.c = c; }
     
     public int getH() { return h; }
     public void setH(int h) { this.h = h; }

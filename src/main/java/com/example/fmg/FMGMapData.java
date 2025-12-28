@@ -17,18 +17,26 @@ public class FMGMapData {
     private List<FMGBurg> burgs;
     private List<FMGBiome> biomes;
     private List<FMGState> states;
+    private List<FMGVertex> vertices;
     
     // Lookup maps for fast access
     private Map<Integer, FMGCell> cellMap;
     private Map<Integer, FMGBurg> burgMap;
     private Map<Integer, FMGBiome> biomeMap;
     private Map<Integer, FMGState> stateMap;
+    private Map<Integer, FMGVertex> vertexMap;
+
+    // Lazily built FMG-space heightfield (in world Y units), indexed
+    // as [x][y] for 0 <= x < info.width, 0 <= y < info.height.
+    // This is not serialized; it's derived from the FMG cells at runtime.
+    private transient double[][] cachedHeightField;
     
     public FMGMapData() {
         this.cellMap = new HashMap<>();
         this.burgMap = new HashMap<>();
         this.biomeMap = new HashMap<>();
         this.stateMap = new HashMap<>();
+        this.vertexMap = new HashMap<>();
     }
     
     // Getters and setters
@@ -82,12 +90,41 @@ public class FMGMapData {
             }
         }
     }
+
+    public List<FMGVertex> getVertices() { return vertices; }
+    public void setVertices(List<FMGVertex> vertices) {
+        this.vertices = vertices;
+        vertexMap.clear();
+        if (vertices != null) {
+            for (FMGVertex v : vertices) {
+                vertexMap.put(v.getI(), v);
+            }
+        }
+    }
+
+    /**
+     * Returns the cached FMG-space heightfield, if any. May be {@code null}
+     * if it has not been built yet.
+     */
+    public synchronized double[][] getCachedHeightField() {
+        return cachedHeightField;
+    }
+
+    /**
+     * Stores a precomputed FMG-space heightfield. Intended for use by
+     * FMGHeightSampler or other runtime systems that want a 2D heightmap
+     * instead of sampling cell neighbourhoods on every query.
+     */
+    public synchronized void setCachedHeightField(double[][] cachedHeightField) {
+        this.cachedHeightField = cachedHeightField;
+    }
     
     // Lookup methods for fast access
     public FMGCell getCell(int id) { return cellMap.get(id); }
     public FMGBurg getBurg(int id) { return burgMap.get(id); }
     public FMGBiome getBiome(int id) { return biomeMap.get(id); }
     public FMGState getState(int id) { return stateMap.get(id); }
+    public FMGVertex getVertex(int id) { return vertexMap.get(id); }
     
     // Helper to find the nearest cell to a coordinate
     public FMGCell findNearestCell(double x, double y) {
