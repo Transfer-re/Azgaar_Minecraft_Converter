@@ -82,6 +82,11 @@ public final class FMGBiomeMapper {
 
         FMGBiome biomeDef = mapData.getBiome(cell.getBiome());
         if (biomeDef != null) {
+            // Temporary debug to understand why mappings fall back to PLAINS
+            // if (cell.getI() % 1000 == 0) {
+            //     System.out.println("[FMG] Cell " + cell.getI() + " biome id=" + cell.getBiome()
+            //             + " name='" + biomeDef.getName() + "'");
+            // }
             RegistryEntry<Biome> named = mapByName(
                     resolver,
                     biomeDef.getName(),
@@ -173,7 +178,7 @@ public final class FMGBiomeMapper {
         // Core FMG biome categories from the export
         map.put("marine", BiomeKeys.OCEAN);
         map.put("hotdesert", BiomeKeys.DESERT);
-        map.put("colddesert", BiomeKeys.SNOWY_PLAINS);
+        map.put("colddesert", BiomeKeys.SAVANNA);
         map.put("savanna", BiomeKeys.SAVANNA);
         map.put("grassland", BiomeKeys.PLAINS);
         map.put("tropicalseasonalforest", BiomeKeys.JUNGLE);
@@ -208,8 +213,6 @@ public final class FMGBiomeMapper {
                 keys,
                 BiomeKeys.DEEP_OCEAN,
                 BiomeKeys.OCEAN,
-                BiomeKeys.FROZEN_RIVER,
-                BiomeKeys.RIVER,
                 BiomeKeys.BEACH,
                 BiomeKeys.SNOWY_SLOPES,
                 BiomeKeys.STONY_PEAKS,
@@ -227,4 +230,6 @@ public final class FMGBiomeMapper {
         }
         return Collections.unmodifiableSet(keys);
     }
+
+
 }

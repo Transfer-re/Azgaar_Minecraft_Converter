@@ -16,8 +16,13 @@
       "generator": {
         "type": "fantasymapgenerator:image_map",
         "biome_source": {
-          "type": "minecraft:multi_noise",
-          "preset": "minecraft:overworld"
+          "type": "fantasymapgenerator:color_map",
+          "map": {
+            "fmg_export": "run/Boisia Full 2025-12-27-14-08.json",
+            "min_y": -64,
+            "max_y": 256,
+            "sea_level": 63
+          }
         },
         "settings": "minecraft:overworld",
         "map": {

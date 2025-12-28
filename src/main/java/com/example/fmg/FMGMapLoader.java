@@ -32,30 +32,46 @@ public class FMGMapLoader {
         
         try (FileReader reader = new FileReader(jsonFile.toFile())) {
             JsonObject root = gson.fromJson(reader, JsonObject.class);
-            
+
             // Load info
             if (root.has("info")) {
                 mapData.setInfo(parseInfo(root.getAsJsonObject("info")));
             }
-            
-            // Load pack data
+
+            // Load pack data (cells, burgs, states are inside "pack")
+            JsonObject pack = null;
             if (root.has("pack")) {
-                JsonObject pack = root.getAsJsonObject("pack");
-                
+                pack = root.getAsJsonObject("pack");
+
                 if (pack.has("cells")) {
                     mapData.setCells(parseCells(pack.getAsJsonArray("cells")));
                 }
-                
+
                 if (pack.has("burgs")) {
                     mapData.setBurgs(parseBurgs(pack.getAsJsonArray("burgs")));
                 }
-                
-                if (pack.has("biomes")) {
-                    mapData.setBiomes(parseBiomes(pack.getAsJsonArray("biomes")));
-                }
-                
+
                 if (pack.has("states")) {
                     mapData.setStates(parseStates(pack.getAsJsonArray("states")));
+                }
+            }
+
+            // FMG exports can represent biomes either as an array of
+            // objects ("biomes") or as a columnar structure
+            // ("biomesData" with parallel i/name/color arrays).
+            // Some versions place this under "pack", others at the root.
+            JsonObject biomesSource = null;
+            if (pack != null && (pack.has("biomesData") || pack.has("biomes"))) {
+                biomesSource = pack;
+            } else if (root.has("biomesData") || root.has("biomes")) {
+                biomesSource = root;
+            }
+
+            if (biomesSource != null) {
+                if (biomesSource.has("biomesData")) {
+                    mapData.setBiomes(parseBiomesData(biomesSource.getAsJsonObject("biomesData")));
+                } else if (biomesSource.has("biomes")) {
+                    mapData.setBiomes(parseBiomes(biomesSource.getAsJsonArray("biomes")));
                 }
             }
         }
@@ -157,6 +173,53 @@ public class FMGMapLoader {
             biomes.add(biome);
         }
         
+        return biomes;
+    }
+
+    /**
+     * Parse the newer FMG "biomesData" structure:
+     * {
+     *   "i":    [0, 1, 2, ...],
+     *   "name": ["Marine", "Hot desert", ...],
+     *   "color":["#466eab", "#fbe79f", ...]
+     * }
+     */
+    private static List<FMGBiome> parseBiomesData(JsonObject biomesData) {
+        List<FMGBiome> biomes = new ArrayList<>();
+
+        if (biomesData == null) {
+            return biomes;
+        }
+
+        JsonArray ids = biomesData.has("i") ? biomesData.getAsJsonArray("i") : null;
+        JsonArray names = biomesData.has("name") ? biomesData.getAsJsonArray("name") : null;
+        JsonArray colors = biomesData.has("color") ? biomesData.getAsJsonArray("color") : null;
+
+        if (ids == null || names == null) {
+            LOGGER.warn("FMG biomesData is missing 'i' or 'name' arrays");
+            return biomes;
+        }
+
+        int count = ids.size();
+        for (int idx = 0; idx < count; idx++) {
+            FMGBiome biome = new FMGBiome();
+
+            JsonElement idElem = ids.get(idx);
+            if (!idElem.isJsonNull()) {
+                biome.setI(idElem.getAsInt());
+            }
+
+            if (idx < names.size() && !names.get(idx).isJsonNull()) {
+                biome.setName(names.get(idx).getAsString());
+            }
+
+            if (colors != null && idx < colors.size() && !colors.get(idx).isJsonNull()) {
+                biome.setColor(colors.get(idx).getAsString());
+            }
+
+            biomes.add(biome);
+        }
+
         return biomes;
     }
     

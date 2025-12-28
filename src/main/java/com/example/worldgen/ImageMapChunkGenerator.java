@@ -18,6 +18,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.HeightLimitView;
 import net.minecraft.world.Heightmap;
+import net.minecraft.world.biome.Biome;
+import net.minecraft.world.biome.BiomeKeys;
 import net.minecraft.world.biome.source.BiomeAccess;
 import net.minecraft.world.biome.source.BiomeSource;
 import net.minecraft.world.chunk.Chunk;
@@ -82,7 +84,7 @@ public final class ImageMapChunkGenerator extends ChunkGenerator {
 
     @Override
     public void buildSurface(ChunkRegion region, StructureAccessor structures, NoiseConfig noiseConfig, Chunk chunk) {
-        delegate.buildSurface(region, structures, noiseConfig, chunk);
+        // We handle surface placement ourselves in rewriteTerrain, so this is a no-op.
     }
 
     @Override
@@ -135,6 +137,7 @@ public final class ImageMapChunkGenerator extends ChunkGenerator {
         ChunkPos chunkPos = chunk.getPos();
         int minY = getMinimumY();
         int maxY = getWorldHeight();
+        int seaLevel = mapInfo.seaLevel();
         BlockPos.Mutable mutable = new BlockPos.Mutable();
         
         for (int localX = 0; localX < 16; localX++) {
@@ -158,7 +161,88 @@ public final class ImageMapChunkGenerator extends ChunkGenerator {
                         chunk.setBlockState(mutable, Blocks.STONE.getDefaultState(), false);
                     }
                 }
+
+                if (target <= minY + 1 || target >= maxY - 1) {
+                    continue;
+                }
+
+                // Biome-aware surface placement similar to vanilla palettes.
+                int biomeX = worldX >> 2;
+                int biomeZ = worldZ >> 2;
+                int biomeY = target >> 2;
+                RegistryEntry<Biome> biome = chunk.getBiomeForNoiseGen(biomeX, biomeY, biomeZ);
+
+                boolean isDesert = isBiome(biome, BiomeKeys.DESERT) || isBiome(biome, BiomeKeys.BADLANDS);
+                boolean isSnowy = isBiome(biome, BiomeKeys.SNOWY_PLAINS) || isBiome(biome, BiomeKeys.SNOWY_TAIGA)
+                        || isBiome(biome, BiomeKeys.SNOWY_SLOPES) || isBiome(biome, BiomeKeys.FROZEN_PEAKS);
+                boolean isTaiga = isBiome(biome, BiomeKeys.TAIGA);
+                boolean isOcean = isBiome(biome, BiomeKeys.OCEAN) || isBiome(biome, BiomeKeys.DEEP_OCEAN);
+
+                // Oceans: sand floor and water up to sea level.
+                if (target < seaLevel - 2 && isOcean) {
+                    // Ocean floor
+                    mutable.set(worldX, target, worldZ);
+                    chunk.setBlockState(mutable, Blocks.SAND.getDefaultState(), false);
+
+                    // A few layers of sandstone under the floor
+                    for (int y = target - 1; y >= target - 3 && y > minY; y--) {
+                        mutable.set(worldX, y, worldZ);
+                        if (!chunk.getBlockState(mutable).isAir()) {
+                            chunk.setBlockState(mutable, Blocks.SANDSTONE.getDefaultState(), false);
+                        }
+                    }
+
+                    // Water column
+                    for (int y = target + 1; y <= seaLevel && y < maxY; y++) {
+                        mutable.set(worldX, y, worldZ);
+                        chunk.setBlockState(mutable, Blocks.WATER.getDefaultState(), false);
+                    }
+                    continue;
+                }
+
+                // Land surface palettes.
+                mutable.set(worldX, target, worldZ);
+                if (isDesert) {
+                    chunk.setBlockState(mutable, Blocks.SAND.getDefaultState(), false);
+
+                    for (int y = target - 1; y >= target - 3 && y > minY; y--) {
+                        mutable.set(worldX, y, worldZ);
+                        if (!chunk.getBlockState(mutable).isAir()) {
+                            chunk.setBlockState(mutable, Blocks.SANDSTONE.getDefaultState(), false);
+                        }
+                    }
+                } else if (isSnowy) {
+                    // Snowy top with dirt underneath.
+                    chunk.setBlockState(mutable, Blocks.SNOW_BLOCK.getDefaultState(), false);
+                    for (int y = target - 1; y >= target - 3 && y > minY; y--) {
+                        mutable.set(worldX, y, worldZ);
+                        if (!chunk.getBlockState(mutable).isAir()) {
+                            chunk.setBlockState(mutable, Blocks.DIRT.getDefaultState(), false);
+                        }
+                    }
+                } else if (isTaiga) {
+                    chunk.setBlockState(mutable, Blocks.PODZOL.getDefaultState(), false);
+                    for (int y = target - 1; y >= target - 3 && y > minY; y--) {
+                        mutable.set(worldX, y, worldZ);
+                        if (!chunk.getBlockState(mutable).isAir()) {
+                            chunk.setBlockState(mutable, Blocks.DIRT.getDefaultState(), false);
+                        }
+                    }
+                } else {
+                    // Default grass/dirt stack.
+                    chunk.setBlockState(mutable, Blocks.GRASS_BLOCK.getDefaultState(), false);
+                    for (int y = target - 1; y >= target - 3 && y > minY; y--) {
+                        mutable.set(worldX, y, worldZ);
+                        if (!chunk.getBlockState(mutable).isAir()) {
+                            chunk.setBlockState(mutable, Blocks.DIRT.getDefaultState(), false);
+                        }
+                    }
+                }
             }
         }
+    }
+
+    private static boolean isBiome(RegistryEntry<Biome> biome, net.minecraft.registry.RegistryKey<Biome> key) {
+        return biome.getKey().map(k -> k.equals(key)).orElse(false);
     }
 }
