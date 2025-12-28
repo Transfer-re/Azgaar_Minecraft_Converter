@@ -58,6 +58,14 @@ public class FMGMapLoader {
                 if (pack.has("states")) {
                     mapData.setStates(parseStates(pack.getAsJsonArray("states")));
                 }
+
+                if (pack.has("routes")) {
+                    mapData.setRoutes(parseRoutes(pack.getAsJsonArray("routes")));
+                }
+
+                if (pack.has("rivers")) {
+                    mapData.setRivers(parseRivers(pack.getAsJsonArray("rivers")));
+                }
             }
 
             // FMG exports can represent biomes either as an array of
@@ -80,11 +88,13 @@ public class FMGMapLoader {
             }
         }
         
-        LOGGER.info("Map loaded successfully: {} cells, {} burgs, {} biomes, {} states",
+        LOGGER.info("Map loaded successfully: {} cells, {} burgs, {} biomes, {} states, {} routes, {} rivers",
                 mapData.getCells() != null ? mapData.getCells().size() : 0,
                 mapData.getBurgs() != null ? mapData.getBurgs().size() : 0,
                 mapData.getBiomes() != null ? mapData.getBiomes().size() : 0,
-                mapData.getStates() != null ? mapData.getStates().size() : 0);
+            mapData.getStates() != null ? mapData.getStates().size() : 0,
+            mapData.getRoutes() != null ? mapData.getRoutes().size() : 0,
+            mapData.getRivers() != null ? mapData.getRivers().size() : 0);
         
         return mapData;
     }
@@ -215,11 +225,136 @@ public class FMGMapLoader {
             if (burgObj.has("capital")) burg.setCapital(burgObj.get("capital").getAsInt());
             if (burgObj.has("x")) burg.setX(burgObj.get("x").getAsDouble());
             if (burgObj.has("y")) burg.setY(burgObj.get("y").getAsDouble());
+
+            if (burgObj.has("culture")) burg.setCulture(burgObj.get("culture").getAsInt());
+            if (burgObj.has("state")) burg.setState(burgObj.get("state").getAsInt());
+            if (burgObj.has("feature")) burg.setFeature(burgObj.get("feature").getAsInt());
+            if (burgObj.has("type")) burg.setType(burgObj.get("type").getAsString());
+            if (burgObj.has("MFCG")) burg.setMfcg(burgObj.get("MFCG").getAsInt());
+            if (burgObj.has("link")) burg.setLink(burgObj.get("link").getAsString());
+            if (burgObj.has("port")) burg.setPort(burgObj.get("port").getAsInt());
+            if (burgObj.has("citadel")) burg.setCitadel(burgObj.get("citadel").getAsInt());
+            if (burgObj.has("plaza")) burg.setPlaza(burgObj.get("plaza").getAsInt());
+            if (burgObj.has("shanty")) burg.setShanty(burgObj.get("shanty").getAsInt());
+            if (burgObj.has("temple")) burg.setTemple(burgObj.get("temple").getAsInt());
+            if (burgObj.has("walls")) burg.setWalls(burgObj.get("walls").getAsInt());
+            if (burgObj.has("lock")) burg.setLock(burgObj.get("lock").getAsBoolean());
+            if (burgObj.has("removed")) burg.setRemoved(burgObj.get("removed").getAsBoolean());
             
             burgs.add(burg);
         }
         
         return burgs;
+    }
+
+    private static List<FMGRoute> parseRoutes(JsonArray routesArray) {
+        List<FMGRoute> routes = new ArrayList<>();
+
+        for (JsonElement elem : routesArray) {
+            JsonObject routeObj = elem.getAsJsonObject();
+            FMGRoute route = new FMGRoute();
+
+            if (routeObj.has("group")) {
+                String group = routeObj.get("group").getAsString();
+                // Only keep land routes for now
+                if (!"roads".equals(group) && !"trails".equals(group)) {
+                    continue;
+                }
+                route.setGroup(group);
+            } else {
+                // If group is missing, skip as we don't know how to categorize it
+                continue;
+            }
+
+            if (routeObj.has("i")) route.setI(routeObj.get("i").getAsInt());
+            if (routeObj.has("feature")) route.setFeature(routeObj.get("feature").getAsInt());
+            if (routeObj.has("name")) route.setName(routeObj.get("name").getAsString());
+            if (routeObj.has("lock")) route.setLock(routeObj.get("lock").getAsBoolean());
+
+            if (routeObj.has("points")) {
+                JsonArray pts = routeObj.getAsJsonArray("points");
+                List<FMGRoute.FMGRoutePoint> list = new ArrayList<>();
+
+                // FMG spec says points is number[] [x, y, cellId, ...],
+                // but actual exports may use [[x, y, cellId], ...].
+                // Support both representations.
+                if (!pts.isEmpty() && pts.get(0).isJsonArray()) {
+                    // Array of triplets: [[x, y, cellId], ...]
+                    for (JsonElement element : pts) {
+                        JsonArray triple = element.getAsJsonArray();
+                        if (triple.size() >= 3) {
+                            double x = triple.get(0).getAsDouble();
+                            double y = triple.get(1).getAsDouble();
+                            int cellId = triple.get(2).getAsInt();
+                            list.add(new FMGRoute.FMGRoutePoint(x, y, cellId));
+                        }
+                    }
+                } else {
+                    // Flat array: [x, y, cellId, x, y, cellId, ...]
+                    for (int idx = 0; idx + 2 < pts.size(); idx += 3) {
+                        double x = pts.get(idx).getAsDouble();
+                        double y = pts.get(idx + 1).getAsDouble();
+                        int cellId = pts.get(idx + 2).getAsInt();
+                        list.add(new FMGRoute.FMGRoutePoint(x, y, cellId));
+                    }
+                }
+
+                route.setPoints(list);
+            }
+
+            routes.add(route);
+        }
+
+        return routes;
+    }
+
+    private static List<FMGRiver> parseRivers(JsonArray riversArray) {
+        List<FMGRiver> rivers = new ArrayList<>();
+
+        for (JsonElement elem : riversArray) {
+            JsonObject riverObj = elem.getAsJsonObject();
+            FMGRiver river = new FMGRiver();
+
+            if (riverObj.has("i")) river.setI(riverObj.get("i").getAsInt());
+            if (riverObj.has("name")) river.setName(riverObj.get("name").getAsString());
+            if (riverObj.has("type")) river.setType(riverObj.get("type").getAsString());
+            if (riverObj.has("source")) river.setSource(riverObj.get("source").getAsInt());
+            if (riverObj.has("mouth")) river.setMouth(riverObj.get("mouth").getAsInt());
+            if (riverObj.has("parent")) river.setParent(riverObj.get("parent").getAsInt());
+            if (riverObj.has("basin")) river.setBasin(riverObj.get("basin").getAsInt());
+
+            if (riverObj.has("cells")) {
+                JsonArray cellsArr = riverObj.getAsJsonArray("cells");
+                int[] cells = new int[cellsArr.size()];
+                for (int idx = 0; idx < cellsArr.size(); idx++) {
+                    cells[idx] = cellsArr.get(idx).getAsInt();
+                }
+                river.setCells(cells);
+            }
+
+            if (riverObj.has("points")) {
+                JsonArray ptsArr = riverObj.getAsJsonArray("points");
+                List<double[]> pts = new ArrayList<>();
+                for (JsonElement pElem : ptsArr) {
+                    JsonArray pArr = pElem.getAsJsonArray();
+                    if (pArr.size() >= 2) {
+                        double x = pArr.get(0).getAsDouble();
+                        double y = pArr.get(1).getAsDouble();
+                        pts.add(new double[]{x, y});
+                    }
+                }
+                river.setPoints(pts);
+            }
+
+            if (riverObj.has("discharge")) river.setDischarge(riverObj.get("discharge").getAsDouble());
+            if (riverObj.has("length")) river.setLength(riverObj.get("length").getAsDouble());
+            if (riverObj.has("width")) river.setWidth(riverObj.get("width").getAsDouble());
+            if (riverObj.has("sourceWidth")) river.setSourceWidth(riverObj.get("sourceWidth").getAsDouble());
+
+            rivers.add(river);
+        }
+
+        return rivers;
     }
     
     private static List<FMGBiome> parseBiomes(JsonArray biomesArray) {

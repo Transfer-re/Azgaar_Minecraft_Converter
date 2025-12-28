@@ -34,6 +34,11 @@ public final class MapImageData {
         return definition;
     }
 
+    /** Underlying FMG map data backing this image. */
+    public FMGMapData fmgData() {
+        return fmgData;
+    }
+
     public int sampleHeightY(int worldX, int worldZ) {
         int sampled = FMGHeightSampler.sampleHeight(fmgData, worldX, worldZ);
         int min = definition.minY();

@@ -6,6 +6,7 @@ import java.util.concurrent.CompletableFuture;
 import com.example.worldmap.MapInfo;
 import com.example.worldmap.runtime.MapImageCache;
 import com.example.worldmap.runtime.MapImageData;
+import com.example.fmg.FMGRouteSampler;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
@@ -139,22 +140,76 @@ public final class ImageMapChunkGenerator extends ChunkGenerator {
         int maxY = getWorldHeight();
         int seaLevel = mapInfo.seaLevel();
         BlockPos.Mutable mutable = new BlockPos.Mutable();
-        
+
+        // 1) Sample FMG height + route kind for this chunk
+        int[][] heights = new int[16][16];
+        FMGRouteSampler.RouteKind[][] routes = new FMGRouteSampler.RouteKind[16][16];
+
         for (int localX = 0; localX < 16; localX++) {
             for (int localZ = 0; localZ < 16; localZ++) {
                 int worldX = chunkPos.getStartX() + localX;
                 int worldZ = chunkPos.getStartZ() + localZ;
-                int target = data.sampleHeightY(worldX, worldZ);
 
-                // Clear everything above the target height so the vanilla
-                // surface rules can rebuild the top blocks (grass, sand, etc.).
+                int target = data.sampleHeightY(worldX, worldZ);
+                heights[localX][localZ] = target;
+                routes[localX][localZ] = FMGRouteSampler.sampleRoute(data.fmgData(), worldX, worldZ);
+            }
+        }
+
+        // 2) Smooth route heights (only land, only along routes)
+        for (int pass = 0; pass < 2; pass++) {
+            for (int localX = 0; localX < 16; localX++) {
+                for (int localZ = 0; localZ < 16; localZ++) {
+                    if (routes[localX][localZ] == FMGRouteSampler.RouteKind.NONE) continue;
+
+                    int h = heights[localX][localZ];
+                    if (h < seaLevel) continue; // don't touch water columns
+
+                    int minNeighbour = h;
+
+                    // 4‑neighbourhood along the route
+                    if (localX > 0 && routes[localX - 1][localZ] != FMGRouteSampler.RouteKind.NONE) {
+                        int nh = heights[localX - 1][localZ];
+                        if (nh >= seaLevel) minNeighbour = Math.min(minNeighbour, nh);
+                    }
+                    if (localX < 15 && routes[localX + 1][localZ] != FMGRouteSampler.RouteKind.NONE) {
+                        int nh = heights[localX + 1][localZ];
+                        if (nh >= seaLevel) minNeighbour = Math.min(minNeighbour, nh);
+                    }
+                    if (localZ > 0 && routes[localX][localZ - 1] != FMGRouteSampler.RouteKind.NONE) {
+                        int nh = heights[localX][localZ - 1];
+                        if (nh >= seaLevel) minNeighbour = Math.min(minNeighbour, nh);
+                    }
+                    if (localZ < 15 && routes[localX][localZ + 1] != FMGRouteSampler.RouteKind.NONE) {
+                        int nh = heights[localX][localZ + 1];
+                        if (nh >= seaLevel) minNeighbour = Math.min(minNeighbour, nh);
+                    }
+
+                    // If this column sticks up more than 1 block above its
+                    // neighbours on the route, carve it down.
+                    if (h - minNeighbour > 1) {
+                        int newH = minNeighbour + 1;
+                        if (newH < seaLevel) newH = seaLevel;
+                        heights[localX][localZ] = newH;
+                    }
+                }
+            }
+        }
+
+        // 3) Build terrain using adjusted heights
+        for (int localX = 0; localX < 16; localX++) {
+            for (int localZ = 0; localZ < 16; localZ++) {
+                int worldX = chunkPos.getStartX() + localX;
+                int worldZ = chunkPos.getStartZ() + localZ;
+                int target = heights[localX][localZ];
+
+                // Clear everything above the target height
                 for (int y = target + 1; y < maxY; y++) {
                     mutable.set(worldX, y, worldZ);
                     chunk.setBlockState(mutable, Blocks.AIR.getDefaultState(), false);
                 }
 
-                // Ensure there is solid terrain up to our target FMG height,
-                // but do not try to decide the exact surface block here.
+                // Solid terrain up to target
                 for (int y = minY + 1; y <= target && y < maxY; y++) {
                     mutable.set(worldX, y, worldZ);
                     if (chunk.getBlockState(mutable).isAir()) {
@@ -166,17 +221,9 @@ public final class ImageMapChunkGenerator extends ChunkGenerator {
                     continue;
                 }
 
-                // Height-driven water/land decision: if the sampled FMG
-                // height (which is terrain for land or seabed for water)
-                // is strictly below sea level, we treat this whole column
-                // as water with a floor at 'target' and a flat surface at
-                // Y=seaLevel, regardless of biome. This prevents hard
-                // edges where biomes change but the heightfield says
-                // "ocean".
+                // Water columns unchanged, still height‑driven
                 if (target < seaLevel) {
                     int floorY = target;
-
-                    // Clamp the floor to be safely below sea level.
                     if (floorY >= seaLevel) {
                         floorY = seaLevel - 1;
                     }
@@ -184,12 +231,9 @@ public final class ImageMapChunkGenerator extends ChunkGenerator {
                         continue;
                     }
 
-                    // Seabed block (keep it simple: sand).
                     mutable.set(worldX, floorY, worldZ);
                     chunk.setBlockState(mutable, Blocks.SAND.getDefaultState(), false);
 
-                    // Optional few layers of sandstone underneath for
-                    // nicer ocean walls.
                     for (int y = floorY - 1; y >= floorY - 3 && y > minY; y--) {
                         mutable.set(worldX, y, worldZ);
                         if (!chunk.getBlockState(mutable).isAir()) {
@@ -197,8 +241,6 @@ public final class ImageMapChunkGenerator extends ChunkGenerator {
                         }
                     }
 
-                    // Fill water up to exactly sea level; don't care about
-                    // existing biome here, we want a flat ocean surface.
                     for (int y = floorY + 1; y <= seaLevel && y < maxY; y++) {
                         mutable.set(worldX, y, worldZ);
                         chunk.setBlockState(mutable, Blocks.WATER.getDefaultState(), false);
@@ -206,10 +248,7 @@ public final class ImageMapChunkGenerator extends ChunkGenerator {
                     continue;
                 }
 
-                // From here on, this is land (target >= seaLevel). We do
-                // not place any water or touch sea-level blocks.
-
-                // Biome-aware surface placement similar to vanilla palettes.
+                // Land surface (same as before, but using smoothed height)
                 int biomeX = worldX >> 2;
                 int biomeZ = worldZ >> 2;
                 int biomeY = target >> 2;
@@ -220,11 +259,9 @@ public final class ImageMapChunkGenerator extends ChunkGenerator {
                         || isBiome(biome, BiomeKeys.SNOWY_SLOPES) || isBiome(biome, BiomeKeys.FROZEN_PEAKS);
                 boolean isTaiga = isBiome(biome, BiomeKeys.TAIGA);
 
-                // Land surface palettes.
                 mutable.set(worldX, target, worldZ);
                 if (isDesert) {
                     chunk.setBlockState(mutable, Blocks.SAND.getDefaultState(), false);
-
                     for (int y = target - 1; y >= target - 3 && y > minY; y--) {
                         mutable.set(worldX, y, worldZ);
                         if (!chunk.getBlockState(mutable).isAir()) {
@@ -232,7 +269,6 @@ public final class ImageMapChunkGenerator extends ChunkGenerator {
                         }
                     }
                 } else if (isSnowy) {
-                    // Snowy top with dirt underneath.
                     chunk.setBlockState(mutable, Blocks.SNOW_BLOCK.getDefaultState(), false);
                     for (int y = target - 1; y >= target - 3 && y > minY; y--) {
                         mutable.set(worldX, y, worldZ);
@@ -249,7 +285,6 @@ public final class ImageMapChunkGenerator extends ChunkGenerator {
                         }
                     }
                 } else {
-                    // Default grass/dirt stack.
                     chunk.setBlockState(mutable, Blocks.GRASS_BLOCK.getDefaultState(), false);
                     for (int y = target - 1; y >= target - 3 && y > minY; y--) {
                         mutable.set(worldX, y, worldZ);
@@ -258,8 +293,90 @@ public final class ImageMapChunkGenerator extends ChunkGenerator {
                         }
                     }
                 }
+
+                // 4) Overlay route blocks at the smoothed height
+                FMGRouteSampler.RouteKind routeKind = routes[localX][localZ];
+                if (routeKind != FMGRouteSampler.RouteKind.NONE) {
+                    BlockState pathBlock = choosePathBlock(routeKind, isDesert, isSnowy, isTaiga, worldX, worldZ);
+                    if (pathBlock != null) {
+                        mutable.set(worldX, target, worldZ);
+                        chunk.setBlockState(mutable, pathBlock, false);
+                    }
+                }
             }
         }
+    }
+
+    private static BlockState choosePathBlock(
+            FMGRouteSampler.RouteKind kind,
+            boolean isDesert,
+            boolean isSnowy,
+            boolean isTaiga,
+            int worldX,
+            int worldZ
+    ) {
+        // Deterministic pseudo-random based on world coordinates so
+        // routes look varied but stable between runs.
+        long seed = (long) worldX * 341873128712L ^ (long) worldZ * 132897987541L;
+        seed ^= (seed >>> 13);
+        seed *= 0x5DEECE66DL;
+        int r = (int) (seed & 0x7FFFFFFF);
+
+        boolean grassy = !isDesert && !isSnowy;
+
+        if (kind == FMGRouteSampler.RouteKind.TRAIL) {
+            if (isDesert) {
+                // Desert trails: mostly sand with occasional birch planks.
+                int v = r % 4; // 0-3
+                if (v == 2) {
+                    return Blocks.BIRCH_PLANKS.getDefaultState();
+                }
+                return Blocks.SAND.getDefaultState();
+            }
+
+            if (isSnowy) {
+                // Snowy trails: cobblestone and gravel, no snow on top.
+                int v = r % 4;
+                if (v < 2) {
+                    return Blocks.COBBLESTONE.getDefaultState();
+                }
+                return Blocks.GRAVEL.getDefaultState();
+            }
+            return Blocks.DIRT_PATH.getDefaultState();
+        }
+
+        if (kind == FMGRouteSampler.RouteKind.ROAD) {
+            if (isDesert) {
+                // Desert roads: terracotta core with granite variations.
+                int v = r % 8;
+                if (v < 3) {
+                    return Blocks.TERRACOTTA.getDefaultState();
+                } else if (v < 5) {
+                    return Blocks.GRANITE.getDefaultState();
+                } else if (v < 7) {
+                    return Blocks.POLISHED_GRANITE.getDefaultState();
+                }
+                // Occasional sand to help it fade into surroundings.
+                return Blocks.SAND.getDefaultState();
+            }
+
+            if (isSnowy) {
+                // Snowy roads: cobblestone/gravel base with andesite/stone bricks.
+                int v = r % 8;
+                if (v < 2) {
+                    return Blocks.COBBLESTONE.getDefaultState();
+                } else if (v < 4) {
+                    return Blocks.GRAVEL.getDefaultState();
+                } else if (v < 6) {
+                    return Blocks.ANDESITE.getDefaultState();
+                }
+                return Blocks.STONE_BRICKS.getDefaultState();
+            }
+
+            return Blocks.DIRT_PATH.getDefaultState();
+        }
+
+        return null;
     }
 
     private static boolean isBiome(RegistryEntry<Biome> biome, net.minecraft.registry.RegistryKey<Biome> key) {

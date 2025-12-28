@@ -18,6 +18,8 @@ public class FMGMapData {
     private List<FMGBiome> biomes;
     private List<FMGState> states;
     private List<FMGVertex> vertices;
+    private List<FMGRoute> routes;
+    private List<FMGRiver> rivers;
     
     // Lookup maps for fast access
     private Map<Integer, FMGCell> cellMap;
@@ -25,6 +27,8 @@ public class FMGMapData {
     private Map<Integer, FMGBiome> biomeMap;
     private Map<Integer, FMGState> stateMap;
     private Map<Integer, FMGVertex> vertexMap;
+    private Map<Integer, FMGRoute> routeMap;
+    private Map<Integer, FMGRiver> riverMap;
 
     // Lazily built FMG-space heightfield (in world Y units), indexed
     // as [x][y] for 0 <= x < info.width, 0 <= y < info.height.
@@ -37,6 +41,8 @@ public class FMGMapData {
         this.biomeMap = new HashMap<>();
         this.stateMap = new HashMap<>();
         this.vertexMap = new HashMap<>();
+        this.routeMap = new HashMap<>();
+        this.riverMap = new HashMap<>();
     }
     
     // Getters and setters
@@ -102,6 +108,28 @@ public class FMGMapData {
         }
     }
 
+    public List<FMGRoute> getRoutes() { return routes; }
+    public void setRoutes(List<FMGRoute> routes) {
+        this.routes = routes;
+        routeMap.clear();
+        if (routes != null) {
+            for (FMGRoute route : routes) {
+                routeMap.put(route.getI(), route);
+            }
+        }
+    }
+
+    public List<FMGRiver> getRivers() { return rivers; }
+    public void setRivers(List<FMGRiver> rivers) {
+        this.rivers = rivers;
+        riverMap.clear();
+        if (rivers != null) {
+            for (FMGRiver river : rivers) {
+                riverMap.put(river.getI(), river);
+            }
+        }
+    }
+
     /**
      * Returns the cached FMG-space heightfield, if any. May be {@code null}
      * if it has not been built yet.
@@ -125,6 +153,8 @@ public class FMGMapData {
     public FMGBiome getBiome(int id) { return biomeMap.get(id); }
     public FMGState getState(int id) { return stateMap.get(id); }
     public FMGVertex getVertex(int id) { return vertexMap.get(id); }
+    public FMGRoute getRoute(int id) { return routeMap.get(id); }
+    public FMGRiver getRiver(int id) { return riverMap.get(id); }
     
     // Helper to find the nearest cell to a coordinate
     public FMGCell findNearestCell(double x, double y) {
