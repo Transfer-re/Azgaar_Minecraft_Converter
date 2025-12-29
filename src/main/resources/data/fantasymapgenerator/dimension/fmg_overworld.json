@@ -11,7 +11,7 @@
         "sea_level": 63
       }
     },
-    "settings": "minecraft:overworld",
+    "settings": "fantasymapgenerator:fmg_overworld_base",
     "map": {
       "fmg_export": "run/Boisia Full 2025-12-27-14-08.json",
       "min_y": -64,
