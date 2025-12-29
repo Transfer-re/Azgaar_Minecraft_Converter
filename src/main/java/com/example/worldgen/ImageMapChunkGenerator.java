@@ -7,6 +7,7 @@ import com.example.worldmap.MapInfo;
 import com.example.worldmap.runtime.MapImageCache;
 import com.example.worldmap.runtime.MapImageData;
 import com.example.fmg.FMGRouteSampler;
+import com.example.fmg.FMRiverSampler;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
@@ -151,8 +152,19 @@ public final class ImageMapChunkGenerator extends ChunkGenerator {
                 int worldZ = chunkPos.getStartZ() + localZ;
 
                 int target = data.sampleHeightY(worldX, worldZ);
-                heights[localX][localZ] = target;
                 routes[localX][localZ] = FMGRouteSampler.sampleRoute(data.fmgData(), worldX, worldZ);
+
+                // Carve river beds based on FMG river samples. This pulls the
+                // terrain down below sea level in a smooth cross‑section whose
+                // width and depth depend on the river width at this point.
+                FMRiverSampler.RiverQuery rq = FMRiverSampler.query(worldX, worldZ);
+                if (rq.hit) {
+                    double carved = FMRiverSampler.carvedHeight(rq, seaLevel);
+                    int riverBed = (int) Math.floor(carved);
+                    target = Math.min(target, riverBed);
+                }
+
+                heights[localX][localZ] = target;
             }
         }
 

@@ -24,6 +24,33 @@ public class FMGHeightSampler {
 
     private static boolean loggedOnce = false;
 
+    /**
+     * Locate the nearest FMG cell for a world position, using the same
+     * projection that height sampling relies on. Returns {@code null}
+     * when the position is outside the FMG map bounds or map data is
+     * missing.
+     */
+    public static FMGCell findCellAtWorldPos(FMGMapData map, int worldX, int worldZ) {
+        if (map == null || map.getInfo() == null || map.getCells() == null) {
+            return null;
+        }
+
+        double mapW = map.getInfo().getWidth();
+        double mapH = map.getInfo().getHeight();
+
+        double offsetX = -(mapW * SAMPLE_SCALE) / 2.0;
+        double offsetZ = -(mapH * SAMPLE_SCALE) / 2.0;
+
+        double fmgX = (worldX - offsetX) / SAMPLE_SCALE;
+        double fmgY = (worldZ - offsetZ) / SAMPLE_SCALE;
+
+        if (fmgX < 0 || fmgY < 0 || fmgX >= mapW || fmgY >= mapH) {
+            return null;
+        }
+
+        return map.findNearestCell(fmgX, fmgY);
+    }
+
     public static int sampleHeight(FMGMapData map, int worldX, int worldZ) {
 
         if (map == null || map.getInfo() == null) {

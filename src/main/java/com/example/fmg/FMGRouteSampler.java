@@ -1,6 +1,11 @@
 package com.example.fmg;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import com.example.util.CatmullRomSpline;
 
 /**
  * Samples FMG routes (roads and trails) at world coordinates.
@@ -15,6 +20,47 @@ public final class FMGRouteSampler {
         NONE,
         TRAIL,
         ROAD
+    }
+
+    private static final class RouteSample {
+        final double x;
+        final double y;
+
+        RouteSample(double x, double y) {
+            this.x = x;
+            this.y = y;
+        }
+    }
+
+    private static final Map<Integer, List<RouteSample>> SAMPLED_ROUTES = new HashMap<>();
+
+
+    public static void build(FMGMapData map) {
+        SAMPLED_ROUTES.clear();
+
+        if (map == null || map.getRoutes() == null) return;
+
+        for (FMGRoute route : map.getRoutes()) {
+            List<FMGRoute.FMGRoutePoint> pts = route.getPoints();
+            if (pts == null || pts.size() < 2) continue;
+
+            // Convert to Vec2 for spline
+            List<CatmullRomSpline.Vec2> control = new ArrayList<>();
+            for (FMGRoute.FMGRoutePoint p : pts) {
+                control.add(new CatmullRomSpline.Vec2(p.getX(), p.getY()));
+            }
+
+            // Sample spline (FMG-space!)
+            List<CatmullRomSpline.Vec2> sampled =
+                    CatmullRomSpline.sample(control, 0.25); // ~1.5 blocks
+
+            List<RouteSample> samples = new ArrayList<>(sampled.size());
+            for (var v : sampled) {
+                samples.add(new RouteSample(v.x(), v.z()));
+            }
+
+            SAMPLED_ROUTES.put(route.getI(), samples);
+        }
     }
 
     private FMGRouteSampler() {}
@@ -57,12 +103,10 @@ public final class FMGRouteSampler {
                 continue;
             }
 
-            List<FMGRoute.FMGRoutePoint> pts = route.getPoints();
-            if (pts == null || pts.size() < 2) {
-                continue;
-            }
+            List<RouteSample> samples = SAMPLED_ROUTES.get(route.getI());
+            if (samples == null || samples.size() < 2) continue;
 
-            double bestForRoute = distanceToPolyline(fmgX, fmgY, pts);
+            double bestForRoute = distanceToSampledPolyline(fmgX, fmgY, samples);
             if (bestForRoute < 0) continue;
 
             double score = bestForRoute / threshold;
@@ -75,22 +119,29 @@ public final class FMGRouteSampler {
         return bestKind;
     }
 
-    private static double distanceToPolyline(double px, double py, List<FMGRoute.FMGRoutePoint> pts) {
+    private static double distanceToSampledPolyline(
+            double px,
+            double py,
+            List<RouteSample> samples
+    ) {
         double best = Double.POSITIVE_INFINITY;
 
-        for (int i = 0; i < pts.size() - 1; i++) {
-            FMGRoute.FMGRoutePoint a = pts.get(i);
-            FMGRoute.FMGRoutePoint b = pts.get(i + 1);
+        for (int i = 0; i < samples.size() - 1; i++) {
+            RouteSample a = samples.get(i);
+            RouteSample b = samples.get(i + 1);
 
-            double d = distancePointToSegment(px, py, a.getX(), a.getY(), b.getX(), b.getY());
-            if (d < best) {
-                best = d;
-            }
+            double d = distancePointToSegment(
+                    px, py,
+                    a.x, a.y,
+                    b.x, b.y
+            );
+            if (d < best) best = d;
         }
 
         return best == Double.POSITIVE_INFINITY ? -1.0 : best;
     }
 
+    
     private static double distancePointToSegment(
             double px,
             double py,

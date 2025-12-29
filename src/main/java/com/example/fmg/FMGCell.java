@@ -18,6 +18,7 @@ public class FMGCell {
     private Map<String, Integer> routes; // Road connections to other cells
     private int burg;        // City/burg ID (0 if no city)
     private int state;       // State/kingdom ID
+    private int province;    // Province ID
     private double area;     // Cell area
     private double t;        // Temperature
     
@@ -57,6 +58,9 @@ public class FMGCell {
     
     public int getState() { return state; }
     public void setState(int state) { this.state = state; }
+
+    public int getProvince() { return province; }
+    public void setProvince(int province) { this.province = province; }
     
     public double getArea() { return area; }
     public void setArea(double area) { this.area = area; }

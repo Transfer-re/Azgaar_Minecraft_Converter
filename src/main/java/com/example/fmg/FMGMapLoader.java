@@ -66,6 +66,15 @@ public class FMGMapLoader {
                 if (pack.has("rivers")) {
                     mapData.setRivers(parseRivers(pack.getAsJsonArray("rivers")));
                 }
+
+                if (pack.has("provinces")) {
+                    mapData.setProvinces(parseProvinces(pack.getAsJsonArray("provinces")));
+                }
+            }
+
+            // Some exports may place provinces outside of "pack".
+            if (mapData.getProvinces() == null && root.has("provinces")) {
+                mapData.setProvinces(parseProvinces(root.getAsJsonArray("provinces")));
             }
 
             // FMG exports can represent biomes either as an array of
@@ -88,11 +97,12 @@ public class FMGMapLoader {
             }
         }
         
-        LOGGER.info("Map loaded successfully: {} cells, {} burgs, {} biomes, {} states, {} routes, {} rivers",
+        LOGGER.info("Map loaded successfully: {} cells, {} burgs, {} biomes, {} states, {} provinces, {} routes, {} rivers",
                 mapData.getCells() != null ? mapData.getCells().size() : 0,
                 mapData.getBurgs() != null ? mapData.getBurgs().size() : 0,
                 mapData.getBiomes() != null ? mapData.getBiomes().size() : 0,
             mapData.getStates() != null ? mapData.getStates().size() : 0,
+            mapData.getProvinces() != null ? mapData.getProvinces().size() : 0,
             mapData.getRoutes() != null ? mapData.getRoutes().size() : 0,
             mapData.getRivers() != null ? mapData.getRivers().size() : 0);
         
@@ -152,6 +162,7 @@ public class FMGMapLoader {
             if (cellObj.has("r")) cell.setR(cellObj.get("r").getAsInt());
             if (cellObj.has("burg")) cell.setBurg(cellObj.get("burg").getAsInt());
             if (cellObj.has("state")) cell.setState(cellObj.get("state").getAsInt());
+            if (cellObj.has("province")) cell.setProvince(cellObj.get("province").getAsInt());
             if (cellObj.has("area")) cell.setArea(cellObj.get("area").getAsDouble());
             if (cellObj.has("t")) cell.setT(cellObj.get("t").getAsDouble());
             
@@ -421,6 +432,38 @@ public class FMGMapLoader {
         return biomes;
     }
     
+    private static List<FMGProvince> parseProvinces(JsonArray provincesArray) {
+        List<FMGProvince> provinces = new ArrayList<>();
+
+        for (JsonElement elem : provincesArray) {
+            if (!elem.isJsonObject()) {
+                // Some exports keep placeholder zeros in the array; skip them safely.
+                continue;
+            }
+
+            JsonObject provinceObj = elem.getAsJsonObject();
+            FMGProvince province = new FMGProvince();
+
+            if (provinceObj.has("i")) province.setI(provinceObj.get("i").getAsInt());
+            if (provinceObj.has("name")) province.setName(provinceObj.get("name").getAsString());
+            if (provinceObj.has("state")) province.setState(provinceObj.get("state").getAsInt());
+            if (provinceObj.has("color")) province.setColor(provinceObj.get("color").getAsString());
+
+            if (provinceObj.has("cells")) {
+                JsonArray cellsArray = provinceObj.getAsJsonArray("cells");
+                List<Integer> cells = new ArrayList<>(cellsArray.size());
+                for (JsonElement cellElem : cellsArray) {
+                    cells.add(cellElem.getAsInt());
+                }
+                province.setCells(cells);
+            }
+
+            provinces.add(province);
+        }
+
+        return provinces;
+    }
+
     private static List<FMGState> parseStates(JsonArray statesArray) {
         List<FMGState> states = new ArrayList<>();
         
@@ -431,6 +474,7 @@ public class FMGMapLoader {
             if (stateObj.has("i")) state.setI(stateObj.get("i").getAsInt());
             if (stateObj.has("name")) state.setName(stateObj.get("name").getAsString());
             if (stateObj.has("capital")) state.setCapital(stateObj.get("capital").getAsInt());
+            if (stateObj.has("color")) state.setColor(stateObj.get("color").getAsString());
             
             states.add(state);
         }

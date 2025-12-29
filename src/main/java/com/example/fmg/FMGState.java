@@ -7,6 +7,7 @@ public class FMGState {
     private int i;        // State ID
     private String name;  // State name
     private int capital;  // Capital city ID
+    private String color; // Display color (e.g. "#66c2a5")
     
     // Getters and setters
     public int getI() { return i; }
@@ -17,4 +18,7 @@ public class FMGState {
     
     public int getCapital() { return capital; }
     public void setCapital(int capital) { this.capital = capital; }
+
+    public String getColor() { return color; }
+    public void setColor(String color) { this.color = color; }
 }

@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 
 import com.example.command.FMGCommands;
 import com.example.generation.FMGGenerators;
+import com.example.worldmap.runtime.PlayerRegionTracker;
 
 public class FantasyMapGenerator implements ModInitializer {
 	public static final String MOD_ID = "fantasymapgenerator";
@@ -27,6 +28,7 @@ public class FantasyMapGenerator implements ModInitializer {
 		LOGGER.info("Bootstrapping Fantasy Map Generator");
 		FMGGenerators.register();
 		FMGCommands.register();
+		PlayerRegionTracker.register();
 
 	   	LOGGER.info("Registered FMG image map pipeline");
 		

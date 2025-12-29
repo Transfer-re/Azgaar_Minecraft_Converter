@@ -11,6 +11,8 @@ import org.slf4j.LoggerFactory;
 
 import com.example.fmg.FMGMapData;
 import com.example.fmg.FMGMapLoader;
+import com.example.fmg.FMGRouteSampler;
+import com.example.fmg.FMRiverSampler;
 
 import net.fabricmc.loader.api.FabricLoader;
 
@@ -42,7 +44,12 @@ public final class FMGMapDataCache {
             throw new IllegalStateException("Missing FMG export at " + path);
         }
         try {
-            return FMGMapLoader.loadMap(path);
+            FMGMapData data = FMGMapLoader.loadMap(path);
+
+            FMGRouteSampler.build(data);
+            FMRiverSampler.build(data);
+
+            return data;
         } catch (IOException ex) {
             LOGGER.error("Failed to load FMG export {}", path, ex);
             throw new IllegalStateException("Failed to load FMG export at " + path, ex);

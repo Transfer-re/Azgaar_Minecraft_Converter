@@ -20,7 +20,7 @@ public class FMGMapData {
     private List<FMGVertex> vertices;
     private List<FMGRoute> routes;
     private List<FMGRiver> rivers;
-    
+    private List<FMGProvince> provinces;
     // Lookup maps for fast access
     private Map<Integer, FMGCell> cellMap;
     private Map<Integer, FMGBurg> burgMap;
@@ -29,7 +29,8 @@ public class FMGMapData {
     private Map<Integer, FMGVertex> vertexMap;
     private Map<Integer, FMGRoute> routeMap;
     private Map<Integer, FMGRiver> riverMap;
-
+    private Map<Integer, FMGProvince> provinceMap;
+    private Map<Integer, Integer> cellToProvince = new HashMap<>();
     // Lazily built FMG-space heightfield (in world Y units), indexed
     // as [x][y] for 0 <= x < info.width, 0 <= y < info.height.
     // This is not serialized; it's derived from the FMG cells at runtime.
@@ -43,6 +44,7 @@ public class FMGMapData {
         this.vertexMap = new HashMap<>();
         this.routeMap = new HashMap<>();
         this.riverMap = new HashMap<>();
+        this.provinceMap = new HashMap<>();
     }
     
     // Getters and setters
@@ -59,6 +61,8 @@ public class FMGMapData {
                 cellMap.put(cell.getI(), cell);
             }
         }
+
+        rebuildCellProvinceIndex();
     }
     
     public List<FMGBurg> getBurgs() { return burgs; }
@@ -130,6 +134,21 @@ public class FMGMapData {
         }
     }
 
+
+    public List<FMGProvince> getProvinces() { return provinces; }
+    public void setProvinces(List<FMGProvince> provinces) {
+        this.provinces = provinces;
+        provinceMap.clear();
+
+        if (provinces != null) {
+            for (FMGProvince province : provinces) {
+                provinceMap.put(province.getI(), province);
+            }
+        }
+
+        rebuildCellProvinceIndex();
+    }
+
     /**
      * Returns the cached FMG-space heightfield, if any. May be {@code null}
      * if it has not been built yet.
@@ -155,7 +174,16 @@ public class FMGMapData {
     public FMGVertex getVertex(int id) { return vertexMap.get(id); }
     public FMGRoute getRoute(int id) { return routeMap.get(id); }
     public FMGRiver getRiver(int id) { return riverMap.get(id); }
-    
+    public FMGProvince getProvince(int id) { return provinceMap.get(id); }
+
+    /** Province assigned to the given cell, or {@code null} if none. */
+    public Integer getProvinceIdForCell(int cellId) { return cellToProvince.get(cellId); }
+
+    /** Province assigned to the given cell, or {@code null} if none. */
+    public FMGProvince getProvinceForCell(int cellId) {
+        Integer id = cellToProvince.get(cellId);
+        return id != null ? provinceMap.get(id) : null;
+    }
     // Helper to find the nearest cell to a coordinate
     public FMGCell findNearestCell(double x, double y) {
         FMGCell nearest = null;
@@ -230,6 +258,30 @@ public class FMGMapData {
         private FMGCellDistance(FMGCell cell, double distanceSq) {
             this.cell = cell;
             this.distanceSq = distanceSq;
+        }
+    }
+
+    private void rebuildCellProvinceIndex() {
+        cellToProvince.clear();
+
+        if (provinces != null) {
+            for (FMGProvince province : provinces) {
+                if (province == null) continue;
+                if (province.getCells() == null) continue;
+                for (int cellId : province.getCells()) {
+                    cellToProvince.put(cellId, province.getI());
+                }
+            }
+        }
+
+        if (cells != null) {
+            for (FMGCell cell : cells) {
+                if (cell == null) continue;
+                int provinceId = cell.getProvince();
+                if (provinceId >= 0) {
+                    cellToProvince.putIfAbsent(cell.getI(), provinceId);
+                }
+            }
         }
     }
 }
