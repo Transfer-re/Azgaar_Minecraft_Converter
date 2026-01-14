@@ -1,7 +1,6 @@
 package com.example.fmg;
 
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.Locale;
 import java.util.Map;
@@ -12,7 +11,6 @@ import java.util.regex.Pattern;
 import net.minecraft.registry.RegistryEntryLookup;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.BiomeKeys;
 
@@ -23,7 +21,7 @@ import net.minecraft.world.biome.BiomeKeys;
 public final class FMGBiomeMapper {
 
     private static final Pattern NON_WORD = Pattern.compile("[^a-z0-9]");
-    private static final Map<String, RegistryKey<Biome>> NAMED_MAPPINGS = buildMappings();
+    private static final Map<String, RegistryKey<Biome>> NAMED_MAPPINGS = FMGBiomeMappingConfig.loadOrCreateMappings();
     private static final Set<RegistryKey<Biome>> PALETTE_KEYS = buildPaletteKeys();
 
     private FMGBiomeMapper() {}
@@ -171,40 +169,6 @@ public final class FMGBiomeMapper {
                                 .orElseThrow(() ->
                                         new IllegalStateException("Plains biome missing"))
                 );
-    }
-
-    private static Map<String, RegistryKey<Biome>> buildMappings() {
-        Map<String, RegistryKey<Biome>> map = new HashMap<>();
-        // Core FMG biome categories from the export
-        map.put("marine", BiomeKeys.OCEAN);
-        map.put("hotdesert", BiomeKeys.DESERT);
-        map.put("colddesert", BiomeKeys.SAVANNA);
-        map.put("savanna", BiomeKeys.SAVANNA);
-        map.put("grassland", BiomeKeys.PLAINS);
-        map.put("tropicalseasonalforest", BiomeKeys.JUNGLE);
-        map.put("temperatedeciduousforest", BiomeKeys.FOREST);
-        map.put("tropicalrainforest", BiomeKeys.JUNGLE);
-        map.put("temperaterainforest", BiomeKeys.FOREST);
-        map.put("taiga", BiomeKeys.TAIGA);
-        map.put("tundra", BiomeKeys.SNOWY_PLAINS);
-        map.put("glacier", BiomeKeys.SNOWY_SLOPES);
-        map.put("wetland", BiomeKeys.MANGROVE_SWAMP);
-
-        // Generic aliases / fallbacks
-        map.put("plains", BiomeKeys.PLAINS);
-        map.put("desert", BiomeKeys.DESERT);
-        map.put("forest", BiomeKeys.FOREST);
-        map.put("steppe", BiomeKeys.WINDSWEPT_SAVANNA);
-        map.put("swamp", BiomeKeys.SWAMP);
-        map.put("marsh", BiomeKeys.SWAMP);
-        map.put("jungle", BiomeKeys.JUNGLE);
-        map.put("rainforest", BiomeKeys.JUNGLE);
-        map.put("mountain", BiomeKeys.STONY_PEAKS);
-        map.put("highlands", BiomeKeys.WINDSWEPT_HILLS);
-        map.put("mesa", BiomeKeys.BADLANDS);
-        map.put("ocean", BiomeKeys.OCEAN);
-        map.put("coast", BiomeKeys.BEACH);
-        return map;
     }
 
     private static Set<RegistryKey<Biome>> buildPaletteKeys() {

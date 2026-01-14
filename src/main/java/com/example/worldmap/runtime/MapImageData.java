@@ -40,10 +40,13 @@ public final class MapImageData {
     }
 
     public int sampleHeightY(int worldX, int worldZ) {
-        int sampled = FMGHeightSampler.sampleHeight(fmgData, worldX, worldZ);
         int min = definition.minY();
-        int max = definition.maxY();
-        return Math.max(min, Math.min(max, sampled));
+        int maxExclusive = definition.maxY();
+        int seaLevel = definition.seaLevel();
+
+        int sampled = FMGHeightSampler.sampleHeight(fmgData, worldX, worldZ, min, maxExclusive, seaLevel);
+        int maxInclusive = Math.max(min, maxExclusive - 1);
+        return Math.max(min, Math.min(maxInclusive, sampled));
     }
 
     /** Resolve FMG biomes using the provided biome registry lookup. */

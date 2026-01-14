@@ -1,5 +1,5 @@
 {
-  "type": "minecraft:overworld",
+  "type": "fantasymapgenerator:fmg_overworld_tall",
   "generator": {
     "type": "fantasymapgenerator:image_map",
     "biome_source": {
@@ -7,7 +7,7 @@
       "map": {
         "fmg_export": "run/Boisia Full 2025-12-27-14-08.json",
         "min_y": -64,
-        "max_y": 256,
+        "max_y": 400,
         "sea_level": 63
       }
     },
@@ -15,7 +15,7 @@
     "map": {
       "fmg_export": "run/Boisia Full 2025-12-27-14-08.json",
       "min_y": -64,
-      "max_y": 256,
+      "max_y": 400,
       "sea_level": 63
     }
   }

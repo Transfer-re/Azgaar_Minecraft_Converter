@@ -22,17 +22,37 @@ public final class FMGRouteSampler {
         ROAD
     }
 
-    private static final class RouteSample {
-        final double x;
-        final double y;
+    /**
+     * A sampled point on a route spline, in FMG coordinate space.
+     */
+    public static final class RouteSample {
+        private final double x;
+        private final double y;
 
         RouteSample(double x, double y) {
             this.x = x;
             this.y = y;
         }
+
+        public double x() {
+            return x;
+        }
+
+        public double y() {
+            return y;
+        }
     }
 
     private static final Map<Integer, List<RouteSample>> SAMPLED_ROUTES = new HashMap<>();
+
+    /**
+     * Returns the sampled spline points for a route id, in FMG-space.
+     *
+     * <p>Call {@link #build(FMGMapData)} before using this.</p>
+     */
+    public static List<RouteSample> getSampledRoute(int routeId) {
+        return SAMPLED_ROUTES.get(routeId);
+    }
 
 
     public static void build(FMGMapData map) {
@@ -50,9 +70,12 @@ public final class FMGRouteSampler {
                 control.add(new CatmullRomSpline.Vec2(p.getX(), p.getY()));
             }
 
-            // Sample spline (FMG-space!)
-            List<CatmullRomSpline.Vec2> sampled =
-                    CatmullRomSpline.sample(control, 0.25); // ~1.5 blocks
+                // Sample spline (FMG-space!)
+                // FMGHeightSampler.SAMPLE_SCALE is 10.0, so 0.10 FMG-units ~= 1 world block.
+                // Denser sampling makes the 1D slope relaxation behave predictably and avoids
+                // "2 blocks up at once" artifacts when projecting samples back to world-grid.
+                List<CatmullRomSpline.Vec2> sampled =
+                    CatmullRomSpline.sample(control, 0.10);
 
             List<RouteSample> samples = new ArrayList<>(sampled.size());
             for (var v : sampled) {
