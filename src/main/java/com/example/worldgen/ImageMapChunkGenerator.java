@@ -140,7 +140,11 @@ public final class ImageMapChunkGenerator extends ChunkGenerator {
     @Override
     public void carve(ChunkRegion chunkRegion, long seed, NoiseConfig noiseConfig, BiomeAccess biomeAccess,
                       StructureAccessor structureAccessor, Chunk chunk) {
-        // Disable vanilla carving so our projected heightmap stays intact.
+        patchNoiseRouterOnce(noiseConfig);
+        // Delegate to vanilla carving to enable caves.
+        // Our height cap density function keeps the surface locked to the FMG heightmap,
+        // but carving can still cut into that solid volume to form caves.
+        delegate.carve(chunkRegion, seed, noiseConfig, biomeAccess, structureAccessor, chunk);
     }
 
     @Override
