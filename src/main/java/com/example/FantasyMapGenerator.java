@@ -1,18 +1,18 @@
 package com.example;
 
-import net.fabricmc.api.ModInitializer;
-import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
-import net.fabricmc.fabric.api.resource.ResourcePackActivationType;
-import net.fabricmc.loader.api.FabricLoader;
-import net.minecraft.text.Text;
-import net.minecraft.util.Identifier;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.example.command.FMGCommands;
 import com.example.generation.FMGGenerators;
 import com.example.worldmap.runtime.PlayerRegionTracker;
+
+import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
+import net.fabricmc.fabric.api.resource.ResourcePackActivationType;
+import net.fabricmc.loader.api.FabricLoader;
+import net.minecraft.text.Text;
+import net.minecraft.util.Identifier;
 
 public class FantasyMapGenerator implements ModInitializer {
 	public static final String MOD_ID = "fantasymapgenerator";

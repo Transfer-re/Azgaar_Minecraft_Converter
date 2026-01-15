@@ -25,6 +25,8 @@ import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.entry.RegistryElementCodec;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.registry.tag.BiomeTags;
+import net.minecraft.structure.StructureSet;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.ChunkRegion;
@@ -41,6 +43,7 @@ import net.minecraft.world.gen.chunk.ChunkGenerator;
 import net.minecraft.world.gen.chunk.ChunkGeneratorSettings;
 import net.minecraft.world.gen.chunk.NoiseChunkGenerator;
 import net.minecraft.world.gen.chunk.VerticalBlockSample;
+import net.minecraft.world.gen.chunk.placement.StructurePlacementCalculator;
 import net.minecraft.world.gen.densityfunction.DensityFunction;
 import net.minecraft.world.gen.noise.NoiseConfig;
 import net.minecraft.world.gen.noise.NoiseRouter;
@@ -193,6 +196,24 @@ public final class ImageMapChunkGenerator extends ChunkGenerator {
             StructureAccessor structureAccessor, Chunk chunk) {
         patchNoiseRouterOnce(noiseConfig);
         return delegate.populateNoise(blender, noiseConfig, structureAccessor, chunk);
+    }
+
+    @Override
+    public StructurePlacementCalculator createStructurePlacementCalculator(
+            net.minecraft.registry.RegistryWrapper<StructureSet> structureSetRegistry,
+            NoiseConfig noiseConfig,
+            long seed
+    ) {
+        // Disable random village generation for the FMG overworld by removing the
+        // villages structure set from the placement calculator.
+        //
+        // Burg-driven village placement is handled via a custom structure.
+        var villagesKey = net.minecraft.registry.RegistryKey.of(
+                RegistryKeys.STRUCTURE_SET,
+                Identifier.of("minecraft", "villages")
+        );
+        var filtered = FilteringRegistryWrapper.excludingKey(structureSetRegistry, villagesKey);
+        return super.createStructurePlacementCalculator(filtered, noiseConfig, seed);
     }
 
     private void patchNoiseRouterOnce(NoiseConfig noiseConfig) {

@@ -1,0 +1,15 @@
+{
+  "structures": [
+    {
+      "structure": "fantasymapgenerator:burg_village",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "minecraft:random_spread",
+    "salt": 1847310,
+    "spacing": 1,
+    "separation": 0,
+    "spread_type": "linear"
+  }
+}

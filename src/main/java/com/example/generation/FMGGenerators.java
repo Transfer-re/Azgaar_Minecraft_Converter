@@ -2,6 +2,7 @@ package com.example.generation;
 
 import com.example.FantasyMapGenerator;
 import com.example.worldgen.ColorMapBiomeSource;
+import com.example.worldgen.BurgVillageStructure;
 import com.example.worldgen.ImageMapChunkGenerator;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
@@ -26,6 +27,14 @@ public class FMGGenerators {
                 IMAGE_MAP_GENERATOR_ID,
                 ImageMapChunkGenerator.CODEC
         );
+
+        // Register custom structures.
+        BurgVillageStructure.TYPE = Registry.register(
+            Registries.STRUCTURE_TYPE,
+            BurgVillageStructure.ID,
+            () -> BurgVillageStructure.CODEC
+        );
+
         FantasyMapGenerator.LOGGER.info(
             "Registered ColorMapBiomeSource ({}) and image-map ChunkGenerator ({})",
             COLOR_MAP_BIOME_SOURCE_ID,
