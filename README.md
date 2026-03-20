@@ -41,7 +41,7 @@ These are additional map examples (less detailed than the HD overview above), us
 
 ---
 
-I would highly recommend installing william wythers overhauled overworld as well https://modrinth.com/mod/wwoo/as it introduces better biome blending/shading and good looking sub biomes as well, using this generation mod without it makes the biomes look off. Even if you use both the game stays perfectly vanilla block and item wise.
+I would highly recommend installing william wythers overhauled overworld as well https://modrinth.com/mod/wwoo/ as it introduces better biome blending/shading and good looking sub biomes as well, using this generation mod without it makes the biomes look off. Even if you use both the game stays perfectly vanilla block and item wise.
 ## Quickstart: play on your FMG map
 
 ### 1) Export your map from FMG
@@ -58,15 +58,16 @@ After first launch, edit:
 
 - `.minecraft/config/fantasymapgenerator/config.json`
 
-Set `mapJsonPath` to your export. Paths can be **relative to `.minecraft/`** or **absolute**.
+Set `mapJsonPath` to your export.
 
-Example (recommended relative path):
+Example:
 
 ```json
 {
-  "mapJsonPath": "config/fantasymapgenerator/YourMap.json"
+  "mapJsonPath": "C:/Users/ExampleUser/Downloads/YourMap.json"
 }
 ```
+Mind the directino of the slashes, it has to be forward slashes.
 
 Restart Minecraft after changing the file.
 
@@ -77,15 +78,11 @@ Create a new singleplayer world and select the **“Fantasy Map”** world prese
 - The mod ships a built-in datapack/resource pack that adds this preset.
 - Nether and End remain vanilla; only the Overworld is replaced.
 
+
+NOTE: generating can take a while
 ---
 
-## In-game commands
 
-These are mainly for debugging/verification (singleplayer: enable cheats or open LAN with cheats).
-
-- `/fmg info` — lists FMG map definitions and the `fmg_export` path they point at.
-
----
 
 ## Implemented features
 
@@ -94,11 +91,13 @@ Current functionality in this template:
 - **Custom Overworld preset** (“Fantasy Map”) that uses FMG-backed worldgen.
 - **FMG-backed terrain height**: surface elevation is projected from the FMG export instead of vanilla noise.
 - **FMG-backed biome selection**: surface biomes are chosen from FMG map data.
-  - Optional underground delegation exists in the biome source (so caves can still use cave-biome logic).
-- **Burg-based villages**: a custom structure places jigsaw villages at FMG **burg** locations (with a flatness check).
+- **Burg-based villages**: a custom structure places jigsaw villages at FMG **burg** locations (with a flatness check, this does mean some burgs do not spawn).
 - **Region title popups**: when a player crosses into a different **state/province**, the mod shows a title + subtitle.
 - **Configurable map path override** via `config/fantasymapgenerator/config.json`.
 
+Missing functionality:
+- **Rivers** 
+- **1.18 noise caves instead of just spaghetti caves**
 ---
 
 ## Troubleshooting
