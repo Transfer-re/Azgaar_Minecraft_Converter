@@ -52,6 +52,8 @@ Put the exported `.json` file somewhere inside your Minecraft instance folder (r
 
 - `.minecraft/config/fantasymapgenerator/YourMap.json`
 
+
+![export example](images/Screenshot%202026-03-20%20152618.png)
 ### 2) Point the mod to your JSON export
 
 After first launch, edit:
