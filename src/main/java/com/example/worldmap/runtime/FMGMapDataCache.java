@@ -24,6 +24,9 @@ public final class FMGMapDataCache {
     private static final Logger LOGGER = LoggerFactory.getLogger("FMGMapDataCache");
     private static final Map<Path, FMGMapData> CACHE = new ConcurrentHashMap<>();
 
+    // Loaded lazily to avoid touching FabricLoader config dir too early.
+    private static volatile FMGModConfig.Config CONFIG;
+
     private FMGMapDataCache() {
     }
 
@@ -31,12 +34,46 @@ public final class FMGMapDataCache {
         if (rawPath == null || rawPath.isBlank()) {
             throw new IllegalArgumentException("fmg_export must be defined");
         }
-        Path path = resolve(rawPath);
-        return CACHE.computeIfAbsent(path, FMGMapDataCache::read);
+
+        Path defaultPath = resolve(rawPath);
+        Path resolved = resolveConfiguredOverrideOrDefault(defaultPath);
+        return CACHE.computeIfAbsent(resolved, FMGMapDataCache::read);
     }
 
     public static void invalidate() {
         CACHE.clear();
+        CONFIG = null;
+    }
+
+    private static Path resolveConfiguredOverrideOrDefault(Path defaultPath) {
+        FMGModConfig.Config config = getConfig();
+        if (config == null) {
+            return defaultPath;
+        }
+        String override = config.mapJsonPath();
+        if (override == null || override.isBlank()) {
+            return defaultPath;
+        }
+
+        Path overridePath = resolve(override);
+        if (!Files.exists(overridePath)) {
+            LOGGER.warn("Configured mapJsonPath does not exist: {} (falling back to {})", overridePath, defaultPath);
+            return defaultPath;
+        }
+        return overridePath;
+    }
+
+    private static FMGModConfig.Config getConfig() {
+        FMGModConfig.Config local = CONFIG;
+        if (local != null) {
+            return local;
+        }
+        synchronized (FMGMapDataCache.class) {
+            if (CONFIG == null) {
+                CONFIG = FMGModConfig.loadOrCreate();
+            }
+            return CONFIG;
+        }
     }
 
     private static FMGMapData read(Path path) {

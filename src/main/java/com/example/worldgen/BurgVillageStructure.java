@@ -18,7 +18,6 @@ import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.structure.StructureLiquidSettings;
-import net.minecraft.structure.pool.StructurePool;
 import net.minecraft.structure.pool.StructurePoolBasedGenerator;
 import net.minecraft.structure.pool.alias.StructurePoolAliasLookup;
 import net.minecraft.util.Identifier;
@@ -51,6 +50,13 @@ public final class BurgVillageStructure extends Structure {
     );
 
     private static final Map<String, Map<Long, List<BurgPos>>> BURG_POS_CACHE = new HashMap<>();
+
+    // Flatness gate for villages. This prevents villages from generating on steep terrain
+    // now that we no longer pre-flatten around burg sites.
+    private static final int FLATNESS_RADIUS_BLOCKS = 32;
+    private static final int FLATNESS_SAMPLE_STEP_BLOCKS = 8;
+    private static final int FLATNESS_MAX_RELIEF_BLOCKS = 14;
+    private static final double FLATNESS_MAX_MEAN_SLOPE = 0.70; // blocks up per block traveled
 
     private static final class BurgPos {
         final int burgId;
@@ -92,6 +98,10 @@ public final class BurgVillageStructure extends Structure {
         // If multiple burgs are in the same chunk, pick deterministically.
         BurgPos burg = pickDeterministicBurg(burgs, context.random());
 
+        if (!isAreaFlatEnoughForVillage(context, burg.x, burg.z)) {
+            return Optional.empty();
+        }
+
         int y = context.chunkGenerator().getHeight(
                 burg.x,
                 burg.z,
@@ -99,7 +109,13 @@ public final class BurgVillageStructure extends Structure {
                 context.world(),
                 context.noiseConfig()
         );
-        BlockPos start = new BlockPos(burg.x, y, burg.z);
+
+        // ChunkGenerator#getHeight returns the heightmap value (typically the first air block
+        // above the surface). Our terrain cap produces air at y==target, so the top solid block
+        // is usually at y-1.
+        int surfaceY = Math.max(context.world().getBottomY(), y - 1);
+
+        BlockPos start = new BlockPos(burg.x, surfaceY, burg.z);
 
         BurgVillageConfig.Config cfg = BurgVillageConfig.loadOrCreate();
         BurgVillageConfig.VillageType typeCfg = pickVillageType(context, start, cfg, burg.burgId);
@@ -133,12 +149,77 @@ public final class BurgVillageStructure extends Structure {
                 size,
                 start,
                 true,
-                Optional.of(Heightmap.Type.WORLD_SURFACE_WG),
+            // We already computed an explicit Y for the start position. Passing a heightmap here
+            // can cause the jigsaw generator to re-snap or offset the Y again.
+            Optional.empty(),
                 maxDistanceFromCenter,
                 StructurePoolAliasLookup.EMPTY,
                 DimensionPadding.NONE,
                 StructureLiquidSettings.APPLY_WATERLOGGING
         );
+    }
+
+    private static boolean isAreaFlatEnoughForVillage(Context context, int centerX, int centerZ) {
+        // Sample the surface heightmap on a coarse grid in a square around the center.
+        // Metrics:
+        // - relief = maxHeight - minHeight
+        // - meanSlope = mean(|dh| / step) over cardinal neighbor pairs
+
+        final int radius = FLATNESS_RADIUS_BLOCKS;
+        final int step = FLATNESS_SAMPLE_STEP_BLOCKS;
+
+        final int size = (radius * 2 / step) + 1;
+        int[] heights = new int[size * size];
+
+        int min = Integer.MAX_VALUE;
+        int max = Integer.MIN_VALUE;
+
+        for (int ix = 0; ix < size; ix++) {
+            int x = centerX - radius + (ix * step);
+            for (int iz = 0; iz < size; iz++) {
+                int z = centerZ - radius + (iz * step);
+
+                int h = context.chunkGenerator().getHeight(
+                        x,
+                        z,
+                        Heightmap.Type.WORLD_SURFACE_WG,
+                        context.world(),
+                        context.noiseConfig()
+                );
+
+                heights[(ix * size) + iz] = h;
+                if (h < min) min = h;
+                if (h > max) max = h;
+            }
+        }
+
+        int relief = max - min;
+        if (relief > FLATNESS_MAX_RELIEF_BLOCKS) {
+            return false;
+        }
+
+        double slopeSum = 0.0;
+        int slopeCount = 0;
+
+        for (int ix = 0; ix < size; ix++) {
+            for (int iz = 0; iz < size; iz++) {
+                int h = heights[(ix * size) + iz];
+
+                if (ix + 1 < size) {
+                    int hx = heights[((ix + 1) * size) + iz];
+                    slopeSum += Math.abs(hx - h) / (double) step;
+                    slopeCount++;
+                }
+                if (iz + 1 < size) {
+                    int hz = heights[(ix * size) + (iz + 1)];
+                    slopeSum += Math.abs(hz - h) / (double) step;
+                    slopeCount++;
+                }
+            }
+        }
+
+        double meanSlope = slopeCount == 0 ? 0.0 : (slopeSum / slopeCount);
+        return meanSlope <= FLATNESS_MAX_MEAN_SLOPE;
     }
 
     private static BurgPos pickDeterministicBurg(List<BurgPos> burgs, Random random) {

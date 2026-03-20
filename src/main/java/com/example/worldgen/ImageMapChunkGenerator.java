@@ -6,11 +6,13 @@ import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import com.example.fmg.FMGBurg;
+import com.example.fmg.FMGCell;
 import com.example.fmg.FMGHeightSampler;
 import com.example.fmg.FMGMapData;
+import com.example.fmg.FMGProvince;
 import com.example.fmg.FMGRoute;
 import com.example.fmg.FMGRouteSampler;
+import com.example.fmg.FMGState;
 import com.example.fmg.FMRiverSampler;
 import com.example.mixin.NoiseConfigAccessor;
 import com.example.worldmap.MapInfo;
@@ -95,6 +97,9 @@ public final class ImageMapChunkGenerator extends ChunkGenerator {
         NoiseRouter baseRouter = base.noiseRouter();
 
         this.heightCap = new FmgHeightCapDensityFunction(mapInfo, this.columnCache);
+
+
+
         NoiseRouter fixedRouter = new NoiseRouter(
             baseRouter.barrierNoise(),
             baseRouter.fluidLevelFloodednessNoise(),
@@ -255,6 +260,31 @@ public final class ImageMapChunkGenerator extends ChunkGenerator {
         int height = columnCache.get().getHeight(pos.getX(), pos.getZ());
         double cap = heightCap.sample(new DensityFunction.UnblendedNoisePos(pos.getX(), pos.getY(), pos.getZ()));
         text.add("FMG height@XZ: " + height + " cap@pos: " + String.format(java.util.Locale.ROOT, "%.2f", cap));
+
+        MapImageData cached = MapImageCache.get(mapInfo);
+        FMGMapData map = cached.fmgData();
+        FMGCell cell = FMGHeightSampler.findCellAtWorldPos(map, pos.getX(), pos.getZ());
+        if (cell == null) {
+            text.add("FMG region: (unknown)");
+            text.add("FMG province: (unknown)");
+            return;
+        }
+
+        int stateId = cell.getState();
+        Integer provinceId = map.getProvinceIdForCell(cell.getI());
+
+        FMGState state = map.getState(stateId);
+        FMGProvince province = provinceId != null ? map.getProvince(provinceId) : null;
+
+        String stateName = state != null && state.getName() != null && !state.getName().isBlank()
+                ? state.getName()
+                : "Unknown State";
+        String provinceName = province != null && province.getName() != null && !province.getName().isBlank()
+                ? province.getName()
+                : "Unclaimed Province";
+
+        text.add("FMG region: " + stateName);
+        text.add("FMG province: " + provinceName);
     }
 
     private void applyRoutes(Chunk chunk) {
@@ -412,11 +442,8 @@ public final class ImageMapChunkGenerator extends ChunkGenerator {
                 }
             }
 
-            // 1b) Smooth/flatten around burg sites BEFORE route shaping.
-            // Roads/paths are stamped later on top of this baseline.
-            if (hasBurgs) {
-                applyBurgPreSmoothing(baseHeights, startX, startZ, size, seaLevel, map);
-            }
+            // 1b) NOTE: We intentionally do NOT pre-flatten around burg/village sites.
+            // Villages are instead gated by a flatness check at placement time.
 
             // 2) Project FMG route splines into this padded grid and compute nearest
             // route segment + interpolation parameter per cell.
@@ -763,225 +790,6 @@ public final class ImageMapChunkGenerator extends ChunkGenerator {
 
             return out;
         }
-
-        private void applyBurgPreSmoothing(
-                int[] baseHeights,
-                int startX,
-                int startZ,
-                int size,
-                int seaLevel,
-                FMGMapData map
-        ) {
-            // Your requested behavior:
-            // - pick a representative height near the burg center (average of a small neighborhood)
-            // - bias it downward a few blocks (3-4)
-            // - smoothly push terrain in a radius towards that target with a blend ring
-            // - keep slopes gentle so the transition looks natural
-
-            // 2x larger footprint than before.
-            final int coreRadius = 40;
-            final int blendRadius = 64;
-            final int sampleRadius = 3; // neighborhood for average height
-            final int downBias = 4;
-
-            final int maxFill = 10;
-            final int maxCut = 18;
-
-            // Keep grades gentle: adjacent <=1, and over 2 blocks <=1.
-            final int slopePasses = 6;
-
-            final double mapW = map.getInfo().getWidth();
-            final double mapH = map.getInfo().getHeight();
-            final double scale = FMGHeightSampler.SAMPLE_SCALE;
-            final double offsetX = -(mapW * scale) / 2.0;
-            final double offsetZ = -(mapH * scale) / 2.0;
-
-            // Snapshot of the baseline before we touch burgs (used for clamping).
-            final int[] baseline = baseHeights.clone();
-
-            for (FMGBurg burg : map.getBurgs()) {
-                if (burg == null || burg.isRemoved()) {
-                    continue;
-                }
-
-                int centerX = (int) Math.round((burg.getX() * scale) + offsetX);
-                int centerZ = (int) Math.round((burg.getY() * scale) + offsetZ);
-
-                if (centerX < startX - blendRadius || centerX > startX + size - 1 + blendRadius
-                        || centerZ < startZ - blendRadius || centerZ > startZ + size - 1 + blendRadius) {
-                    continue;
-                }
-
-                Integer avg = computeLocalMeanLandHeight(baseHeights, startX, startZ, size, seaLevel, centerX, centerZ, sampleRadius);
-                if (avg == null) {
-                    continue;
-                }
-
-                int targetY = Math.max(seaLevel + 2, avg - downBias);
-
-                // First: direct pull towards targetY with smooth falloff.
-                for (int dx = -blendRadius; dx <= blendRadius; dx++) {
-                    int worldX = centerX + dx;
-                    int lx = worldX - startX;
-                    if (lx <= 0 || lx >= size - 1) continue;
-
-                    for (int dz = -blendRadius; dz <= blendRadius; dz++) {
-                        int worldZ = centerZ + dz;
-                        int lz = worldZ - startZ;
-                        if (lz <= 0 || lz >= size - 1) continue;
-
-                        double dist = Math.sqrt((double) dx * (double) dx + (double) dz * (double) dz);
-                        if (dist > blendRadius) {
-                            continue;
-                        }
-
-                        int i = (lx * size) + lz;
-                        int original = baseHeights[i];
-                        if (original < seaLevel) {
-                            continue;
-                        }
-
-                        double pull = dist <= coreRadius
-                                ? 0.85
-                                : 0.85 * (1.0 - smoothstep(coreRadius, blendRadius, dist));
-
-                        int shaped = (int) Math.round(lerp(original, targetY, pull));
-
-                        int base0 = baseline[i];
-                        if (shaped > base0 + maxFill) {
-                            shaped = base0 + maxFill;
-                        } else if (shaped < base0 - maxCut) {
-                            shaped = base0 - maxCut;
-                        }
-
-                        baseHeights[i] = shaped;
-                    }
-                }
-
-                // Second: a few slope-tightening passes in the region so it blends naturally.
-                for (int pass = 0; pass < slopePasses; pass++) {
-                    boolean any = false;
-
-                    for (int dx = -blendRadius; dx <= blendRadius; dx++) {
-                        int worldX = centerX + dx;
-                        int lx = worldX - startX;
-                        if (lx <= 1 || lx >= size - 2) continue;
-                        for (int dz = -blendRadius; dz <= blendRadius; dz++) {
-                            int worldZ = centerZ + dz;
-                            int lz = worldZ - startZ;
-                            if (lz <= 1 || lz >= size - 2) continue;
-
-                            double dist = Math.sqrt((double) dx * (double) dx + (double) dz * (double) dz);
-                            if (dist > blendRadius) continue;
-
-                            int i = (lx * size) + lz;
-                            int h = baseHeights[i];
-                            if (h < seaLevel) continue;
-
-                            // Adjacent neighbors
-                            any |= clampStepCutPreferred(baseHeights, baseline, i, i - size, 1, maxFill);
-                            any |= clampStepCutPreferred(baseHeights, baseline, i, i + size, 1, maxFill);
-                            any |= clampStepCutPreferred(baseHeights, baseline, i, i - 1, 1, maxFill);
-                            any |= clampStepCutPreferred(baseHeights, baseline, i, i + 1, 1, maxFill);
-
-                            // Two-step neighbors (approx 1 up per 2 blocks)
-                            any |= clampStepCutPreferred(baseHeights, baseline, i, i - size * 2, 1, maxFill);
-                            any |= clampStepCutPreferred(baseHeights, baseline, i, i + size * 2, 1, maxFill);
-                            any |= clampStepCutPreferred(baseHeights, baseline, i, i - 2, 1, maxFill);
-                            any |= clampStepCutPreferred(baseHeights, baseline, i, i + 2, 1, maxFill);
-
-                            // Softly bias back towards target in the core.
-                            if (dist <= coreRadius) {
-                                int hh = baseHeights[i];
-                                int biased = (int) Math.round(lerp(hh, targetY, 0.25));
-                                int base0 = baseline[i];
-                                if (biased > base0 + maxFill) biased = base0 + maxFill;
-                                else if (biased < base0 - maxCut) biased = base0 - maxCut;
-                                if (biased != hh) {
-                                    baseHeights[i] = biased;
-                                    any = true;
-                                }
-                            }
-                        }
-                    }
-
-                    if (!any) {
-                        break;
-                    }
-                }
-            }
-        }
-
-        private static Integer computeLocalMeanLandHeight(
-                int[] heights,
-                int startX,
-                int startZ,
-                int size,
-                int seaLevel,
-                int centerX,
-                int centerZ,
-                int radius
-        ) {
-            long sum = 0;
-            int count = 0;
-
-            for (int dx = -radius; dx <= radius; dx++) {
-                int worldX = centerX + dx;
-                int lx = worldX - startX;
-                if (lx < 0 || lx >= size) continue;
-                for (int dz = -radius; dz <= radius; dz++) {
-                    int worldZ = centerZ + dz;
-                    int lz = worldZ - startZ;
-                    if (lz < 0 || lz >= size) continue;
-                    int h = heights[(lx * size) + lz];
-                    if (h >= seaLevel) {
-                        sum += h;
-                        count++;
-                    }
-                }
-            }
-
-            if (count == 0) {
-                return null;
-            }
-            return (int) Math.round(sum / (double) count);
-        }
-
-        private static boolean clampStepCutPreferred(
-                int[] heights,
-                int[] baseline,
-                int i,
-                int ni,
-                int maxStep,
-                int maxFill
-        ) {
-            if (ni < 0 || ni >= heights.length) {
-                return false;
-            }
-
-            int h = heights[i];
-            int hn = heights[ni];
-            int diff = h - hn;
-            if (diff > maxStep) {
-                heights[i] = hn + maxStep;
-                return true;
-            }
-            if (diff < -maxStep) {
-                // Allow limited fill (relative to baseline), but prefer cut overall.
-                int desired = hn - maxStep;
-                int maxAllowed = baseline[i] + maxFill;
-                if (desired > maxAllowed) {
-                    desired = maxAllowed;
-                }
-                if (desired > heights[i]) {
-                    heights[i] = desired;
-                    return true;
-                }
-            }
-            return false;
-        }
-
-
 
         private static double smoothstep(double edge0, double edge1, double x) {
             if (x <= edge0) return 0.0;

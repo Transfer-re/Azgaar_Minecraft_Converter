@@ -1,0 +1,132 @@
+# Fantasy Map Generator (Fabric)
+
+A fabric mod to generate a Minecraft overworld from a **Fantasy Map Generator (FMG)** JSON export from Azgaars fantasy map generator.
+
+- **Minecraft**: 1.21.4
+- **Mod loader**: Fabric (`fabricloader >= 0.18.4`)
+- **Requires**: Fabric API
+- **Java**: 21+
+
+---
+
+## Gallery
+
+### FMG overview (zoomable)
+
+This is an **HD/partial-load** FMG view so you can zoom in and see the paths + biome layout clearly (a “what this will look like in a full world” preview).
+
+![FMG map overview (zoomable)](images/fmg__map.png)
+
+### In-game screenshots
+
+![In-game screenshot](images/2026-01-15_13.45.00.png)
+![In-game screenshot](images/2026-03-18_13.36.08.png)
+![In-game screenshot](images/2026-03-18_13.43.20.png)
+![In-game screenshot](images/2026-03-19_14.16.48.png)
+![In-game screenshot](images/2026-03-20_12.07.41.png)
+
+### Map examples (less detailed)
+
+These are additional map examples (less detailed than the HD overview above), useful to illustrate different layouts.
+
+![Map example](images/Screenshot%202026-03-19%20125819.png)
+![Map example](images/Screenshot%202026-03-19%20141940.png)
+
+## Install (Singleplayer)
+
+1. Install **Fabric Loader** for Minecraft **1.21.4**.
+2. Download/install **Fabric API**.
+3. Put this mod’s `.jar` in your `.minecraft/mods` folder.
+4. Launch the game once (this creates the config file).
+
+---
+
+## Quickstart: play on your FMG map
+
+### 1) Export your map from FMG
+
+From Fantasy Map Generator, export a **Full JSON** (the same kind of export that contains states/provinces/biomes/burgs).
+
+Put the exported `.json` file somewhere inside your Minecraft instance folder (recommended):
+
+- `.minecraft/config/fantasymapgenerator/YourMap.json`
+
+### 2) Point the mod to your JSON export
+
+After first launch, edit:
+
+- `.minecraft/config/fantasymapgenerator/config.json`
+
+Set `mapJsonPath` to your export. Paths can be **relative to `.minecraft/`** or **absolute**.
+
+Example (recommended relative path):
+
+```json
+{
+  "mapJsonPath": "config/fantasymapgenerator/YourMap.json"
+}
+```
+
+Restart Minecraft after changing the file.
+
+### 3) Create a new world using the preset
+
+Create a new singleplayer world and select the **“Fantasy Map”** world preset.
+
+- The mod ships a built-in datapack/resource pack that adds this preset.
+- Nether and End remain vanilla; only the Overworld is replaced.
+
+---
+
+## In-game commands
+
+These are mainly for debugging/verification (singleplayer: enable cheats or open LAN with cheats).
+
+- `/fmg info` — lists FMG map definitions and the `fmg_export` path they point at.
+
+---
+
+## Implemented features
+
+Current functionality in this template:
+
+- **Custom Overworld preset** (“Fantasy Map”) that uses FMG-backed worldgen.
+- **FMG-backed terrain height**: surface elevation is projected from the FMG export instead of vanilla noise.
+- **FMG-backed biome selection**: surface biomes are chosen from FMG map data.
+  - Optional underground delegation exists in the biome source (so caves can still use cave-biome logic).
+- **Burg-based villages**: a custom structure places jigsaw villages at FMG **burg** locations (with a flatness check).
+- **Region title popups**: when a player crosses into a different **state/province**, the mod shows a title + subtitle.
+- **Configurable map path override** via `config/fantasymapgenerator/config.json`.
+
+---
+
+## Troubleshooting
+
+- **World creation crashes or says it can’t find the FMG export**:
+  - Make sure the file exists at the path in `mapJsonPath`.
+  - If using a relative path, it is resolved relative to the **Minecraft instance directory** (usually `.minecraft/`).
+  - Restart Minecraft after changing the config.
+
+- **No region titles show up**:
+  - Region titles only appear in dimensions using the FMG chunk generator (the “Fantasy Map” preset overworld).
+
+---
+
+## Screenshots / images for this repo
+
+All images used in this README live in:
+
+- `images/`
+
+If you want to add more later, good candidates are:
+
+- World creation screen with the **“Fantasy Map”** preset selected
+- A screenshot of `config/fantasymapgenerator/config.json` showing `mapJsonPath`
+- A short GIF of the **state/province title** popup when crossing borders
+- A village generated at/near an FMG burg location
+
+---
+
+## License
+
+See `LICENSE`.

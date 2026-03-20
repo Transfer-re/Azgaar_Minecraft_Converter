@@ -9,6 +9,11 @@
         "min_y": -64,
         "max_y": 400,
         "sea_level": 63
+      },
+      "underground_y": 39,
+      "underground_source": {
+        "type": "minecraft:multi_noise",
+        "preset": "minecraft:overworld"
       }
     },
     "settings": "fantasymapgenerator:fmg_overworld_base",
