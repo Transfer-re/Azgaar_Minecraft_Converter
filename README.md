@@ -2,7 +2,7 @@
 
 A fabric mod to generate a Minecraft overworld from a **Fantasy Map Generator (FMG)** JSON export from Azgaars fantasy map generator.
 
-- **Minecraft**: 1.21.4
+- **Minecraft**: 1.21.4 (is currently most up to date)
 - **Mod loader**: Fabric (`fabricloader >= 0.18.4`)
 - **Requires**: Fabric API
 - **Java**: 21+
@@ -41,6 +41,7 @@ These are additional map examples (less detailed than the HD overview above), us
 
 ---
 
+I would highly recommend installing william wythers overhauled overworld as well https://modrinth.com/mod/wwoo/as it introduces better biome blending/shading and good looking sub biomes as well, using this generation mod without it makes the biomes look off. Even if you use both the game stays perfectly vanilla block and item wise.
 ## Quickstart: play on your FMG map
 
 ### 1) Export your map from FMG
@@ -110,22 +111,7 @@ Current functionality in this template:
 - **No region titles show up**:
   - Region titles only appear in dimensions using the FMG chunk generator (the “Fantasy Map” preset overworld).
 
----
 
-## Screenshots / images for this repo
-
-All images used in this README live in:
-
-- `images/`
-
-If you want to add more later, good candidates are:
-
-- World creation screen with the **“Fantasy Map”** preset selected
-- A screenshot of `config/fantasymapgenerator/config.json` showing `mapJsonPath`
-- A short GIF of the **state/province title** popup when crossing borders
-- A village generated at/near an FMG burg location
-
----
 
 ## License
 
