@@ -45,8 +45,12 @@ final class FMGBiomeMappingConfig {
 
     private static final String CONFIG_RELATIVE_PATH = "fantasymapgenerator/biome_mappings.json";
 
+    private static final int CURRENT_VERSION = 2;
+
     private FMGBiomeMappingConfig() {
     }
+
+    private record LoadedConfig(int version, Map<String, String> mappings) {}
 
     static Map<String, RegistryKey<Biome>> loadOrCreateMappings() {
         Map<String, String> defaults = defaultMappingsAsString();
@@ -71,14 +75,27 @@ final class FMGBiomeMappingConfig {
         }
 
         try {
-            Map<String, String> loaded = readConfig(configPath);
-            if (loaded.isEmpty()) {
+            LoadedConfig loaded = readConfig(configPath);
+            if (loaded.mappings().isEmpty()) {
                 return toRegistryKeys(defaults);
             }
 
             // Merge loaded on top of defaults so missing keys still exist.
             Map<String, String> merged = new LinkedHashMap<>(defaults);
-            merged.putAll(loaded);
+            merged.putAll(loaded.mappings());
+
+            boolean migrated = false;
+            if (loaded.version() < CURRENT_VERSION) {
+                migrated = applyMigrations(merged, loaded.version());
+            }
+            if (migrated) {
+                try {
+                    writeConfig(configPath, merged);
+                } catch (IOException ex) {
+                    LOGGER.warn("Failed to migrate biome mapping config at {} (continuing with merged mappings)", configPath, ex);
+                }
+            }
+
             return toRegistryKeys(merged);
         } catch (Exception ex) {
             LOGGER.warn("Failed to read biome mapping config at {} (using defaults)", configPath, ex);
@@ -86,14 +103,17 @@ final class FMGBiomeMappingConfig {
         }
     }
 
-    private static Map<String, String> readConfig(Path configPath) throws IOException {
+    private static LoadedConfig readConfig(Path configPath) throws IOException {
         try (Reader reader = Files.newBufferedReader(configPath, StandardCharsets.UTF_8)) {
             JsonElement root = GSON.fromJson(reader, JsonElement.class);
             if (root == null || !root.isJsonObject()) {
-                return Collections.emptyMap();
+                return new LoadedConfig(0, Collections.emptyMap());
             }
 
             JsonObject obj = root.getAsJsonObject();
+            int version = obj.has("version") && obj.get("version").isJsonPrimitive()
+                    ? obj.get("version").getAsInt()
+                    : 0;
             JsonObject mappings = obj.has("mappings") && obj.get("mappings").isJsonObject()
                     ? obj.getAsJsonObject("mappings")
                     : obj;
@@ -103,6 +123,9 @@ final class FMGBiomeMappingConfig {
                 if (entry.getValue() == null || !entry.getValue().isJsonPrimitive()) {
                     continue;
                 }
+                if ("version".equalsIgnoreCase(entry.getKey())) {
+                    continue;
+                }
                 String key = normalize(entry.getKey());
                 String value = entry.getValue().getAsString();
                 if (key.isEmpty() || value == null || value.isBlank()) {
@@ -110,7 +133,7 @@ final class FMGBiomeMappingConfig {
                 }
                 out.put(key, value);
             }
-            return out;
+            return new LoadedConfig(version, out);
         }
     }
 
@@ -118,7 +141,7 @@ final class FMGBiomeMappingConfig {
         Files.createDirectories(configPath.getParent());
 
         JsonObject root = new JsonObject();
-        root.addProperty("version", 1);
+        root.addProperty("version", CURRENT_VERSION);
 
         JsonObject mapObj = new JsonObject();
         for (Map.Entry<String, String> e : mappings.entrySet()) {
@@ -129,6 +152,12 @@ final class FMGBiomeMappingConfig {
         try (Writer writer = Files.newBufferedWriter(configPath, StandardCharsets.UTF_8)) {
             GSON.toJson(root, writer);
         }
+    }
+
+    private static boolean applyMigrations(Map<String, String> mergedMappings, int fromVersion) {
+        // Intentionally no-op at the moment.
+        // If future config migrations are needed, apply them here.
+        return false;
     }
 
     private static Map<String, RegistryKey<Biome>> toRegistryKeys(Map<String, String> mappings) {

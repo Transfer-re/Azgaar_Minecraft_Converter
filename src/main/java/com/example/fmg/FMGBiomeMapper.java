@@ -59,11 +59,12 @@ public final class FMGBiomeMapper {
             return lookup(resolver, BiomeKeys.PLAINS);
         }
 
-        double offsetX = -(mapData.getInfo().getWidth() * FMGHeightSampler.SAMPLE_SCALE) / 2.0;
-        double offsetZ = -(mapData.getInfo().getHeight() * FMGHeightSampler.SAMPLE_SCALE) / 2.0;
+        double scale = FMGHeightSampler.sampleScale();
+        double offsetX = -(mapData.getInfo().getWidth() * scale) / 2.0;
+        double offsetZ = -(mapData.getInfo().getHeight() * scale) / 2.0;
 
-        double fmgX = (worldX - offsetX) / FMGHeightSampler.SAMPLE_SCALE;
-        double fmgY = (worldZ - offsetZ) / FMGHeightSampler.SAMPLE_SCALE;
+        double fmgX = (worldX - offsetX) / scale;
+        double fmgY = (worldZ - offsetZ) / scale;
 
         FMGCell cell = mapData.findNearestCell(fmgX, fmgY);
         return resolve(resolver, mapData, cell);

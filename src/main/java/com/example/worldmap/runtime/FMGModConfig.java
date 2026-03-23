@@ -31,18 +31,22 @@ final class FMGModConfig {
 
     private static final String CONFIG_RELATIVE_PATH = "fantasymapgenerator/config.json";
 
-        /**
-         * Optional override for the FMG export JSON file.
-         *
-         * If empty, the map specified by the dimension's MapInfo ("fmg_export") is used.
-         *
-         * If relative, it's resolved against the Minecraft instance directory.
-         * Examples:
-         * - "Boisia Full 2025-12-26-21-37.json"
-         * - "maps/Boisia Full 2025-12-26-21-37.json"
-         * - "C:/Users/you/Downloads/Boisia.json"
-         */
-        record Config(String mapJsonPath) {}
+    static final double DEFAULT_SAMPLE_SCALE = 12.0;
+
+    /**
+     * Optional override for the FMG export JSON file.
+     *
+     * If empty, the map specified by the dimension's MapInfo ("fmg_export") is used.
+     *
+     * If relative, it's resolved against the Minecraft instance directory.
+     * Examples:
+     * - "Boisia Full 2025-12-26-21-37.json"
+     * - "maps/Boisia Full 2025-12-26-21-37.json"
+     * - "C:/Users/you/Downloads/Boisia.json"
+     *
+     * @param sampleScale FMG-pixels to world-blocks scale. Must be > 0.
+     */
+    record Config(String mapJsonPath, Double sampleScale) {}
 
     static Config loadOrCreate() {
         Config defaults = defaultConfig();
@@ -69,11 +73,31 @@ final class FMGModConfig {
             if (loaded == null) {
                 return defaults;
             }
+
+            boolean changed = false;
+
             String path = loaded.mapJsonPath();
             if (path == null) {
                 path = defaults.mapJsonPath();
+                changed = true;
             }
-            return new Config(path);
+
+            Double sampleScale = loaded.sampleScale();
+            if (sampleScale == null || !Double.isFinite(sampleScale) || sampleScale <= 0.0) {
+                sampleScale = defaults.sampleScale();
+                changed = true;
+            }
+
+            Config sanitized = new Config(path, sampleScale);
+            if (changed) {
+                try {
+                    writeConfig(configPath, sanitized);
+                } catch (IOException ex) {
+                    LOGGER.warn("Failed to update config with defaults at {}", configPath, ex);
+                }
+            }
+
+            return sanitized;
         } catch (Exception ex) {
             LOGGER.warn("Failed to read config (using defaults)", ex);
             return defaults;
@@ -88,6 +112,6 @@ final class FMGModConfig {
     }
 
     private static Config defaultConfig() {
-        return new Config("");
+        return new Config("", DEFAULT_SAMPLE_SCALE);
     }
 }

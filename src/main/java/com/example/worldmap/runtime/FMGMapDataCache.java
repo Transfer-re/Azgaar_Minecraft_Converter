@@ -45,6 +45,25 @@ public final class FMGMapDataCache {
         CONFIG = null;
     }
 
+    /**
+     * FMG-pixels to world-blocks scale factor.
+     *
+     * <p>This value is read from {@code config/fantasymapgenerator/config.json}
+     * as {@code sampleScale}. If missing/invalid, defaults are used.</p>
+     */
+    public static double sampleScale() {
+        FMGModConfig.Config config = getConfig();
+        if (config == null) {
+            return FMGModConfig.DEFAULT_SAMPLE_SCALE;
+        }
+
+        Double s = config.sampleScale();
+        if (s == null || !Double.isFinite(s) || s <= 0.0) {
+            return FMGModConfig.DEFAULT_SAMPLE_SCALE;
+        }
+        return s;
+    }
+
     private static Path resolveConfiguredOverrideOrDefault(Path defaultPath) {
         FMGModConfig.Config config = getConfig();
         if (config == null) {

@@ -71,7 +71,7 @@ public final class FMGRouteSampler {
             }
 
                 // Sample spline (FMG-space!)
-                // FMGHeightSampler.SAMPLE_SCALE is 10.0, so 0.10 FMG-units ~= 1 world block.
+                // This is later projected into world space using FMGHeightSampler.sampleScale().
                 // Denser sampling makes the 1D slope relaxation behave predictably and avoids
                 // "2 blocks up at once" artifacts when projecting samples back to world-grid.
                 List<CatmullRomSpline.Vec2> sampled =
@@ -96,11 +96,12 @@ public final class FMGRouteSampler {
         double mapW = map.getInfo().getWidth();
         double mapH = map.getInfo().getHeight();
 
-        double offsetX = -(mapW * FMGHeightSampler.SAMPLE_SCALE) / 2.0;
-        double offsetZ = -(mapH * FMGHeightSampler.SAMPLE_SCALE) / 2.0;
+        double scale = FMGHeightSampler.sampleScale();
+        double offsetX = -(mapW * scale) / 2.0;
+        double offsetZ = -(mapH * scale) / 2.0;
 
-        double fmgX = (worldX - offsetX) / FMGHeightSampler.SAMPLE_SCALE;
-        double fmgY = (worldZ - offsetZ) / FMGHeightSampler.SAMPLE_SCALE;
+        double fmgX = (worldX - offsetX) / scale;
+        double fmgY = (worldZ - offsetZ) / scale;
 
         if (fmgX < 0 || fmgY < 0 || fmgX >= mapW || fmgY >= mapH) {
             return RouteKind.NONE;

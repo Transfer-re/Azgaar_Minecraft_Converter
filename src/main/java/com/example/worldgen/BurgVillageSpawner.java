@@ -38,6 +38,15 @@ public final class BurgVillageSpawner {
 
     private static final String STATE_KEY = "fantasymapgenerator_burg_villages";
 
+    // Flatness gate for villages. Mirrors the structure-based gate in BurgVillageStructure.
+    // If an area is too steep, we place an outpost instead of a village.
+    private static final int FLATNESS_RADIUS_BLOCKS = 32;
+    private static final int FLATNESS_SAMPLE_STEP_BLOCKS = 8;
+    private static final int FLATNESS_MAX_RELIEF_BLOCKS = 14;
+    private static final double FLATNESS_MAX_MEAN_SLOPE = 0.70; // blocks up per block traveled
+
+    private static final String OUTPOST_STRUCTURE_ID = "minecraft:pillager_outpost";
+
     private static final Map<String, Map<Long, List<BurgPos>>> BURG_POS_CACHE = new HashMap<>();
 
     private static final class BurgPos {
@@ -94,10 +103,23 @@ public final class BurgVillageSpawner {
                 continue;
             }
 
+            // If the terrain is too steep for a village, place an outpost instead.
+            if (!isAreaFlatEnoughForVillage(world, burg.x, burg.z)) {
+                int topY = world.getTopY(Heightmap.Type.WORLD_SURFACE_WG, burg.x, burg.z);
+                BlockPos placePos = new BlockPos(burg.x, topY, burg.z);
+
+                boolean ok = runPlaceStructure(world.getServer(), world, placePos, OUTPOST_STRUCTURE_ID);
+                if (ok) {
+                    state.markSpawned(burg.burgId);
+                    LOGGER.info("Placed outpost ({}) at burg {} @ {},{},{} (village terrain too steep)", OUTPOST_STRUCTURE_ID, burg.burgId, placePos.getX(), placePos.getY(), placePos.getZ());
+                }
+                continue;
+            }
+
             int topY = world.getTopY(Heightmap.Type.WORLD_SURFACE_WG, burg.x, burg.z);
             BlockPos placePos = new BlockPos(burg.x, topY, burg.z);
 
-            String structureId = pickVillageStructureId(world, placePos, config, burg.burgId);
+            String structureId = pickVillageStructureId(world, map, placePos, config, burg.burgId);
             if (structureId == null) {
                 continue;
             }
@@ -106,8 +128,65 @@ public final class BurgVillageSpawner {
             if (ok) {
                 state.markSpawned(burg.burgId);
                 LOGGER.info("Placed village ({}) at burg {} @ {},{},{}", structureId, burg.burgId, placePos.getX(), placePos.getY(), placePos.getZ());
+            } else {
+                boolean outpostOk = runPlaceStructure(world.getServer(), world, placePos, OUTPOST_STRUCTURE_ID);
+                if (outpostOk) {
+                    state.markSpawned(burg.burgId);
+                    LOGGER.info("Placed outpost ({}) at burg {} @ {},{},{} (village placement failed)", OUTPOST_STRUCTURE_ID, burg.burgId, placePos.getX(), placePos.getY(), placePos.getZ());
+                }
             }
         }
+    }
+
+    private static boolean isAreaFlatEnoughForVillage(ServerWorld world, int centerX, int centerZ) {
+        final int radius = FLATNESS_RADIUS_BLOCKS;
+        final int step = FLATNESS_SAMPLE_STEP_BLOCKS;
+
+        final int size = (radius * 2 / step) + 1;
+        int[] heights = new int[size * size];
+
+        int min = Integer.MAX_VALUE;
+        int max = Integer.MIN_VALUE;
+
+        for (int ix = 0; ix < size; ix++) {
+            int x = centerX - radius + (ix * step);
+            for (int iz = 0; iz < size; iz++) {
+                int z = centerZ - radius + (iz * step);
+
+                int h = world.getTopY(Heightmap.Type.WORLD_SURFACE_WG, x, z);
+                heights[(ix * size) + iz] = h;
+                if (h < min) min = h;
+                if (h > max) max = h;
+            }
+        }
+
+        int relief = max - min;
+        if (relief > FLATNESS_MAX_RELIEF_BLOCKS) {
+            return false;
+        }
+
+        double slopeSum = 0.0;
+        int slopeCount = 0;
+
+        for (int ix = 0; ix < size; ix++) {
+            for (int iz = 0; iz < size; iz++) {
+                int h = heights[(ix * size) + iz];
+
+                if (ix + 1 < size) {
+                    int hx = heights[((ix + 1) * size) + iz];
+                    slopeSum += Math.abs(hx - h) / (double) step;
+                    slopeCount++;
+                }
+                if (iz + 1 < size) {
+                    int hz = heights[(ix * size) + (iz + 1)];
+                    slopeSum += Math.abs(hz - h) / (double) step;
+                    slopeCount++;
+                }
+            }
+        }
+
+        double meanSlope = slopeCount == 0 ? 0.0 : (slopeSum / slopeCount);
+        return meanSlope <= FLATNESS_MAX_MEAN_SLOPE;
     }
 
     private static Map<Long, List<BurgPos>> computeBurgChunkMap(FMGMapData map) {
@@ -115,7 +194,7 @@ public final class BurgVillageSpawner {
 
         final double mapW = map.getInfo().getWidth();
         final double mapH = map.getInfo().getHeight();
-        final double scale = FMGHeightSampler.SAMPLE_SCALE;
+        final double scale = FMGHeightSampler.sampleScale();
         final double offsetX = -(mapW * scale) / 2.0;
         final double offsetZ = -(mapH * scale) / 2.0;
 
@@ -142,13 +221,21 @@ public final class BurgVillageSpawner {
         return mgr.getOrCreate(BurgVillageState.TYPE, STATE_KEY);
     }
 
-    private static String pickVillageStructureId(ServerWorld world, BlockPos pos, BurgVillageConfig.Config config, int burgId) {
+    private static String pickVillageStructureId(ServerWorld world, FMGMapData mapData, BlockPos pos, BurgVillageConfig.Config config, int burgId) {
         RegistryEntry<Biome> biomeEntry = world.getBiome(pos);
         Identifier biomeId = world.getRegistryManager().getOrThrow(net.minecraft.registry.RegistryKeys.BIOME)
                 .getId(biomeEntry.value());
 
         String biomeKey = biomeId != null ? biomeId.toString() : "";
-        List<String> types = config.biomeVillageTypes().get(biomeKey);
+
+        List<String> types = null;
+        String fmgKey = FmgBiomeKeySampler.sampleNormalizedKey(mapData, pos.getX(), pos.getZ());
+        if (fmgKey != null && !fmgKey.isBlank()) {
+            types = config.biomeVillageTypes().get("fmg:" + fmgKey);
+        }
+        if (types == null || types.isEmpty()) {
+            types = config.biomeVillageTypes().get(biomeKey);
+        }
         if (types == null || types.isEmpty()) {
             types = config.defaultVillageTypes();
         }

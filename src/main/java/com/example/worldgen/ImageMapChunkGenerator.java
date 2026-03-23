@@ -458,7 +458,7 @@ public final class ImageMapChunkGenerator extends ChunkGenerator {
             if (map != null && map.getInfo() != null && map.getRoutes() != null && !map.getRoutes().isEmpty()) {
                 final double mapW = map.getInfo().getWidth();
                 final double mapH = map.getInfo().getHeight();
-                final double scale = FMGHeightSampler.SAMPLE_SCALE;
+                final double scale = FMGHeightSampler.sampleScale();
                 final double offsetX = -(mapW * scale) / 2.0;
                 final double offsetZ = -(mapH * scale) / 2.0;
 
@@ -588,7 +588,7 @@ public final class ImageMapChunkGenerator extends ChunkGenerator {
             if (!sampleRangeByRoute.isEmpty() && map != null && map.getInfo() != null) {
                 final double mapW = map.getInfo().getWidth();
                 final double mapH = map.getInfo().getHeight();
-                final double scale = FMGHeightSampler.SAMPLE_SCALE;
+                final double scale = FMGHeightSampler.sampleScale();
                 final double offsetX = -(mapW * scale) / 2.0;
                 final double offsetZ = -(mapH * scale) / 2.0;
 

@@ -3,12 +3,29 @@ package com.example.fmg;
 import java.util.List;
 
 import com.example.FantasyMapGenerator;
+import com.example.worldmap.runtime.FMGMapDataCache;
 
 import net.minecraft.util.math.MathHelper;
 
 public class FMGHeightSampler {
 
-    public static final double SAMPLE_SCALE = 12.0;
+    public static final double DEFAULT_SAMPLE_SCALE = 12.0;
+
+    /**
+     * @deprecated Use {@link #sampleScale()} instead (configurable).
+     */
+    @Deprecated
+    public static final double SAMPLE_SCALE = DEFAULT_SAMPLE_SCALE;
+
+    public static double sampleScale() {
+        // Read from global config via FMGMapDataCache (cached).
+        // Falls back to DEFAULT_SAMPLE_SCALE when config is missing/invalid.
+        double s = FMGMapDataCache.sampleScale();
+        if (!Double.isFinite(s) || s <= 0.0) {
+            return DEFAULT_SAMPLE_SCALE;
+        }
+        return s;
+    }
 
     // Defaults (used only when no MapInfo is available)
     private static final int DEFAULT_SEA_LEVEL = 63;
@@ -44,11 +61,12 @@ public class FMGHeightSampler {
         double mapW = map.getInfo().getWidth();
         double mapH = map.getInfo().getHeight();
 
-        double offsetX = -(mapW * SAMPLE_SCALE) / 2.0;
-        double offsetZ = -(mapH * SAMPLE_SCALE) / 2.0;
+        double scale = sampleScale();
+        double offsetX = -(mapW * scale) / 2.0;
+        double offsetZ = -(mapH * scale) / 2.0;
 
-        double fmgX = (worldX - offsetX) / SAMPLE_SCALE;
-        double fmgY = (worldZ - offsetZ) / SAMPLE_SCALE;
+        double fmgX = (worldX - offsetX) / scale;
+        double fmgY = (worldZ - offsetZ) / scale;
 
         if (fmgX < 0 || fmgY < 0 || fmgX >= mapW || fmgY >= mapH) {
             return null;
@@ -95,11 +113,12 @@ public class FMGHeightSampler {
         double mapW = map.getInfo().getWidth();
         double mapH = map.getInfo().getHeight();
 
-        double offsetX = -(mapW * SAMPLE_SCALE) / 2.0;
-        double offsetZ = -(mapH * SAMPLE_SCALE) / 2.0;
+        double scale = sampleScale();
+        double offsetX = -(mapW * scale) / 2.0;
+        double offsetZ = -(mapH * scale) / 2.0;
 
-        double fmgX = (worldX - offsetX) / SAMPLE_SCALE;
-        double fmgY = (worldZ - offsetZ) / SAMPLE_SCALE;
+        double fmgX = (worldX - offsetX) / scale;
+        double fmgY = (worldZ - offsetZ) / scale;
 
         if (!loggedOnce && worldX == 0 && worldZ == 0) {
             FantasyMapGenerator.LOGGER.info(
