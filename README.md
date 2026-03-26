@@ -61,7 +61,7 @@ After first launch, edit:
 - `.minecraft/config/fantasymapgenerator/config.json`
 
 Set `mapJsonPath` to your export.
-
+sampleScale is an adjustable value for the map scale
 Example:
 
 ```json
@@ -90,7 +90,7 @@ NOTE: generating can take a while
 ## Implemented features
 
 Current functionality in this template:
-
+- **togglable borders** typing /fmg borders enables a client side render of the province borders.
 - **Custom Overworld preset** (“Fantasy Map”) that uses FMG-backed worldgen.
 - **FMG-backed terrain height**: surface elevation is projected from the FMG export instead of vanilla noise.
 - **FMG-backed biome selection**: surface biomes are chosen from FMG map data.
