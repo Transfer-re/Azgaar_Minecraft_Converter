@@ -103,25 +103,6 @@ Missing functionality:
 - **1.18 noise caves instead of just spaghetti caves**
 ---
 
-## Switching burg villages to a custom "castle" template
-
-This mod’s burg placement is a jigsaw structure (`fantasymapgenerator:burg_village`) whose *start pool* is picked from:
-
-- `.minecraft/config/fantasymapgenerator/villages.json`
-
-The repo includes a built-in `castle` type that places a **single structure template** (currently a vanilla placeholder: the pillager outpost watchtower) via:
-
-- [src/main/resources/data/fantasymapgenerator/worldgen/template_pool/castle/start_pool.json](src/main/resources/data/fantasymapgenerator/worldgen/template_pool/castle/start_pool.json)
-
-To use it, set (or add) in `villages.json`:
-
-- `defaultVillageTypes`: `["castle"]`
-
-To replace the placeholder with your own castle build:
-
-1. In-game, save your build with a **Structure Block**.
-2. Export it to a datapack/mod resource at `data/fantasymapgenerator/structures/castle/castle_01.nbt`.
-3. Update the pool element’s `location` to `fantasymapgenerator:castle/castle_01`.
 
 
 ## Troubleshooting
