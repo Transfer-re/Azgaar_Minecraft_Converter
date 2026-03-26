@@ -474,6 +474,11 @@ public class FMGMapLoader {
         List<FMGState> states = new ArrayList<>();
         
         for (JsonElement elem : statesArray) {
+            if (!elem.isJsonObject()) {
+                // Some exports keep placeholder zeros (or nulls) in the array; skip them safely.
+                continue;
+            }
+
             JsonObject stateObj = elem.getAsJsonObject();
             FMGState state = new FMGState();
             

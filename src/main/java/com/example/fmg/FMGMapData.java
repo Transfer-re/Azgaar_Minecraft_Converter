@@ -31,6 +31,10 @@ public class FMGMapData {
     private Map<Integer, FMGRiver> riverMap;
     private Map<Integer, FMGProvince> provinceMap;
     private Map<Integer, Integer> cellToProvince = new HashMap<>();
+
+    // Accelerate nearest-cell queries (used by Debug HUD + height sampling).
+    // This is transient runtime state derived from cells.
+    private transient KdNode cellKdRoot;
     // Lazily built FMG-space heightfield (in world Y units), indexed
     // as [x][y] for 0 <= x < info.width, 0 <= y < info.height.
     // This is not serialized; it's derived from the FMG cells at runtime.
@@ -61,6 +65,8 @@ public class FMGMapData {
                 cellMap.put(cell.getI(), cell);
             }
         }
+
+        rebuildCellKdTree();
 
         rebuildCellProvinceIndex();
     }
@@ -186,21 +192,113 @@ public class FMGMapData {
     }
     // Helper to find the nearest cell to a coordinate
     public FMGCell findNearestCell(double x, double y) {
-        FMGCell nearest = null;
-        double minDist = Double.MAX_VALUE;
-        
-        for (FMGCell cell : cells) {
-            double dx = cell.getPx() - x;
-            double dy = cell.getPy() - y;
-            double dist = dx * dx + dy * dy; // Squared distance (faster)
-            
-            if (dist < minDist) {
-                minDist = dist;
-                nearest = cell;
+        if (cells == null || cells.isEmpty()) {
+            return null;
+        }
+
+        KdNode root = cellKdRoot;
+        if (root == null) {
+            // Fallback to brute force (should be rare; tree is rebuilt on setCells).
+            FMGCell nearest = null;
+            double minDist = Double.MAX_VALUE;
+            for (FMGCell cell : cells) {
+                double dx = cell.getPx() - x;
+                double dy = cell.getPy() - y;
+                double dist = dx * dx + dy * dy;
+                if (dist < minDist) {
+                    minDist = dist;
+                    nearest = cell;
+                }
+            }
+            return nearest;
+        }
+
+        Best best = new Best();
+        best.distSq = Double.MAX_VALUE;
+        nearestKd(root, x, y, best);
+        return best.cell;
+    }
+
+    private void rebuildCellKdTree() {
+        if (cells == null || cells.isEmpty()) {
+            cellKdRoot = null;
+            return;
+        }
+
+        // Copy to array list for sorting. Cells may be large; keep references only.
+        List<FMGCell> pts = new ArrayList<>(cells.size());
+        for (FMGCell c : cells) {
+            if (c != null) {
+                pts.add(c);
             }
         }
-        
-        return nearest;
+        cellKdRoot = buildKd(pts, 0);
+    }
+
+    private static KdNode buildKd(List<FMGCell> pts, int depth) {
+        if (pts == null || pts.isEmpty()) {
+            return null;
+        }
+
+        int axis = depth & 1;
+        pts.sort(axis == 0
+                ? Comparator.comparingDouble(FMGCell::getPx)
+                : Comparator.comparingDouble(FMGCell::getPy));
+
+        int mid = pts.size() / 2;
+        FMGCell pivot = pts.get(mid);
+        KdNode node = new KdNode(pivot, axis);
+
+        if (mid > 0) {
+            node.left = buildKd(new ArrayList<>(pts.subList(0, mid)), depth + 1);
+        }
+        if (mid + 1 < pts.size()) {
+            node.right = buildKd(new ArrayList<>(pts.subList(mid + 1, pts.size())), depth + 1);
+        }
+        return node;
+    }
+
+    private static void nearestKd(KdNode node, double x, double y, Best best) {
+        if (node == null) {
+            return;
+        }
+
+        FMGCell c = node.cell;
+        double dx = c.getPx() - x;
+        double dy = c.getPy() - y;
+        double distSq = dx * dx + dy * dy;
+        if (distSq < best.distSq) {
+            best.distSq = distSq;
+            best.cell = c;
+        }
+
+        double diff = node.axis == 0 ? (x - c.getPx()) : (y - c.getPy());
+        KdNode near = diff < 0 ? node.left : node.right;
+        KdNode far = diff < 0 ? node.right : node.left;
+
+        nearestKd(near, x, y, best);
+
+        // Only explore the far side if the splitting plane is within best distance.
+        if (diff * diff < best.distSq) {
+            nearestKd(far, x, y, best);
+        }
+    }
+
+    private static final class Best {
+        private FMGCell cell;
+        private double distSq;
+    }
+
+    private static final class KdNode {
+        private final FMGCell cell;
+        private final int axis;
+        private KdNode left;
+        private KdNode right;
+
+        private KdNode(FMGCell cell, int axis) {
+            this.cell = cell;
+            this.axis = axis;
+        }
     }
 
     /**

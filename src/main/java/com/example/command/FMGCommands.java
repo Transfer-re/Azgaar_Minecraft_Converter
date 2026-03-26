@@ -9,6 +9,9 @@ import net.minecraft.text.Text;
 import com.example.worldmap.FMGMapRegistries;
 import com.example.worldmap.MapInfo;
 
+import com.example.border.BorderMode;
+import com.example.worldmap.runtime.PlayerBorderViewer;
+
 import static net.minecraft.server.command.CommandManager.literal;
 
 /**
@@ -26,7 +29,39 @@ public class FMGCommands {
         dispatcher.register(literal("fmg")
             .then(literal("info")
                 .executes(FMGCommands::showInfo))
+            .then(literal("borders")
+                .executes(ctx -> toggleBorders(ctx, BorderMode.PROVINCE))
+                .then(literal("province").executes(ctx -> toggleBorders(ctx, BorderMode.PROVINCE)))
+                .then(literal("state").executes(ctx -> toggleBorders(ctx, BorderMode.STATE)))
+                .then(literal("off").executes(ctx -> setBorders(ctx, BorderMode.OFF)))
+            )
         );
+    }
+
+    private static int toggleBorders(CommandContext<ServerCommandSource> context, BorderMode mode) {
+        try {
+            var player = context.getSource().getPlayer();
+            BorderMode current = PlayerBorderViewer.getMode(player);
+            BorderMode next = (current == mode) ? BorderMode.OFF : mode;
+            PlayerBorderViewer.setMode(player, next);
+            context.getSource().sendFeedback(() -> Text.literal("Border viewer: " + next.name().toLowerCase()), false);
+            return 1;
+        } catch (Exception e) {
+            context.getSource().sendError(Text.literal("This command can only be used by a player."));
+            return 0;
+        }
+    }
+
+    private static int setBorders(CommandContext<ServerCommandSource> context, BorderMode mode) {
+        try {
+            var player = context.getSource().getPlayer();
+            PlayerBorderViewer.setMode(player, mode);
+            context.getSource().sendFeedback(() -> Text.literal("Border viewer: " + mode.name().toLowerCase()), false);
+            return 1;
+        } catch (Exception e) {
+            context.getSource().sendError(Text.literal("This command can only be used by a player."));
+            return 0;
+        }
     }
     
     private static int showInfo(CommandContext<ServerCommandSource> context) {

@@ -5,9 +5,11 @@ import org.slf4j.LoggerFactory;
 
 import com.example.command.FMGCommands;
 import com.example.generation.FMGGenerators;
+import com.example.border.BorderDataPayload;
 import com.example.worldmap.runtime.PlayerRegionTracker;
 
 import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.fabricmc.fabric.api.resource.ResourcePackActivationType;
 import net.fabricmc.loader.api.FabricLoader;
@@ -25,9 +27,11 @@ public class FantasyMapGenerator implements ModInitializer {
 	@Override
 	public void onInitialize() {
 		LOGGER.info("Bootstrapping Fantasy Map Generator");
+		PayloadTypeRegistry.playS2C().register(BorderDataPayload.ID, BorderDataPayload.CODEC);
 		FMGGenerators.register();
 		FMGCommands.register();
 		PlayerRegionTracker.register();
+		com.example.worldmap.runtime.PlayerBorderViewer.register();
 
 	   	LOGGER.info("Registered FMG image map pipeline");
 		
