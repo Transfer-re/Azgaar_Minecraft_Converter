@@ -31,8 +31,17 @@ public final class PlayerBorderViewer {
     private static final int CHECK_INTERVAL_TICKS = 10;
     private static final int MAX_SEGMENTS = 6000;
 
+    // Border geometry is generated within a radius around the player.
+    // If the player travels far within the same region (province/state), the previously
+    // sent geometry can end up entirely outside the client's view, making it look like
+    // borders "randomly" stopped rendering. Refresh when moving far enough.
+    private static final double RESEND_FRACTION_OF_RADIUS = 0.35;
+    private static final double MIN_RESEND_DISTANCE_BLOCKS = 64.0;
+
     private static final Map<UUID, BorderMode> MODES = new ConcurrentHashMap<>();
     private static final Map<UUID, Integer> LAST_REGION_ID = new ConcurrentHashMap<>();
+    private static final Map<UUID, Long> LAST_CENTER_XZ = new ConcurrentHashMap<>();
+    private static final Map<UUID, Integer> LAST_RADIUS_BLOCKS = new ConcurrentHashMap<>();
 
     private PlayerBorderViewer() {
     }
@@ -51,6 +60,8 @@ public final class PlayerBorderViewer {
             UUID id = handler.player.getUuid();
             MODES.remove(id);
             LAST_REGION_ID.remove(id);
+            LAST_CENTER_XZ.remove(id);
+            LAST_RADIUS_BLOCKS.remove(id);
         });
     }
 
@@ -67,6 +78,8 @@ public final class PlayerBorderViewer {
         if (mode == BorderMode.OFF) {
             MODES.remove(id);
             LAST_REGION_ID.remove(id);
+            LAST_CENTER_XZ.remove(id);
+            LAST_RADIUS_BLOCKS.remove(id);
             sendDisabled(player);
             return;
         }
@@ -74,11 +87,13 @@ public final class PlayerBorderViewer {
         MODES.put(id, mode);
         // Force immediate resend.
         LAST_REGION_ID.remove(id);
+        LAST_CENTER_XZ.remove(id);
+        LAST_RADIUS_BLOCKS.remove(id);
         tickPlayer(player);
     }
 
     private static void tickPlayer(ServerPlayerEntity player) {
-        BorderMode mode = getMode(player);
+        BorderMode mode = Objects.requireNonNullElse(getMode(player), BorderMode.OFF);
         if (mode == BorderMode.OFF) {
             return;
         }
@@ -115,14 +130,22 @@ public final class PlayerBorderViewer {
         }
 
         Integer prev = LAST_REGION_ID.put(player.getUuid(), regionId);
-        if (Objects.equals(prev, regionId)) {
+        int viewDistanceChunks = player.getServerWorld().getServer().getPlayerManager().getViewDistance();
+        int radiusBlocks = (int) Math.round(Math.max(2, viewDistanceChunks) * 16.0);
+        double centerX = player.getX();
+        double centerZ = player.getZ();
+
+        boolean regionChanged = !Objects.equals(prev, regionId);
+        boolean movedFarEnough = shouldResendForMovement(player.getUuid(), centerX, centerZ, radiusBlocks);
+        boolean radiusChanged = shouldResendForRadius(player.getUuid(), radiusBlocks);
+
+        if (!regionChanged && !movedFarEnough && !radiusChanged) {
             return;
         }
 
-        int viewDistanceChunks = player.getServerWorld().getServer().getPlayerManager().getViewDistance();
-        double radiusBlocks = Math.max(2, viewDistanceChunks) * 16.0;
-        double centerX = player.getX();
-        double centerZ = player.getZ();
+        // Record send parameters.
+        LAST_CENTER_XZ.put(player.getUuid(), packBlockXZ(centerX, centerZ));
+        LAST_RADIUS_BLOCKS.put(player.getUuid(), radiusBlocks);
 
         FMGBorderPoints.Result result = switch (mode) {
             case PROVINCE -> FMGBorderPoints.computeProvinceBorderPoints(map, regionId, MAX_SEGMENTS, centerX, centerZ, radiusBlocks);
@@ -131,6 +154,36 @@ public final class PlayerBorderViewer {
         };
 
         sendBorderData(player, mode, regionId, result);
+    }
+
+    private static boolean shouldResendForMovement(UUID playerId, double centerX, double centerZ, int radiusBlocks) {
+        Long packed = LAST_CENTER_XZ.get(playerId);
+        if (packed == null) {
+            return true;
+        }
+        int lastX = (int) (packed >> 32);
+        int lastZ = (int) packed.longValue();
+
+        double dx = centerX - lastX;
+        double dz = centerZ - lastZ;
+        double distSq = dx * dx + dz * dz;
+
+        double threshold = Math.max(MIN_RESEND_DISTANCE_BLOCKS, radiusBlocks * RESEND_FRACTION_OF_RADIUS);
+        return distSq >= threshold * threshold;
+    }
+
+    private static boolean shouldResendForRadius(UUID playerId, int radiusBlocks) {
+        Integer last = LAST_RADIUS_BLOCKS.get(playerId);
+        if (last == null) {
+            return true;
+        }
+        return !Objects.equals(last, radiusBlocks);
+    }
+
+    private static long packBlockXZ(double x, double z) {
+        int ix = (int) Math.floor(x);
+        int iz = (int) Math.floor(z);
+        return ((long) ix << 32) | (iz & 0xFFFFFFFFL);
     }
 
     private static void sendDisabled(ServerPlayerEntity player) {

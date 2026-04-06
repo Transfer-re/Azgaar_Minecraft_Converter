@@ -33,7 +33,7 @@ public final class ClientBorderOverlay {
     private static final double WALL_HEIGHT = 256.0; // Tall enough to cover build height in all versions, including modded ones with higher limits.
     private static final double SURFACE_EPSILON = 0.05;
     private static final double MIN_BORDER_Y = 63.0;
-    private static final int MAX_STEPS_PER_FRAME = 200_000;
+    private static final int MAX_QUADS_PER_FRAME = 200_000;
 
     private ClientBorderOverlay() {
     }
@@ -97,7 +97,7 @@ public final class ClientBorderOverlay {
 
             // Convert each received segment into a block-grid stair-step path (no diagonals),
             // then render each step as a vertical quad.
-            StepBudget budget = new StepBudget(MAX_STEPS_PER_FRAME);
+            StepBudget budget = new StepBudget(MAX_QUADS_PER_FRAME);
             for (int i = 0; i + 1 < count && budget.hasRemaining(); i += 2) {
                 int x0 = (int) Math.floor(localXs[i]);
                 int z0 = (int) Math.floor(localZs[i]);
@@ -109,8 +109,14 @@ public final class ClientBorderOverlay {
                 }
 
                 emitStaircaseSegments(x0, z0, x1, z1, (sx0, sz0, sx1, sz1) -> {
-                    if (!budget.tryConsume(1)) {
-                        return;
+                    if (!budget.hasRemaining()) {
+                        return false;
+                    }
+
+                    // Per-step distance cull: a long segment can intersect the view radius while
+                    // most of its staircase steps are far away. Avoid spending budget/time on those.
+                    if (!segmentInRangeXZ(camPos.x, camPos.z, sx0, sz0, sx1, sz1, viewDistanceSq)) {
+                        return true;
                     }
 
                     // Heightmap sampling around the line so borders hug terrain without diagonal slopes.
@@ -118,9 +124,14 @@ public final class ClientBorderOverlay {
                     int yB = sampleTopYNearLine(client, sx1, sz1, sx0, sz0);
                     double yBottom = Math.max(yA, yB) + SURFACE_EPSILON;
                     if (yBottom < MIN_BORDER_Y) {
-                        return;
+                        return true;
                     }
                     double yTop = yBottom + WALL_HEIGHT;
+
+                    // Budget counts emitted quads (actual drawn geometry), not visited steps.
+                    if (!budget.tryConsume(1)) {
+                        return false;
+                    }
 
                     BufferBuilder builder = builderRef[0];
                     if (builder == null) {
@@ -129,6 +140,7 @@ public final class ClientBorderOverlay {
                     }
 
                     emitVerticalQuad(builder, positionMatrix, sx0, sz0, sx1, sz1, yBottom, yTop, r, g, b, a);
+                    return true;
                 });
             }
 
@@ -156,7 +168,7 @@ public final class ClientBorderOverlay {
 
     @FunctionalInterface
     private interface SegmentEmitter {
-        void emit(int x0, int z0, int x1, int z1);
+        boolean emit(int x0, int z0, int x1, int z1);
     }
 
     private static final class StepBudget {
@@ -223,14 +235,24 @@ public final class ClientBorderOverlay {
 
             if (prevX != nextX && prevZ != nextZ) {
                 if (xMajor) {
-                    out.emit(prevX, prevZ, nextX, prevZ);
-                    out.emit(nextX, prevZ, nextX, nextZ);
+                    if (!out.emit(prevX, prevZ, nextX, prevZ)) {
+                        return;
+                    }
+                    if (!out.emit(nextX, prevZ, nextX, nextZ)) {
+                        return;
+                    }
                 } else {
-                    out.emit(prevX, prevZ, prevX, nextZ);
-                    out.emit(prevX, nextZ, nextX, nextZ);
+                    if (!out.emit(prevX, prevZ, prevX, nextZ)) {
+                        return;
+                    }
+                    if (!out.emit(prevX, nextZ, nextX, nextZ)) {
+                        return;
+                    }
                 }
             } else {
-                out.emit(prevX, prevZ, nextX, nextZ);
+                if (!out.emit(prevX, prevZ, nextX, nextZ)) {
+                    return;
+                }
             }
 
             x = nextX;

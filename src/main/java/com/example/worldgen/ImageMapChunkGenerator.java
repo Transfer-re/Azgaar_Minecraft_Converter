@@ -431,12 +431,12 @@ public final class ImageMapChunkGenerator extends ChunkGenerator {
                     int target = data.sampleHeightY(x, z);
 
                     // River carving from your current generator.
-                    FMRiverSampler.RiverQuery rq = FMRiverSampler.query(x, z);
-                    if (rq.hit) {
-                        double carved = FMRiverSampler.carvedHeight(rq, seaLevel);
-                        int riverBed = (int) Math.floor(carved);
-                        target = Math.min(target, riverBed);
-                    }
+                    // FMRiverSampler.RiverQuery rq = FMRiverSampler.query(x, z);
+                    // if (rq.hit) {
+                    //     double carved = FMRiverSampler.carvedHeight(rq, seaLevel);
+                    //     int riverBed = (int) Math.floor(carved);
+                    //     target = Math.min(target, riverBed);
+                    // }
 
                     baseHeights[index] = target;
                 }
@@ -916,13 +916,13 @@ public final class ImageMapChunkGenerator extends ChunkGenerator {
 
                 double target = sampleHeightBilinear(data, px, pz);
 
-                int ix = (int) Math.round(px);
-                int iz = (int) Math.round(pz);
-                FMRiverSampler.RiverQuery rq = FMRiverSampler.query(ix, iz);
-                if (rq.hit) {
-                    double carved = FMRiverSampler.carvedHeight(rq, seaLevel);
-                    target = Math.min(target, carved);
-                }
+                // int ix = (int) Math.round(px);
+                // int iz = (int) Math.round(pz);
+                // FMRiverSampler.RiverQuery rq = FMRiverSampler.query(ix, iz);
+                // if (rq.hit) {
+                //     double carved = FMRiverSampler.carvedHeight(rq, seaLevel);
+                //     target = Math.min(target, carved);
+                // }
 
                 h0[si] = target;
                 h[si] = target;

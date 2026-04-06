@@ -39,7 +39,7 @@ public class FMGHeightSampler {
 
     // Choose how deep the seabed should be when FMG height is 0.
     // This is NOT sea surface; it's the ocean floor for FMG=0.
-    private static final int SEA_FLOOR_OFFSET = 50; // tweak: 30, 50, 80
+    private static final int SEA_FLOOR_OFFSET = 30; // tweak: 30, 50, 80
 
     // Noise overlay settings for natural terrain variation
     private static final double NOISE_SCALE = 80.0; // Large scale for big waves
@@ -569,7 +569,24 @@ public class FMGHeightSampler {
             // Fallback: treat as very far from shore.
             return 9999.0;
         }
-        return minDist;
+
+        // IMPORTANT: Keep ocean depth falloff stable regardless of the
+        // configurable world<->FMG projection scale.
+        //
+        // Distances above are measured in FMG units (cell/vertex coordinates).
+        // For a given world-space distance, FMG-space distance scales as:
+        //   d_fmg = d_world / sampleScale
+        // We want the seabed profile to behave like DEFAULT_SAMPLE_SCALE even
+        // when sampleScale is changed, so convert to an equivalent distance at
+        // DEFAULT_SAMPLE_SCALE:
+        //   d_norm = d_world / DEFAULT = d_fmg * sampleScale / DEFAULT
+        double scale = sampleScale();
+        double normFactor = scale / DEFAULT_SAMPLE_SCALE;
+        if (!Double.isFinite(normFactor) || normFactor <= 0.0) {
+            normFactor = 1.0;
+        }
+
+        return minDist * normFactor;
     }
 
     /**
@@ -636,7 +653,7 @@ public class FMGHeightSampler {
 
         // Shelf and deep-ocean distances in FMG units.
         double shelfRadius = 20.0;  // gentle drop near shore
-        double deepRadius = 120.0;  // beyond this, clamp to deep plateau
+        double deepRadius = 30.0;  // beyond this, clamp to deep plateau
         double seaFloorY = Math.max((double) (seaLevel - SEA_FLOOR_OFFSET), (double) (minWorldY));
         double shallowDrop = 15.0;  // seaLevel -> (seaLevel-15) across shelf
         double deepFloor = Math.min(5.0, seaFloorY);

@@ -16,6 +16,7 @@ import net.minecraft.registry.RegistryEntryLookup;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.RegistryOps;
 import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.registry.tag.BiomeTags;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.BiomeKeys;
 import net.minecraft.world.biome.source.BiomeSource;
@@ -150,7 +151,25 @@ public final class ColorMapBiomeSource extends BiomeSource {
         }
 
         // Use FMG's biome mapping based on FMG JSON data and biome registry.
-        return data.sampleFmgBiome(biomeLookup, quartToBlock(biomeX), quartToBlock(biomeZ));
+        int blockX = quartToBlock(biomeX);
+        int blockZ = quartToBlock(biomeZ);
+
+        RegistryEntry<Biome> surfaceBiome = data.sampleFmgBiome(biomeLookup, blockX, blockZ);
+
+        // Special rule: stop "ocean" biome from extending upward.
+        // If FMG says this column is ocean, then for blocks at/above sea level
+        // (y >= 63 by default), use BEACH instead.
+        int seaLevel = mapInfo.seaLevel();
+        if (surfaceBiome != null
+                && blockY >= seaLevel
+                && (surfaceBiome.isIn(BiomeTags.IS_OCEAN)
+                        || surfaceBiome.matchesKey(BiomeKeys.OCEAN)
+                        || surfaceBiome.matchesKey(BiomeKeys.DEEP_OCEAN))) {
+            RegistryEntry.Reference<Biome> beach = biomeLookup.getOptional(BiomeKeys.BEACH).orElse(null);
+            return beach != null ? beach : surfaceBiome;
+        }
+
+        return surfaceBiome;
     }
 
     private RegistryEntry<Biome> pickUndergroundBiome(int biomeX, int biomeY, int biomeZ) {
