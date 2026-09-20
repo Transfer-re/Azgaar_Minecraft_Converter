@@ -1,0 +1,53 @@
+{
+  "id": "dead_taiga",
+  "name": "Dead Taiga",
+  "azgaar": [
+    "Taiga"
+  ],
+  "status": "ready",
+  "notes": "Burn scar or beetle kill. Mostly dead spruce with survivors; the burnt soil underneath does as much work as the trees.",
+  "surface": {
+    "top": "conquest:dead_grass",
+    "under": "conquest:burnt_soil"
+  },
+  "trees": {
+    "density": 0.35,
+    "sizes": {
+      "xs": 5,
+      "s": 15,
+      "m": 35,
+      "l": 30,
+      "xl": 15
+    },
+    "species": {
+      "qf/norway_spruce/dead": 30,
+      "qf/norway_spruce/dark": 8,
+      "qf/scottish_pine/green": 5,
+      "axiom/dead_pine/3": 16,
+      "axiom/dead_pine/1": 8,
+      "axiom/dead_pine/2": 8,
+      "axiom/survival_dead_pine/1": 10,
+      "axiom/survival_dead_pine/2": 8,
+      "axiom/survival_pine_dead/default": 7
+    },
+    "stumps": {
+      "density": 0.06,
+      "groups": {
+        "axiom/survival_stump/spruce": 50,
+        "axiom/survival_stump/1": 25,
+        "axiom/survival_stump/2": 25
+      }
+    }
+  },
+  "groundCover": {
+    "conquest:dead_grass": 30,
+    "conquest:dead_pine_ground_needles": 18,
+    "conquest:dead_shrubs": 18,
+    "conquest:dead_bracken": 14,
+    "conquest:rosebay_willowherb": 12,
+    "conquest:reindeer_lichen": 8
+  },
+  "props": {
+    "conquest:burnt_soil": 6
+  }
+}

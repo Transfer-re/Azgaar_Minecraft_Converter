@@ -1,0 +1,40 @@
+{
+  "id": "lichen_tundra",
+  "name": "Lichen Tundra",
+  "azgaar": [
+    "Tundra"
+  ],
+  "status": "ready",
+  "notes": "Treeless by design. Lichen and frozen ground with rock breaking through; the rung between shrub tundra and scree.",
+  "surface": {
+    "top": "conquest:lichen_loamy_dirt",
+    "under": "conquest:frozen_loamy_dirt"
+  },
+  "trees": {
+    "density": 0.0,
+    "sizes": {
+      "xs": 5,
+      "s": 15,
+      "m": 35,
+      "l": 30,
+      "xl": 15
+    },
+    "species": {},
+    "stumps": {
+      "density": 0.0,
+      "groups": {}
+    }
+  },
+  "groundCover": {
+    "conquest:reindeer_lichen": 38,
+    "conquest:wolf_lichen": 18,
+    "conquest:elegant_sunburst_lichen": 12,
+    "conquest:cotton_grass": 14,
+    "conquest:dead_grass": 18
+  },
+  "props": {
+    "conquest:granite_rocks": 12,
+    "conquest:slate_rocks": 8,
+    "conquest:smooth_pebbles": 5
+  }
+}

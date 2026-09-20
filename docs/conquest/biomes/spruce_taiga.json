@@ -1,0 +1,55 @@
+{
+  "id": "spruce_taiga",
+  "name": "Spruce Taiga",
+  "azgaar": [
+    "Taiga"
+  ],
+  "status": "ready",
+  "notes": "Dark and light spruce together give the canopy depth; a few dead spruce and some pine keep it from looking planted.",
+  "surface": {
+    "top": "conquest:taiga_grass",
+    "under": "conquest:unfertile_loamy_dirt"
+  },
+  "trees": {
+    "density": 0.68,
+    "sizes": {
+      "xs": 5,
+      "s": 15,
+      "m": 35,
+      "l": 30,
+      "xl": 15
+    },
+    "species": {
+      "qf/norway_spruce/dark": 34,
+      "qf/norway_spruce/light": 20,
+      "qf/scottish_pine/green": 8,
+      "qf/norway_spruce/dead": 4,
+      "axiom/red_spruce/default": 13,
+      "axiom/balsam_fir/default": 11,
+      "axiom/balsam_fir/light": 10
+    },
+    "stumps": {
+      "density": 0.04,
+      "groups": {
+        "axiom/survival_stump/spruce": 70,
+        "axiom/survival_stump/3": 30
+      }
+    }
+  },
+  "groundCover": {
+    "conquest:dark_spruce_ground_needles": 24,
+    "conquest:taiga_grass": 22,
+    "conquest:bilberry_bush": 14,
+    "conquest:fir_forest_floor": 10,
+    "conquest:lingonberry_bush": 9,
+    "conquest:reindeer_lichen": 8,
+    "conquest:thick_fern": 7,
+    "conquest:brittlegill_mushrooms": 3,
+    "conquest:melancholy_thistle": 3
+  },
+  "props": {
+    "conquest:granite_rocks": 4,
+    "conquest:slate_rocks": 2,
+    "conquest:spruce_cones": 3
+  }
+}

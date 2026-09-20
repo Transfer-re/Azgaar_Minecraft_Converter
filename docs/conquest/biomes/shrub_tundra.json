@@ -1,0 +1,47 @@
+{
+  "id": "shrub_tundra",
+  "name": "Shrub Tundra",
+  "azgaar": [
+    "Tundra"
+  ],
+  "status": "ready",
+  "notes": "Above the treeline but not bare. Trees only in xs/s and only occasionally -- these are krummholz, not forest.",
+  "surface": {
+    "top": "conquest:taiga_grass",
+    "under": "conquest:frozen_loamy_dirt"
+  },
+  "trees": {
+    "density": 0.03,
+    "sizes": {
+      "xs": 80,
+      "s": 20,
+      "m": 0,
+      "l": 0,
+      "xl": 0
+    },
+    "species": {
+      "qf/norway_spruce/dark": 36,
+      "qf/quaking_aspen/green": 16,
+      "qf/norway_spruce/dead": 13,
+      "axiom/balsam_fir/light": 15,
+      "axiom/survival_pine_dead/default": 10,
+      "axiom/silver_birch/light": 10
+    },
+    "stumps": {
+      "density": 0.0,
+      "groups": {}
+    }
+  },
+  "groundCover": {
+    "conquest:bilberry_bush": 24,
+    "conquest:lingonberry_bush": 20,
+    "conquest:bog_blueberry_bush": 16,
+    "conquest:reindeer_lichen": 16,
+    "conquest:cotton_grass": 12,
+    "conquest:dead_grass": 12
+  },
+  "props": {
+    "conquest:granite_rocks": 8,
+    "conquest:slate_rocks": 5
+  }
+}

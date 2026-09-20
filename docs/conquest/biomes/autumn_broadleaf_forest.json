@@ -1,0 +1,56 @@
+{
+  "id": "autumn_broadleaf_forest",
+  "name": "Autumnal Broadleaf Forest",
+  "azgaar": [
+    "Temperate deciduous forest"
+  ],
+  "status": "ready",
+  "notes": "The same species in autumn colour. Worth keeping as its own biome rather than a variant: the four beech colours plus autumnal oak and maple mix into a genuinely varied canopy.",
+  "surface": {
+    "top": "conquest:grass",
+    "under": "conquest:unfertile_loamy_dirt"
+  },
+  "trees": {
+    "density": 0.58,
+    "sizes": {
+      "xs": 5,
+      "s": 15,
+      "m": 35,
+      "l": 30,
+      "xl": 15
+    },
+    "species": {
+      "qf/english_oak/autumnal": 22,
+      "qf/european_beech/autumnal": 18,
+      "qf/european_beech/bright_autumnal": 14,
+      "qf/european_beech/faded_autumnal": 7,
+      "qf/sugar_maple/autumnal": 15,
+      "qf/horse_chestnut/autumnal": 6,
+      "qf/quaking_aspen/autumnal": 4,
+      "axiom/red_maple/default": 9,
+      "axiom/yellow_maple/default": 7,
+      "axiom/silver_maple/orange": 5,
+      "axiom/paper_birch/yellow": 5,
+      "axiom/quaking_aspen/yellow": 4,
+      "axiom/bigtooth_aspen/yellow": 3
+    },
+    "stumps": {
+      "density": 0.03,
+      "groups": {
+        "axiom/survival_stump/oak": 50,
+        "axiom/survival_stump/2": 50
+      }
+    }
+  },
+  "groundCover": {
+    "conquest:autumnal_oak_ground_leaves": 22,
+    "conquest:autumnal_beech_tree_ground_leaves": 20,
+    "conquest:autumnal_maple_ground_leaves": 18,
+    "conquest:dead_grass": 12,
+    "conquest:autumnal_bracken": 12,
+    "conquest:dark_autumnal_bracken": 8,
+    "conquest:brittlegill_mushrooms": 5,
+    "conquest:morel_mushrooms": 3
+  },
+  "props": {}
+}

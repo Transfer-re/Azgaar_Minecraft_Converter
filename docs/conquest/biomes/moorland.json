@@ -1,0 +1,49 @@
+{
+  "id": "moorland",
+  "name": "Moorland",
+  "azgaar": [
+    "Grassland"
+  ],
+  "status": "ready",
+  "notes": "Heather and moor grass with wind-bitten pine. Treeless over most of its area; the few trees should look like survivors.",
+  "surface": {
+    "top": "conquest:purple_moor_grass",
+    "under": "conquest:peat"
+  },
+  "trees": {
+    "density": 0.04,
+    "sizes": {
+      "xs": 55,
+      "s": 35,
+      "m": 10,
+      "l": 0,
+      "xl": 0
+    },
+    "species": {
+      "qf/scottish_pine/green": 42,
+      "qf/quaking_aspen/green": 13,
+      "qf/norway_spruce/dead": 10,
+      "axiom/survival_pine/2": 15,
+      "axiom/silver_birch/light": 12,
+      "axiom/dead_pine/3": 8
+    },
+    "stumps": {
+      "density": 0.0,
+      "groups": {}
+    }
+  },
+  "groundCover": {
+    "conquest:heather": 34,
+    "conquest:purple_moor_grass": 24,
+    "conquest:cross_leaved_heath": 12,
+    "conquest:broom_bush": 8,
+    "conquest:bilberry_bush": 8,
+    "conquest:cotton_grass": 7,
+    "conquest:moorland_spotted_orchid": 4,
+    "conquest:melancholy_thistle": 3
+  },
+  "props": {
+    "conquest:granite_rocks": 6,
+    "conquest:slate_rocks": 4
+  }
+}

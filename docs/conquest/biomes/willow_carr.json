@@ -1,0 +1,35 @@
+{
+  "id": "willow_carr",
+  "name": "Willow Carr",
+  "azgaar": [
+    "Wetland"
+  ],
+  "status": "blocked",
+  "notes": "BLOCKED: Conquest has willow_log, weeping_willow_leaves, downy_willow_leaves, goat_sallow_log and an alder sapling, but neither pack ships willow or alder schematics. Highest-value gap -- Azgaar uses Wetland heavily and fen_reedbed has to cover for it.",
+  "surface": {
+    "top": "conquest:clay_rich_mud",
+    "under": "conquest:dark_silt"
+  },
+  "trees": {
+    "density": 0.0,
+    "sizes": {
+      "xs": 5,
+      "s": 15,
+      "m": 35,
+      "l": 30,
+      "xl": 15
+    },
+    "species": {},
+    "stumps": {
+      "density": 0.0,
+      "groups": {}
+    }
+  },
+  "groundCover": {
+    "conquest:rushes": 30,
+    "conquest:sedge": 25,
+    "conquest:cattails": 20,
+    "conquest:duckweed": 25
+  },
+  "props": {}
+}

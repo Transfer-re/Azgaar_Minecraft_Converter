@@ -1,0 +1,42 @@
+{
+  "id": "alpine_scree",
+  "name": "Alpine Scree",
+  "azgaar": [
+    "Tundra",
+    "Glacier"
+  ],
+  "status": "ready",
+  "notes": "Bare rock and loose stone. The top rung of every elevation ladder, sitting under glacier.",
+  "surface": {
+    "top": "conquest:snowy_granite",
+    "under": "conquest:snowy_granite"
+  },
+  "trees": {
+    "density": 0.0,
+    "sizes": {
+      "xs": 5,
+      "s": 15,
+      "m": 35,
+      "l": 30,
+      "xl": 15
+    },
+    "species": {},
+    "stumps": {
+      "density": 0.0,
+      "groups": {}
+    }
+  },
+  "groundCover": {
+    "conquest:alpine_sow_thistle": 20,
+    "conquest:reindeer_lichen": 25,
+    "conquest:dead_grass": 20,
+    "conquest:cotton_grass": 15,
+    "conquest:wolf_lichen": 20
+  },
+  "props": {
+    "conquest:granite_rocks": 20,
+    "conquest:slate_rocks": 14,
+    "conquest:andesite_rocks": 10,
+    "conquest:smooth_pebbles": 8
+  }
+}

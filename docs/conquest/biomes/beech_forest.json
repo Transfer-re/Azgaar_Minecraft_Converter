@@ -1,0 +1,43 @@
+{
+  "id": "beech_forest",
+  "name": "Beech Forest",
+  "azgaar": [
+    "Temperate deciduous forest"
+  ],
+  "status": "ready",
+  "notes": "Beech shades out its own understory, so this one is deliberately bare underfoot: deep leaf litter, little else. Oak and chestnut hold the edges.",
+  "surface": {
+    "top": "conquest:grass",
+    "under": "conquest:unfertile_loamy_dirt"
+  },
+  "trees": {
+    "density": 0.6,
+    "sizes": {
+      "xs": 5,
+      "s": 15,
+      "m": 35,
+      "l": 30,
+      "xl": 15
+    },
+    "species": {
+      "qf/european_beech/green": 60,
+      "qf/english_oak/green": 25,
+      "qf/horse_chestnut/green": 15
+    },
+    "stumps": {
+      "density": 0.0,
+      "groups": {}
+    }
+  },
+  "groundCover": {
+    "conquest:beech_tree_ground_leaves": 55,
+    "conquest:lush_grass": 15,
+    "conquest:harts_tongue_fern": 10,
+    "conquest:thick_fern": 8,
+    "conquest:bracken": 7,
+    "conquest:morel_mushrooms": 5
+  },
+  "props": {
+    "conquest:moss_on_the_ground": 4
+  }
+}

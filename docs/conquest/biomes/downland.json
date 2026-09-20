@@ -1,0 +1,46 @@
+{
+  "id": "downland",
+  "name": "Chalk Downland",
+  "azgaar": [
+    "Grassland"
+  ],
+  "status": "ready",
+  "notes": "Thin turf over chalk. Herb-rich, almost treeless, with limestone showing through -- a good contrast biome next to oak woodland.",
+  "surface": {
+    "top": "conquest:grass_covered_limestone",
+    "under": "conquest:chalky_soil"
+  },
+  "trees": {
+    "density": 0.02,
+    "sizes": {
+      "xs": 55,
+      "s": 35,
+      "m": 10,
+      "l": 0,
+      "xl": 0
+    },
+    "species": {
+      "qf/english_oak/green": 45,
+      "qf/european_beech/green": 30,
+      "axiom/survival_oak/default": 15,
+      "axiom/common_ash/default": 10
+    },
+    "stumps": {
+      "density": 0.0,
+      "groups": {}
+    }
+  },
+  "groundCover": {
+    "conquest:sweet_grass": 30,
+    "conquest:thyme": 18,
+    "conquest:rock_rose": 14,
+    "conquest:wild_daisy": 12,
+    "conquest:oxeye_daisy": 10,
+    "conquest:hawthorn_bush": 8,
+    "conquest:black_knapweed": 8
+  },
+  "props": {
+    "conquest:limestone_rocks": 10,
+    "conquest:light_limestone_boulders": 4
+  }
+}

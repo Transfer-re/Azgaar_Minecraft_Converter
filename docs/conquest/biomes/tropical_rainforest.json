@@ -1,0 +1,33 @@
+{
+  "id": "tropical_rainforest",
+  "name": "Tropical Rainforest",
+  "azgaar": [
+    "Tropical rainforest"
+  ],
+  "status": "blocked",
+  "notes": "BLOCKED: no warm-climate tree schematics at all. banana_tree_leaves and the palm set exist as blocks only.",
+  "surface": {
+    "top": "conquest:lush_grass",
+    "under": "conquest:red_clay"
+  },
+  "trees": {
+    "density": 0.0,
+    "sizes": {
+      "xs": 5,
+      "s": 15,
+      "m": 35,
+      "l": 30,
+      "xl": 15
+    },
+    "species": {},
+    "stumps": {
+      "density": 0.0,
+      "groups": {}
+    }
+  },
+  "groundCover": {
+    "conquest:lush_grass": 60,
+    "conquest:large_fern": 40
+  },
+  "props": {}
+}

@@ -1,0 +1,33 @@
+{
+  "id": "savanna",
+  "name": "Savanna",
+  "azgaar": [
+    "Savanna"
+  ],
+  "status": "blocked",
+  "notes": "BLOCKED: acacia_log and the acacia branch blocks exist, but there are no acacia or baobab schematics.",
+  "surface": {
+    "top": "conquest:dead_grass",
+    "under": "conquest:rocky_sandy_soil"
+  },
+  "trees": {
+    "density": 0.0,
+    "sizes": {
+      "xs": 5,
+      "s": 15,
+      "m": 35,
+      "l": 30,
+      "xl": 15
+    },
+    "species": {},
+    "stumps": {
+      "density": 0.0,
+      "groups": {}
+    }
+  },
+  "groundCover": {
+    "conquest:dead_grass": 60,
+    "conquest:desert_shrub": 40
+  },
+  "props": {}
+}

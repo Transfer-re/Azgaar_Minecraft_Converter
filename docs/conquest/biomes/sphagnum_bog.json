@@ -1,0 +1,48 @@
+{
+  "id": "sphagnum_bog",
+  "name": "Sphagnum Bog",
+  "azgaar": [
+    "Wetland"
+  ],
+  "status": "ready",
+  "notes": "Peat and three colours of sphagnum. Stunted dead spruce and small larch only -- a bog that grows full-size trees looks wrong.",
+  "surface": {
+    "top": "conquest:green_sphagnum_moss_block",
+    "under": "conquest:peat"
+  },
+  "trees": {
+    "density": 0.05,
+    "sizes": {
+      "xs": 80,
+      "s": 20,
+      "m": 0,
+      "l": 0,
+      "xl": 0
+    },
+    "species": {
+      "qf/norway_spruce/dead": 34,
+      "qf/european_larch/green": 18,
+      "qf/norway_spruce/dark": 9,
+      "axiom/survival_dead_pine/1": 14,
+      "axiom/tamarack/default": 15,
+      "axiom/survival_pine_dead/default": 10
+    },
+    "stumps": {
+      "density": 0.0,
+      "groups": {}
+    }
+  },
+  "groundCover": {
+    "conquest:green_sphagnum_moss": 24,
+    "conquest:dark_green_sphagnum_moss": 16,
+    "conquest:cotton_grass": 20,
+    "conquest:bog_blueberry_bush": 14,
+    "conquest:heather": 10,
+    "conquest:dead_reeds": 10,
+    "conquest:sedge": 6
+  },
+  "props": {
+    "conquest:brown_sphagnum_moss_block": 10,
+    "conquest:light_green_sphagnum_moss_block": 10
+  }
+}

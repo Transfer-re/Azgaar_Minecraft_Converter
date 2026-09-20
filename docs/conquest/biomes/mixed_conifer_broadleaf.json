@@ -1,0 +1,53 @@
+{
+  "id": "mixed_conifer_broadleaf",
+  "name": "Mixed Conifer-Broadleaf Forest",
+  "azgaar": [
+    "Temperate deciduous forest",
+    "Taiga"
+  ],
+  "status": "ready",
+  "notes": "The transition band. Put this wherever a deciduous region borders a taiga one -- it is the single biome that stops that edge looking like a cut line.",
+  "surface": {
+    "top": "conquest:grass",
+    "under": "conquest:unfertile_loamy_dirt"
+  },
+  "trees": {
+    "density": 0.56,
+    "sizes": {
+      "xs": 5,
+      "s": 15,
+      "m": 35,
+      "l": 30,
+      "xl": 15
+    },
+    "species": {
+      "qf/norway_spruce/dark": 18,
+      "qf/scottish_pine/green": 13,
+      "qf/quaking_aspen/green": 13,
+      "qf/european_beech/green": 12,
+      "qf/english_oak/green": 10,
+      "axiom/silver_birch/default": 11,
+      "axiom/silver_birch/light": 7,
+      "axiom/red_spruce/default": 8,
+      "axiom/jack_pine/default": 8
+    },
+    "stumps": {
+      "density": 0.035,
+      "groups": {
+        "axiom/survival_stump/spruce": 40,
+        "axiom/survival_stump/birch": 35,
+        "axiom/survival_stump/oak": 25
+      }
+    }
+  },
+  "groundCover": {
+    "conquest:lush_grass": 22,
+    "conquest:taiga_grass": 20,
+    "conquest:bracken": 16,
+    "conquest:bilberry_bush": 12,
+    "conquest:thick_fern": 10,
+    "conquest:oak_ground_leaves": 10,
+    "conquest:wavy_hair_grass": 10
+  },
+  "props": {}
+}

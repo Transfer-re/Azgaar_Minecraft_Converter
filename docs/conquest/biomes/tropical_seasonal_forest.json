@@ -1,0 +1,32 @@
+{
+  "id": "tropical_seasonal_forest",
+  "name": "Tropical Seasonal Forest",
+  "azgaar": [
+    "Tropical seasonal forest"
+  ],
+  "status": "blocked",
+  "notes": "BLOCKED: no warm-climate tree schematics at all.",
+  "surface": {
+    "top": "conquest:lush_grass",
+    "under": "conquest:red_clay"
+  },
+  "trees": {
+    "density": 0.0,
+    "sizes": {
+      "xs": 5,
+      "s": 15,
+      "m": 35,
+      "l": 30,
+      "xl": 15
+    },
+    "species": {},
+    "stumps": {
+      "density": 0.0,
+      "groups": {}
+    }
+  },
+  "groundCover": {
+    "conquest:lush_grass": 100
+  },
+  "props": {}
+}

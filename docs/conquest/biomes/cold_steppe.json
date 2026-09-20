@@ -1,0 +1,40 @@
+{
+  "id": "cold_steppe",
+  "name": "Cold Steppe",
+  "azgaar": [
+    "Cold desert"
+  ],
+  "status": "ready",
+  "notes": "Dry, cold and treeless. Deliberately sparse -- most of the ground should be bare soil showing between clumps.",
+  "surface": {
+    "top": "conquest:dead_grass",
+    "under": "conquest:dark_sandy_soil"
+  },
+  "trees": {
+    "density": 0.0,
+    "sizes": {
+      "xs": 5,
+      "s": 15,
+      "m": 35,
+      "l": 30,
+      "xl": 15
+    },
+    "species": {},
+    "stumps": {
+      "density": 0.0,
+      "groups": {}
+    }
+  },
+  "groundCover": {
+    "conquest:dead_grass": 40,
+    "conquest:dry_reeds": 16,
+    "conquest:dead_shrubs": 16,
+    "conquest:tumbleweed": 12,
+    "conquest:desert_shrub": 10,
+    "conquest:wavy_hair_grass": 6
+  },
+  "props": {
+    "conquest:mudstone_rocks": 10,
+    "conquest:smooth_pebbles": 6
+  }
+}

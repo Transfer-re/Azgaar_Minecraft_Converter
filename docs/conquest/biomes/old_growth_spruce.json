@@ -1,0 +1,48 @@
+{
+  "id": "old_growth_spruce",
+  "name": "Old-Growth Spruce Forest",
+  "azgaar": [
+    "Taiga"
+  ],
+  "status": "ready",
+  "notes": "Same species, biased hard to xl, with moss and hanging moss on everything. Use sparingly -- it reads best as a small region inside ordinary spruce taiga.",
+  "surface": {
+    "top": "conquest:taiga_grass",
+    "under": "conquest:unfertile_loamy_dirt"
+  },
+  "trees": {
+    "density": 0.75,
+    "sizes": {
+      "xs": 5,
+      "s": 10,
+      "m": 20,
+      "l": 30,
+      "xl": 35
+    },
+    "species": {
+      "qf/norway_spruce/dark": 44,
+      "qf/norway_spruce/light": 17,
+      "qf/norway_spruce/dead": 7,
+      "axiom/red_spruce/default": 18,
+      "axiom/balsam_fir/default": 14
+    },
+    "stumps": {
+      "density": 0.0,
+      "groups": {}
+    }
+  },
+  "groundCover": {
+    "conquest:moss_on_the_ground": 30,
+    "conquest:taiga_grass": 20,
+    "conquest:bilberry_bush": 15,
+    "conquest:thick_fern": 12,
+    "conquest:harts_tongue_fern": 10,
+    "conquest:morel_mushrooms": 7,
+    "conquest:brittlegill_mushrooms": 6
+  },
+  "props": {
+    "conquest:hanging_moss": 8,
+    "conquest:moss_vines": 5,
+    "conquest:mossy_light_limestone_boulders": 3
+  }
+}

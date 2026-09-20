@@ -1,0 +1,56 @@
+{
+  "id": "mossy_conifer_forest",
+  "name": "Mossy Conifer Rainforest",
+  "azgaar": [
+    "Temperate rainforest"
+  ],
+  "status": "ready",
+  "notes": "Wet, dark and mossy, and now built on the species it should be: western hemlock and douglas fir carry the canopy, with red spruce and balsam fir under them. This was the biome most obviously standing in for missing assets, and it no longer is.",
+  "surface": {
+    "top": "conquest:lush_grass",
+    "under": "conquest:unfertile_loamy_dirt"
+  },
+  "trees": {
+    "density": 0.8,
+    "sizes": {
+      "xs": 5,
+      "s": 10,
+      "m": 25,
+      "l": 32,
+      "xl": 28
+    },
+    "species": {
+      "axiom/western_hemlock/dark": 24,
+      "axiom/western_hemlock/light": 16,
+      "axiom/douglas_fir/default": 20,
+      "axiom/red_spruce/default": 12,
+      "axiom/balsam_fir/default": 8,
+      "qf/norway_spruce/dark": 12,
+      "qf/norway_spruce/dead": 4,
+      "qf/european_larch/green": 4
+    },
+    "stumps": {
+      "density": 0.07,
+      "groups": {
+        "axiom/survival_stump/spruce": 60,
+        "axiom/survival_stump/3": 40
+      }
+    }
+  },
+  "groundCover": {
+    "conquest:moss_on_the_ground": 26,
+    "conquest:mossy_fir_forest_floor": 14,
+    "conquest:overgrown_fir_forest_floor": 10,
+    "conquest:thick_fern": 14,
+    "conquest:harts_tongue_fern": 11,
+    "conquest:large_fern": 9,
+    "conquest:lush_grass": 6,
+    "conquest:brittlegill_mushrooms": 5,
+    "conquest:morel_mushrooms": 5
+  },
+  "props": {
+    "conquest:hanging_moss": 12,
+    "conquest:moss_vines": 8,
+    "conquest:mossy_light_limestone_boulders": 5
+  }
+}

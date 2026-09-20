@@ -1,0 +1,46 @@
+{
+  "id": "aspen_grove",
+  "name": "Aspen Grove",
+  "azgaar": [
+    "Temperate deciduous forest"
+  ],
+  "status": "ready",
+  "notes": "Aspen is a pioneer -- good on slopes, river terraces and old clearings. A few autumnal aspen mixed in read as individual clones turning early, which is how real aspen stands look.",
+  "surface": {
+    "top": "conquest:grass",
+    "under": "conquest:unfertile_loamy_dirt"
+  },
+  "trees": {
+    "density": 0.5,
+    "sizes": {
+      "xs": 5,
+      "s": 15,
+      "m": 35,
+      "l": 30,
+      "xl": 15
+    },
+    "species": {
+      "qf/quaking_aspen/green": 44,
+      "qf/quaking_aspen/autumnal": 8,
+      "qf/english_oak/green": 10,
+      "axiom/quaking_aspen/default": 14,
+      "axiom/bigtooth_aspen/default": 8,
+      "axiom/white_poplar/default": 12,
+      "axiom/quaking_aspen/yellow": 4
+    },
+    "stumps": {
+      "density": 0.0,
+      "groups": {}
+    }
+  },
+  "groundCover": {
+    "conquest:lush_grass": 35,
+    "conquest:aspen_ground_leaves": 20,
+    "conquest:bracken": 15,
+    "conquest:wavy_hair_grass": 10,
+    "conquest:raspberry_bush": 8,
+    "conquest:rosebay_willowherb": 7,
+    "conquest:wild_daisy": 5
+  },
+  "props": {}
+}

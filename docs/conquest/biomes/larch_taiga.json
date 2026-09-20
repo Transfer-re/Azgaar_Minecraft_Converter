@@ -1,0 +1,49 @@
+{
+  "id": "larch_taiga",
+  "name": "Larch Taiga",
+  "azgaar": [
+    "Taiga"
+  ],
+  "status": "ready",
+  "notes": "Larch is a deciduous conifer -- lighter and more open than spruce. Good as the upper band of an elevation ladder below the treeline.",
+  "surface": {
+    "top": "conquest:taiga_grass",
+    "under": "conquest:unfertile_loamy_dirt"
+  },
+  "trees": {
+    "density": 0.45,
+    "sizes": {
+      "xs": 5,
+      "s": 15,
+      "m": 35,
+      "l": 30,
+      "xl": 15
+    },
+    "species": {
+      "qf/european_larch/green": 40,
+      "qf/norway_spruce/dark": 12,
+      "qf/scottish_pine/green": 7,
+      "axiom/western_larch/default": 16,
+      "axiom/tamarack/default": 14,
+      "axiom/european_larch/default": 11
+    },
+    "stumps": {
+      "density": 0.0,
+      "groups": {}
+    }
+  },
+  "groundCover": {
+    "conquest:larch_ground_needles": 24,
+    "conquest:taiga_grass": 22,
+    "conquest:bilberry_bush": 15,
+    "conquest:reindeer_lichen": 13,
+    "conquest:heather": 11,
+    "conquest:cotton_grass": 8,
+    "conquest:alpine_sow_thistle": 4,
+    "conquest:melancholy_thistle": 3
+  },
+  "props": {
+    "conquest:slate_rocks": 6,
+    "conquest:granite_rocks": 4
+  }
+}

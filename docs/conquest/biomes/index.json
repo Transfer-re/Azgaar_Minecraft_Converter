@@ -1,0 +1,272 @@
+{
+  "count": 29,
+  "ready": 24,
+  "blocked": 5,
+  "biomes": [
+    {
+      "id": "oak_woodland",
+      "name": "Oak Woodland",
+      "azgaar": [
+        "Temperate deciduous forest"
+      ],
+      "status": "ready",
+      "species": 8
+    },
+    {
+      "id": "beech_forest",
+      "name": "Beech Forest",
+      "azgaar": [
+        "Temperate deciduous forest"
+      ],
+      "status": "ready",
+      "species": 3
+    },
+    {
+      "id": "mixed_broadleaf_forest",
+      "name": "Mixed Broadleaf Forest",
+      "azgaar": [
+        "Temperate deciduous forest"
+      ],
+      "status": "ready",
+      "species": 10
+    },
+    {
+      "id": "autumn_broadleaf_forest",
+      "name": "Autumnal Broadleaf Forest",
+      "azgaar": [
+        "Temperate deciduous forest"
+      ],
+      "status": "ready",
+      "species": 13
+    },
+    {
+      "id": "birch_wood",
+      "name": "Birch Wood",
+      "azgaar": [
+        "Temperate deciduous forest",
+        "Taiga"
+      ],
+      "status": "ready",
+      "species": 8
+    },
+    {
+      "id": "aspen_grove",
+      "name": "Aspen Grove",
+      "azgaar": [
+        "Temperate deciduous forest"
+      ],
+      "status": "ready",
+      "species": 7
+    },
+    {
+      "id": "mixed_conifer_broadleaf",
+      "name": "Mixed Conifer-Broadleaf Forest",
+      "azgaar": [
+        "Temperate deciduous forest",
+        "Taiga"
+      ],
+      "status": "ready",
+      "species": 9
+    },
+    {
+      "id": "spruce_taiga",
+      "name": "Spruce Taiga",
+      "azgaar": [
+        "Taiga"
+      ],
+      "status": "ready",
+      "species": 7
+    },
+    {
+      "id": "old_growth_spruce",
+      "name": "Old-Growth Spruce Forest",
+      "azgaar": [
+        "Taiga"
+      ],
+      "status": "ready",
+      "species": 5
+    },
+    {
+      "id": "pine_taiga",
+      "name": "Pine Taiga",
+      "azgaar": [
+        "Taiga"
+      ],
+      "status": "ready",
+      "species": 9
+    },
+    {
+      "id": "larch_taiga",
+      "name": "Larch Taiga",
+      "azgaar": [
+        "Taiga"
+      ],
+      "status": "ready",
+      "species": 6
+    },
+    {
+      "id": "autumn_larch_taiga",
+      "name": "Autumnal Larch Taiga",
+      "azgaar": [
+        "Taiga"
+      ],
+      "status": "ready",
+      "species": 5
+    },
+    {
+      "id": "dead_taiga",
+      "name": "Dead Taiga",
+      "azgaar": [
+        "Taiga"
+      ],
+      "status": "ready",
+      "species": 9
+    },
+    {
+      "id": "mossy_conifer_forest",
+      "name": "Mossy Conifer Rainforest",
+      "azgaar": [
+        "Temperate rainforest"
+      ],
+      "status": "ready",
+      "species": 8
+    },
+    {
+      "id": "meadow",
+      "name": "Meadow",
+      "azgaar": [
+        "Grassland"
+      ],
+      "status": "ready",
+      "species": 7
+    },
+    {
+      "id": "moorland",
+      "name": "Moorland",
+      "azgaar": [
+        "Grassland"
+      ],
+      "status": "ready",
+      "species": 6
+    },
+    {
+      "id": "downland",
+      "name": "Chalk Downland",
+      "azgaar": [
+        "Grassland"
+      ],
+      "status": "ready",
+      "species": 4
+    },
+    {
+      "id": "shrub_tundra",
+      "name": "Shrub Tundra",
+      "azgaar": [
+        "Tundra"
+      ],
+      "status": "ready",
+      "species": 6
+    },
+    {
+      "id": "lichen_tundra",
+      "name": "Lichen Tundra",
+      "azgaar": [
+        "Tundra"
+      ],
+      "status": "ready",
+      "species": 0
+    },
+    {
+      "id": "alpine_scree",
+      "name": "Alpine Scree",
+      "azgaar": [
+        "Tundra",
+        "Glacier"
+      ],
+      "status": "ready",
+      "species": 0
+    },
+    {
+      "id": "glacier",
+      "name": "Glacier",
+      "azgaar": [
+        "Glacier"
+      ],
+      "status": "ready",
+      "species": 0
+    },
+    {
+      "id": "sphagnum_bog",
+      "name": "Sphagnum Bog",
+      "azgaar": [
+        "Wetland"
+      ],
+      "status": "ready",
+      "species": 6
+    },
+    {
+      "id": "fen_reedbed",
+      "name": "Fen and Reedbed",
+      "azgaar": [
+        "Wetland",
+        "Marine"
+      ],
+      "status": "ready",
+      "species": 0
+    },
+    {
+      "id": "cold_steppe",
+      "name": "Cold Steppe",
+      "azgaar": [
+        "Cold desert"
+      ],
+      "status": "ready",
+      "species": 0
+    },
+    {
+      "id": "willow_carr",
+      "name": "Willow Carr",
+      "azgaar": [
+        "Wetland"
+      ],
+      "status": "blocked",
+      "species": 0
+    },
+    {
+      "id": "hot_desert",
+      "name": "Hot Desert",
+      "azgaar": [
+        "Hot desert"
+      ],
+      "status": "blocked",
+      "species": 0
+    },
+    {
+      "id": "savanna",
+      "name": "Savanna",
+      "azgaar": [
+        "Savanna"
+      ],
+      "status": "blocked",
+      "species": 0
+    },
+    {
+      "id": "tropical_seasonal_forest",
+      "name": "Tropical Seasonal Forest",
+      "azgaar": [
+        "Tropical seasonal forest"
+      ],
+      "status": "blocked",
+      "species": 0
+    },
+    {
+      "id": "tropical_rainforest",
+      "name": "Tropical Rainforest",
+      "azgaar": [
+        "Tropical rainforest"
+      ],
+      "status": "blocked",
+      "species": 0
+    }
+  ]
+}

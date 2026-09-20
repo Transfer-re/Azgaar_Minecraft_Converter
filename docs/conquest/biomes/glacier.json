@@ -1,0 +1,33 @@
+{
+  "id": "glacier",
+  "name": "Glacier",
+  "azgaar": [
+    "Glacier"
+  ],
+  "status": "ready",
+  "notes": "Fully covered with no trees needed. Dirty ice at the margins does most of the visual work.",
+  "surface": {
+    "top": "conquest:glacier_ice",
+    "under": "conquest:dirty_glacier_ice"
+  },
+  "trees": {
+    "density": 0.0,
+    "sizes": {
+      "xs": 5,
+      "s": 15,
+      "m": 35,
+      "l": 30,
+      "xl": 15
+    },
+    "species": {},
+    "stumps": {
+      "density": 0.0,
+      "groups": {}
+    }
+  },
+  "groundCover": {},
+  "props": {
+    "conquest:dirty_glacier_ice": 20,
+    "conquest:snow_covered_icy_limestone": 10
+  }
+}

@@ -1,0 +1,34 @@
+{
+  "id": "hot_desert",
+  "name": "Hot Desert",
+  "azgaar": [
+    "Hot desert"
+  ],
+  "status": "blocked",
+  "notes": "BLOCKED: blocks exist (date_palm_leaves, joshua_tree_leaves, cactus, brown_sand) but there are no palm or joshua schematics in either pack.",
+  "surface": {
+    "top": "conquest:brown_sand",
+    "under": "conquest:brown_sandstone"
+  },
+  "trees": {
+    "density": 0.0,
+    "sizes": {
+      "xs": 5,
+      "s": 15,
+      "m": 35,
+      "l": 30,
+      "xl": 15
+    },
+    "species": {},
+    "stumps": {
+      "density": 0.0,
+      "groups": {}
+    }
+  },
+  "groundCover": {
+    "conquest:desert_shrub": 40,
+    "conquest:dead_shrubs": 30,
+    "conquest:tumbleweed": 30
+  },
+  "props": {}
+}

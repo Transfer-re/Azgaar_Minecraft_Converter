@@ -1,0 +1,41 @@
+{
+  "id": "fen_reedbed",
+  "name": "Fen and Reedbed",
+  "azgaar": [
+    "Wetland",
+    "Marine"
+  ],
+  "status": "ready",
+  "notes": "The wet edge: sedge, reed and cattail at the waterline. Treeless until willow and alder exist -- this is the biome that most wants them.",
+  "surface": {
+    "top": "conquest:clay_rich_mud",
+    "under": "conquest:dark_silt"
+  },
+  "trees": {
+    "density": 0.0,
+    "sizes": {
+      "xs": 5,
+      "s": 15,
+      "m": 35,
+      "l": 30,
+      "xl": 15
+    },
+    "species": {},
+    "stumps": {
+      "density": 0.0,
+      "groups": {}
+    }
+  },
+  "groundCover": {
+    "conquest:greater_fen_sedge": 24,
+    "conquest:bottle_sedge": 18,
+    "conquest:rushes": 16,
+    "conquest:cattails": 14,
+    "conquest:sedge": 12,
+    "conquest:dry_reeds": 10,
+    "conquest:sea_arrowgrass": 6
+  },
+  "props": {
+    "conquest:duckweed": 12
+  }
+}

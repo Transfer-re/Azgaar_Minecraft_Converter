@@ -1,0 +1,46 @@
+{
+  "id": "autumn_larch_taiga",
+  "name": "Autumnal Larch Taiga",
+  "azgaar": [
+    "Taiga"
+  ],
+  "status": "ready",
+  "notes": "Larch turning. The orange and yellow variants against dark spruce is the strongest single image in the whole pack -- give it real regions, not just edges.",
+  "surface": {
+    "top": "conquest:taiga_grass",
+    "under": "conquest:unfertile_loamy_dirt"
+  },
+  "trees": {
+    "density": 0.45,
+    "sizes": {
+      "xs": 5,
+      "s": 15,
+      "m": 35,
+      "l": 30,
+      "xl": 15
+    },
+    "species": {
+      "qf/european_larch/orange": 32,
+      "qf/european_larch/yellow": 25,
+      "qf/norway_spruce/dark": 14,
+      "axiom/tamarack/yellow": 16,
+      "axiom/european_larch/yellow": 13
+    },
+    "stumps": {
+      "density": 0.0,
+      "groups": {}
+    }
+  },
+  "groundCover": {
+    "conquest:orange_autumnal_larch_ground_needles": 22,
+    "conquest:yellow_autumnal_larch_ground_needles": 18,
+    "conquest:dead_grass": 16,
+    "conquest:taiga_grass": 13,
+    "conquest:bilberry_bush": 12,
+    "conquest:reindeer_lichen": 10,
+    "conquest:autumnal_bracken": 9
+  },
+  "props": {
+    "conquest:slate_rocks": 6
+  }
+}

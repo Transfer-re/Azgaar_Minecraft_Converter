@@ -1,0 +1,1903 @@
+{
+  "atlas_cedar": {
+    "blueprints": 8,
+    "sizes": {
+      "m": 5,
+      "s": 3
+    },
+    "voxels": 751,
+    "blocks": [
+      {
+        "block": "minecraft:spruce_leaves",
+        "count": 459,
+        "share": 61.1,
+        "role": "foliage",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:spruce_fence_gate",
+        "count": 123,
+        "share": 16.4,
+        "role": "branch",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:mud_brick_wall",
+        "count": 116,
+        "share": 15.4,
+        "role": "branch",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:spruce_fence",
+        "count": 53,
+        "share": 7.1,
+        "role": "branch",
+        "conquest": ""
+      }
+    ]
+  },
+  "balsam_fir": {
+    "blueprints": 20,
+    "sizes": {
+      "l": 2,
+      "m": 12,
+      "s": 6
+    },
+    "voxels": 1888,
+    "blocks": [
+      {
+        "block": "minecraft:spruce_leaves",
+        "count": 702,
+        "share": 37.2,
+        "role": "foliage",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:birch_leaves",
+        "count": 702,
+        "share": 37.2,
+        "role": "foliage",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:cobbled_deepslate_slab",
+        "count": 76,
+        "share": 4.0,
+        "role": "limb",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:cobblestone_slab",
+        "count": 76,
+        "share": 4.0,
+        "role": "limb",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:andesite",
+        "count": 52,
+        "share": 2.8,
+        "role": "filler",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:deepslate_bricks",
+        "count": 49,
+        "share": 2.6,
+        "role": "filler",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:tuff",
+        "count": 49,
+        "share": 2.6,
+        "role": "filler",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:mud",
+        "count": 37,
+        "share": 2.0,
+        "role": "filler",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:acacia_wood",
+        "count": 37,
+        "share": 2.0,
+        "role": "trunk",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:smooth_basalt",
+        "count": 35,
+        "share": 1.9,
+        "role": "filler",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:cobbled_deepslate_stairs",
+        "count": 26,
+        "share": 1.4,
+        "role": "limb",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:cobblestone_stairs",
+        "count": 26,
+        "share": 1.4,
+        "role": "limb",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:polished_basalt",
+        "count": 17,
+        "share": 0.9,
+        "role": "filler",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:spruce_fence",
+        "count": 4,
+        "share": 0.2,
+        "role": "branch",
+        "conquest": ""
+      }
+    ]
+  },
+  "bigtooth_aspen": {
+    "blueprints": 6,
+    "sizes": {
+      "m": 6
+    },
+    "voxels": 976,
+    "blocks": [
+      {
+        "block": "minecraft:wheat",
+        "count": 328,
+        "share": 33.6,
+        "role": "filler",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:birch_leaves",
+        "count": 260,
+        "share": 26.6,
+        "role": "foliage",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:horn_coral",
+        "count": 161,
+        "share": 16.5,
+        "role": "filler",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:birch_wood",
+        "count": 118,
+        "share": 12.1,
+        "role": "trunk",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:dead_bush",
+        "count": 59,
+        "share": 6.0,
+        "role": "filler",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:diorite_slab",
+        "count": 44,
+        "share": 4.5,
+        "role": "limb",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:diorite_stairs",
+        "count": 6,
+        "share": 0.6,
+        "role": "limb",
+        "conquest": ""
+      }
+    ]
+  },
+  "common_ash": {
+    "blueprints": 6,
+    "sizes": {
+      "m": 4,
+      "s": 2
+    },
+    "voxels": 1242,
+    "blocks": [
+      {
+        "block": "minecraft:acacia_leaves",
+        "count": 762,
+        "share": 61.4,
+        "role": "foliage",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:oak_wood",
+        "count": 200,
+        "share": 16.1,
+        "role": "trunk",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:spruce_fence_gate",
+        "count": 129,
+        "share": 10.4,
+        "role": "branch",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:spruce_slab",
+        "count": 80,
+        "share": 6.4,
+        "role": "limb",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:polished_blackstone_button",
+        "count": 26,
+        "share": 2.1,
+        "role": "limb",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:acacia_wood",
+        "count": 18,
+        "share": 1.4,
+        "role": "trunk",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:mossy_cobblestone",
+        "count": 13,
+        "share": 1.0,
+        "role": "filler",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:tuff",
+        "count": 7,
+        "share": 0.6,
+        "role": "filler",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:stone_slab",
+        "count": 4,
+        "share": 0.3,
+        "role": "limb",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:mossy_cobblestone_slab",
+        "count": 3,
+        "share": 0.2,
+        "role": "limb",
+        "conquest": ""
+      }
+    ]
+  },
+  "common_maple": {
+    "blueprints": 10,
+    "sizes": {
+      "m": 6,
+      "s": 4
+    },
+    "voxels": 1646,
+    "blocks": [
+      {
+        "block": "minecraft:birch_leaves",
+        "count": 640,
+        "share": 38.9,
+        "role": "foliage",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:acacia_leaves",
+        "count": 640,
+        "share": 38.9,
+        "role": "foliage",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:stripped_spruce_wood",
+        "count": 161,
+        "share": 9.8,
+        "role": "trunk",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:stripped_dark_oak_wood",
+        "count": 161,
+        "share": 9.8,
+        "role": "trunk",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:spruce_slab",
+        "count": 18,
+        "share": 1.1,
+        "role": "limb",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:dark_oak_slab",
+        "count": 18,
+        "share": 1.1,
+        "role": "limb",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:spruce_stairs",
+        "count": 4,
+        "share": 0.2,
+        "role": "limb",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:dark_oak_stairs",
+        "count": 4,
+        "share": 0.2,
+        "role": "limb",
+        "conquest": ""
+      }
+    ]
+  },
+  "dead_pine": {
+    "blueprints": 33,
+    "sizes": {
+      "l": 3,
+      "m": 18,
+      "s": 12
+    },
+    "voxels": 1383,
+    "blocks": [
+      {
+        "block": "minecraft:cobblestone_wall",
+        "count": 185,
+        "share": 13.4,
+        "role": "branch",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:spruce_fence",
+        "count": 151,
+        "share": 10.9,
+        "role": "branch",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:dark_oak_fence",
+        "count": 151,
+        "share": 10.9,
+        "role": "branch",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:spruce_slab",
+        "count": 131,
+        "share": 9.5,
+        "role": "limb",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:dark_oak_slab",
+        "count": 131,
+        "share": 9.5,
+        "role": "limb",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:cobblestone_slab",
+        "count": 131,
+        "share": 9.5,
+        "role": "limb",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:oak_log",
+        "count": 99,
+        "share": 7.2,
+        "role": "trunk",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:spruce_log",
+        "count": 99,
+        "share": 7.2,
+        "role": "trunk",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:acacia_log",
+        "count": 99,
+        "share": 7.2,
+        "role": "trunk",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:spruce_stairs",
+        "count": 46,
+        "share": 3.3,
+        "role": "limb",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:dark_oak_stairs",
+        "count": 46,
+        "share": 3.3,
+        "role": "limb",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:cobblestone_stairs",
+        "count": 46,
+        "share": 3.3,
+        "role": "limb",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:spruce_fence_gate",
+        "count": 34,
+        "share": 2.5,
+        "role": "branch",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:dark_oak_fence_gate",
+        "count": 34,
+        "share": 2.5,
+        "role": "branch",
+        "conquest": ""
+      }
+    ]
+  },
+  "deodar_cedar": {
+    "blueprints": 6,
+    "sizes": {
+      "m": 3,
+      "s": 3
+    },
+    "voxels": 551,
+    "blocks": [
+      {
+        "block": "minecraft:birch_leaves",
+        "count": 423,
+        "share": 76.8,
+        "role": "foliage",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:andesite_wall",
+        "count": 77,
+        "share": 14.0,
+        "role": "branch",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:andesite_slab",
+        "count": 42,
+        "share": 7.6,
+        "role": "limb",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:andesite_stairs",
+        "count": 9,
+        "share": 1.6,
+        "role": "limb",
+        "conquest": ""
+      }
+    ]
+  },
+  "douglas_fir": {
+    "blueprints": 8,
+    "sizes": {
+      "l": 3,
+      "m": 3,
+      "s": 2
+    },
+    "voxels": 976,
+    "blocks": [
+      {
+        "block": "minecraft:acacia_leaves",
+        "count": 693,
+        "share": 71.0,
+        "role": "foliage",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:oak_wood",
+        "count": 118,
+        "share": 12.1,
+        "role": "trunk",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:spruce_slab",
+        "count": 115,
+        "share": 11.8,
+        "role": "limb",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:acacia_wood",
+        "count": 33,
+        "share": 3.4,
+        "role": "trunk",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:spruce_stairs",
+        "count": 10,
+        "share": 1.0,
+        "role": "limb",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:oak_leaves",
+        "count": 5,
+        "share": 0.5,
+        "role": "foliage",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:spruce_fence",
+        "count": 2,
+        "share": 0.2,
+        "role": "branch",
+        "conquest": ""
+      }
+    ]
+  },
+  "english_oak": {
+    "blueprints": 11,
+    "sizes": {
+      "m": 3,
+      "s": 8
+    },
+    "voxels": 2131,
+    "blocks": [
+      {
+        "block": "minecraft:oak_leaves",
+        "count": 1272,
+        "share": 59.7,
+        "role": "foliage",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:oak_wood",
+        "count": 308,
+        "share": 14.5,
+        "role": "trunk",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:spruce_slab",
+        "count": 279,
+        "share": 13.1,
+        "role": "limb",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:spruce_fence_gate",
+        "count": 270,
+        "share": 12.7,
+        "role": "branch",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:spruce_stairs",
+        "count": 2,
+        "share": 0.1,
+        "role": "limb",
+        "conquest": ""
+      }
+    ]
+  },
+  "european_larch": {
+    "blueprints": 18,
+    "sizes": {
+      "l": 8,
+      "m": 10
+    },
+    "voxels": 3294,
+    "blocks": [
+      {
+        "block": "minecraft:wheat",
+        "count": 787,
+        "share": 23.9,
+        "role": "filler",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:acacia_leaves",
+        "count": 620,
+        "share": 18.8,
+        "role": "foliage",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:horn_coral_fan",
+        "count": 456,
+        "share": 13.8,
+        "role": "filler",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:dandelion",
+        "count": 249,
+        "share": 7.6,
+        "role": "filler",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:dead_bush",
+        "count": 239,
+        "share": 7.3,
+        "role": "filler",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:horn_coral",
+        "count": 187,
+        "share": 5.7,
+        "role": "filler",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:spruce_slab",
+        "count": 131,
+        "share": 4.0,
+        "role": "limb",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:dark_oak_slab",
+        "count": 131,
+        "share": 4.0,
+        "role": "limb",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:oak_wood",
+        "count": 75,
+        "share": 2.3,
+        "role": "trunk",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:dark_oak_wood",
+        "count": 75,
+        "share": 2.3,
+        "role": "trunk",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:stripped_spruce_wood",
+        "count": 67,
+        "share": 2.0,
+        "role": "trunk",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:stripped_dark_oak_wood",
+        "count": 67,
+        "share": 2.0,
+        "role": "trunk",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:polished_basalt",
+        "count": 41,
+        "share": 1.2,
+        "role": "filler",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:mud",
+        "count": 41,
+        "share": 1.2,
+        "role": "filler",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:spruce_fence_gate",
+        "count": 31,
+        "share": 0.9,
+        "role": "branch",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:dark_oak_fence_gate",
+        "count": 31,
+        "share": 0.9,
+        "role": "branch",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:spruce_stairs",
+        "count": 18,
+        "share": 0.5,
+        "role": "limb",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:dark_oak_stairs",
+        "count": 18,
+        "share": 0.5,
+        "role": "limb",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:spruce_fence",
+        "count": 14,
+        "share": 0.4,
+        "role": "branch",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:dark_oak_fence",
+        "count": 14,
+        "share": 0.4,
+        "role": "branch",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:spruce_trapdoor",
+        "count": 1,
+        "share": 0.0,
+        "role": "limb",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:dark_oak_trapdoor",
+        "count": 1,
+        "share": 0.0,
+        "role": "limb",
+        "conquest": ""
+      }
+    ]
+  },
+  "forest_oak": {
+    "blueprints": 8,
+    "sizes": {
+      "m": 3,
+      "s": 5
+    },
+    "voxels": 1142,
+    "blocks": [
+      {
+        "block": "minecraft:acacia_leaves",
+        "count": 827,
+        "share": 72.4,
+        "role": "foliage",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:spruce_slab",
+        "count": 78,
+        "share": 6.8,
+        "role": "limb",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:stripped_spruce_wood",
+        "count": 68,
+        "share": 6.0,
+        "role": "trunk",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:packed_mud",
+        "count": 52,
+        "share": 4.6,
+        "role": "filler",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:oak_wood",
+        "count": 38,
+        "share": 3.3,
+        "role": "trunk",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:polished_blackstone_button",
+        "count": 38,
+        "share": 3.3,
+        "role": "limb",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:mud_brick_slab",
+        "count": 32,
+        "share": 2.8,
+        "role": "limb",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:spruce_stairs",
+        "count": 8,
+        "share": 0.7,
+        "role": "limb",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:mud_brick_stairs",
+        "count": 1,
+        "share": 0.1,
+        "role": "limb",
+        "conquest": ""
+      }
+    ]
+  },
+  "jack_pine": {
+    "blueprints": 10,
+    "sizes": {
+      "l": 2,
+      "m": 5,
+      "s": 3
+    },
+    "voxels": 912,
+    "blocks": [
+      {
+        "block": "minecraft:spruce_leaves",
+        "count": 637,
+        "share": 69.8,
+        "role": "foliage",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:andesite_wall",
+        "count": 65,
+        "share": 7.1,
+        "role": "branch",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:mossy_stone_brick_wall",
+        "count": 56,
+        "share": 6.1,
+        "role": "branch",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:cobblestone_wall",
+        "count": 55,
+        "share": 6.0,
+        "role": "branch",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:mossy_cobblestone_wall",
+        "count": 42,
+        "share": 4.6,
+        "role": "branch",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:stone_brick_wall",
+        "count": 41,
+        "share": 4.5,
+        "role": "branch",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:mossy_cobblestone",
+        "count": 8,
+        "share": 0.9,
+        "role": "filler",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:mossy_stone_bricks",
+        "count": 7,
+        "share": 0.8,
+        "role": "filler",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:cobblestone",
+        "count": 1,
+        "share": 0.1,
+        "role": "filler",
+        "conquest": ""
+      }
+    ]
+  },
+  "paper_birch": {
+    "blueprints": 8,
+    "sizes": {
+      "m": 6,
+      "s": 2
+    },
+    "voxels": 1939,
+    "blocks": [
+      {
+        "block": "minecraft:wheat",
+        "count": 545,
+        "share": 28.1,
+        "role": "filler",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:birch_leaves",
+        "count": 442,
+        "share": 22.8,
+        "role": "foliage",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:horn_coral_fan",
+        "count": 317,
+        "share": 16.3,
+        "role": "filler",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:horn_coral",
+        "count": 273,
+        "share": 14.1,
+        "role": "filler",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:birch_wood",
+        "count": 178,
+        "share": 9.2,
+        "role": "trunk",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:dead_bush",
+        "count": 106,
+        "share": 5.5,
+        "role": "filler",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:diorite_slab",
+        "count": 58,
+        "share": 3.0,
+        "role": "limb",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:diorite_stairs",
+        "count": 20,
+        "share": 1.0,
+        "role": "limb",
+        "conquest": ""
+      }
+    ]
+  },
+  "quaking_aspen": {
+    "blueprints": 18,
+    "sizes": {
+      "m": 10,
+      "s": 8
+    },
+    "voxels": 3087,
+    "blocks": [
+      {
+        "block": "minecraft:wheat",
+        "count": 734,
+        "share": 23.8,
+        "role": "filler",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:acacia_leaves",
+        "count": 509,
+        "share": 16.5,
+        "role": "foliage",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:birch_wood",
+        "count": 326,
+        "share": 10.6,
+        "role": "trunk",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:horn_coral_fan",
+        "count": 313,
+        "share": 10.1,
+        "role": "filler",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:horn_coral",
+        "count": 257,
+        "share": 8.3,
+        "role": "filler",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:orange_tulip",
+        "count": 177,
+        "share": 5.7,
+        "role": "filler",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:dead_bush",
+        "count": 170,
+        "share": 5.5,
+        "role": "filler",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:diorite_slab",
+        "count": 158,
+        "share": 5.1,
+        "role": "limb",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:birch_leaves",
+        "count": 156,
+        "share": 5.1,
+        "role": "foliage",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:dandelion",
+        "count": 153,
+        "share": 5.0,
+        "role": "filler",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:diorite_wall",
+        "count": 78,
+        "share": 2.5,
+        "role": "branch",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:cobblestone_wall",
+        "count": 56,
+        "share": 1.8,
+        "role": "branch",
+        "conquest": ""
+      }
+    ]
+  },
+  "red_maple": {
+    "blueprints": 5,
+    "sizes": {
+      "m": 3,
+      "s": 2
+    },
+    "voxels": 1463,
+    "blocks": [
+      {
+        "block": "minecraft:crimson_roots",
+        "count": 586,
+        "share": 40.1,
+        "role": "filler",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:fire_coral",
+        "count": 396,
+        "share": 27.1,
+        "role": "filler",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:fire_coral_fan",
+        "count": 321,
+        "share": 21.9,
+        "role": "filler",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:oak_wood",
+        "count": 138,
+        "share": 9.4,
+        "role": "trunk",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:spruce_slab",
+        "count": 18,
+        "share": 1.2,
+        "role": "limb",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:spruce_stairs",
+        "count": 4,
+        "share": 0.3,
+        "role": "limb",
+        "conquest": ""
+      }
+    ]
+  },
+  "red_spruce": {
+    "blueprints": 10,
+    "sizes": {
+      "l": 2,
+      "m": 5,
+      "s": 3
+    },
+    "voxels": 1182,
+    "blocks": [
+      {
+        "block": "minecraft:oak_leaves",
+        "count": 859,
+        "share": 72.7,
+        "role": "foliage",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:oak_wood",
+        "count": 178,
+        "share": 15.1,
+        "role": "trunk",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:spruce_slab",
+        "count": 113,
+        "share": 9.6,
+        "role": "limb",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:spruce_stairs",
+        "count": 30,
+        "share": 2.5,
+        "role": "limb",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:spruce_fence",
+        "count": 2,
+        "share": 0.2,
+        "role": "branch",
+        "conquest": ""
+      }
+    ]
+  },
+  "silver_birch": {
+    "blueprints": 18,
+    "sizes": {
+      "l": 2,
+      "m": 8,
+      "s": 8
+    },
+    "voxels": 2563,
+    "blocks": [
+      {
+        "block": "minecraft:birch_leaves",
+        "count": 918,
+        "share": 35.8,
+        "role": "foliage",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:azalea_leaves",
+        "count": 897,
+        "share": 35.0,
+        "role": "foliage",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:birch_wood",
+        "count": 448,
+        "share": 17.5,
+        "role": "trunk",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:diorite_slab",
+        "count": 296,
+        "share": 11.5,
+        "role": "limb",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:diorite_stairs",
+        "count": 4,
+        "share": 0.2,
+        "role": "limb",
+        "conquest": ""
+      }
+    ]
+  },
+  "silver_maple": {
+    "blueprints": 8,
+    "sizes": {
+      "m": 6,
+      "s": 2
+    },
+    "voxels": 2905,
+    "blocks": [
+      {
+        "block": "minecraft:azalea_leaves",
+        "count": 765,
+        "share": 26.3,
+        "role": "foliage",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:orange_stained_glass_pane",
+        "count": 406,
+        "share": 14.0,
+        "role": "branch",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:orange_candle",
+        "count": 218,
+        "share": 7.5,
+        "role": "filler",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:orange_concrete_powder",
+        "count": 201,
+        "share": 6.9,
+        "role": "filler",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:oak_wood",
+        "count": 197,
+        "share": 6.8,
+        "role": "trunk",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:stripped_spruce_wood",
+        "count": 197,
+        "share": 6.8,
+        "role": "trunk",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:honeycomb_block",
+        "count": 194,
+        "share": 6.7,
+        "role": "filler",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:pumpkin",
+        "count": 189,
+        "share": 6.5,
+        "role": "filler",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:honey_block",
+        "count": 181,
+        "share": 6.2,
+        "role": "filler",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:orange_carpet",
+        "count": 161,
+        "share": 5.5,
+        "role": "limb",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:spruce_fence",
+        "count": 160,
+        "share": 5.5,
+        "role": "branch",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:spruce_slab",
+        "count": 34,
+        "share": 1.2,
+        "role": "limb",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:spruce_stairs",
+        "count": 2,
+        "share": 0.1,
+        "role": "limb",
+        "conquest": ""
+      }
+    ]
+  },
+  "simple_pine": {
+    "blueprints": 42,
+    "sizes": {
+      "m": 15,
+      "s": 27
+    },
+    "voxels": 2248,
+    "blocks": [
+      {
+        "block": "minecraft:spruce_leaves",
+        "count": 594,
+        "share": 26.4,
+        "role": "foliage",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:oak_leaves",
+        "count": 586,
+        "share": 26.1,
+        "role": "foliage",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:birch_leaves",
+        "count": 578,
+        "share": 25.7,
+        "role": "foliage",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:spruce_wood",
+        "count": 138,
+        "share": 6.1,
+        "role": "trunk",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:oak_wood",
+        "count": 134,
+        "share": 6.0,
+        "role": "trunk",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:stripped_dark_oak_wood",
+        "count": 131,
+        "share": 5.8,
+        "role": "trunk",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:spruce_log",
+        "count": 29,
+        "share": 1.3,
+        "role": "trunk",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:stripped_dark_oak_log",
+        "count": 29,
+        "share": 1.3,
+        "role": "trunk",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:oak_log",
+        "count": 29,
+        "share": 1.3,
+        "role": "trunk",
+        "conquest": ""
+      }
+    ]
+  },
+  "survival_birch": {
+    "blueprints": 40,
+    "sizes": {
+      "m": 20,
+      "s": 20
+    },
+    "voxels": 4986,
+    "blocks": [
+      {
+        "block": "minecraft:birch_leaves",
+        "count": 2008,
+        "share": 40.3,
+        "role": "foliage",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:acacia_leaves",
+        "count": 2008,
+        "share": 40.3,
+        "role": "foliage",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:birch_wood",
+        "count": 946,
+        "share": 19.0,
+        "role": "trunk",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:birch_log",
+        "count": 24,
+        "share": 0.5,
+        "role": "trunk",
+        "conquest": ""
+      }
+    ]
+  },
+  "survival_dead_pine": {
+    "blueprints": 14,
+    "sizes": {
+      "m": 4,
+      "s": 10
+    },
+    "voxels": 328,
+    "blocks": [
+      {
+        "block": "minecraft:spruce_log",
+        "count": 164,
+        "share": 50.0,
+        "role": "trunk",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:oak_log",
+        "count": 164,
+        "share": 50.0,
+        "role": "trunk",
+        "conquest": ""
+      }
+    ]
+  },
+  "survival_oak": {
+    "blueprints": 8,
+    "sizes": {
+      "m": 3,
+      "s": 5
+    },
+    "voxels": 1084,
+    "blocks": [
+      {
+        "block": "minecraft:oak_leaves",
+        "count": 895,
+        "share": 82.6,
+        "role": "foliage",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:oak_wood",
+        "count": 189,
+        "share": 17.4,
+        "role": "trunk",
+        "conquest": ""
+      }
+    ]
+  },
+  "survival_pine": {
+    "blueprints": 24,
+    "sizes": {
+      "m": 10,
+      "s": 14
+    },
+    "voxels": 1728,
+    "blocks": [
+      {
+        "block": "minecraft:spruce_leaves",
+        "count": 711,
+        "share": 41.1,
+        "role": "foliage",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:birch_leaves",
+        "count": 711,
+        "share": 41.1,
+        "role": "foliage",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:spruce_wood",
+        "count": 132,
+        "share": 7.6,
+        "role": "trunk",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:oak_wood",
+        "count": 132,
+        "share": 7.6,
+        "role": "trunk",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:spruce_log",
+        "count": 21,
+        "share": 1.2,
+        "role": "trunk",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:oak_log",
+        "count": 21,
+        "share": 1.2,
+        "role": "trunk",
+        "conquest": ""
+      }
+    ]
+  },
+  "survival_pine_dead": {
+    "blueprints": 7,
+    "sizes": {
+      "m": 2,
+      "s": 5
+    },
+    "voxels": 155,
+    "blocks": [
+      {
+        "block": "minecraft:spruce_log",
+        "count": 155,
+        "share": 100.0,
+        "role": "trunk",
+        "conquest": ""
+      }
+    ]
+  },
+  "survival_stump": {
+    "blueprints": 30,
+    "sizes": {
+      "1": 5,
+      "2": 5,
+      "3": 5,
+      "birch": 5,
+      "oak": 5,
+      "spruce": 5
+    },
+    "voxels": 522,
+    "blocks": [
+      {
+        "block": "minecraft:oak_log",
+        "count": 96,
+        "share": 18.4,
+        "role": "trunk",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:birch_log",
+        "count": 96,
+        "share": 18.4,
+        "role": "trunk",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:spruce_log",
+        "count": 96,
+        "share": 18.4,
+        "role": "trunk",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:moss_carpet",
+        "count": 84,
+        "share": 16.1,
+        "role": "limb",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:oak_wood",
+        "count": 46,
+        "share": 8.8,
+        "role": "trunk",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:birch_wood",
+        "count": 46,
+        "share": 8.8,
+        "role": "trunk",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:spruce_wood",
+        "count": 46,
+        "share": 8.8,
+        "role": "trunk",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:moss_block",
+        "count": 6,
+        "share": 1.1,
+        "role": "filler",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:short_grass",
+        "count": 6,
+        "share": 1.1,
+        "role": "filler",
+        "conquest": ""
+      }
+    ]
+  },
+  "tamarack": {
+    "blueprints": 20,
+    "sizes": {
+      "l": 4,
+      "m": 10,
+      "s": 6
+    },
+    "voxels": 3077,
+    "blocks": [
+      {
+        "block": "minecraft:acacia_leaves",
+        "count": 818,
+        "share": 26.6,
+        "role": "foliage",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:wheat",
+        "count": 818,
+        "share": 26.6,
+        "role": "filler",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:horn_coral",
+        "count": 679,
+        "share": 22.1,
+        "role": "filler",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:stripped_dark_oak_wood",
+        "count": 328,
+        "share": 10.7,
+        "role": "trunk",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:dark_oak_slab",
+        "count": 216,
+        "share": 7.0,
+        "role": "limb",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:dark_oak_trapdoor",
+        "count": 154,
+        "share": 5.0,
+        "role": "limb",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:dark_oak_stairs",
+        "count": 60,
+        "share": 1.9,
+        "role": "limb",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:dark_oak_fence",
+        "count": 4,
+        "share": 0.1,
+        "role": "branch",
+        "conquest": ""
+      }
+    ]
+  },
+  "western_hemlock": {
+    "blueprints": 20,
+    "sizes": {
+      "l": 4,
+      "m": 14,
+      "s": 2
+    },
+    "voxels": 3732,
+    "blocks": [
+      {
+        "block": "minecraft:spruce_leaves",
+        "count": 1477,
+        "share": 39.6,
+        "role": "foliage",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:acacia_leaves",
+        "count": 1477,
+        "share": 39.6,
+        "role": "foliage",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:stripped_spruce_wood",
+        "count": 167,
+        "share": 4.5,
+        "role": "trunk",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:acacia_wood",
+        "count": 167,
+        "share": 4.5,
+        "role": "trunk",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:stone_slab",
+        "count": 167,
+        "share": 4.5,
+        "role": "limb",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:spruce_slab",
+        "count": 165,
+        "share": 4.4,
+        "role": "limb",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:mud_brick_wall",
+        "count": 39,
+        "share": 1.0,
+        "role": "branch",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:andesite_wall",
+        "count": 37,
+        "share": 1.0,
+        "role": "branch",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:spruce_stairs",
+        "count": 18,
+        "share": 0.5,
+        "role": "limb",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:stone_stairs",
+        "count": 18,
+        "share": 0.5,
+        "role": "limb",
+        "conquest": ""
+      }
+    ]
+  },
+  "western_larch": {
+    "blueprints": 11,
+    "sizes": {
+      "l": 3,
+      "m": 6,
+      "s": 2
+    },
+    "voxels": 1245,
+    "blocks": [
+      {
+        "block": "minecraft:birch_leaves",
+        "count": 832,
+        "share": 66.8,
+        "role": "foliage",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:stripped_spruce_wood",
+        "count": 210,
+        "share": 16.9,
+        "role": "trunk",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:spruce_slab",
+        "count": 164,
+        "share": 13.2,
+        "role": "limb",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:spruce_stairs",
+        "count": 30,
+        "share": 2.4,
+        "role": "limb",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:spruce_trapdoor",
+        "count": 9,
+        "share": 0.7,
+        "role": "limb",
+        "conquest": ""
+      }
+    ]
+  },
+  "white_poplar": {
+    "blueprints": 8,
+    "sizes": {
+      "m": 3,
+      "s": 5
+    },
+    "voxels": 1030,
+    "blocks": [
+      {
+        "block": "minecraft:acacia_leaves",
+        "count": 847,
+        "share": 82.2,
+        "role": "foliage",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:diorite_wall",
+        "count": 149,
+        "share": 14.5,
+        "role": "branch",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:birch_wood",
+        "count": 34,
+        "share": 3.3,
+        "role": "trunk",
+        "conquest": ""
+      }
+    ]
+  },
+  "yellow_maple": {
+    "blueprints": 5,
+    "sizes": {
+      "m": 3,
+      "s": 2
+    },
+    "voxels": 1307,
+    "blocks": [
+      {
+        "block": "minecraft:wheat",
+        "count": 829,
+        "share": 63.4,
+        "role": "filler",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:horn_coral",
+        "count": 184,
+        "share": 14.1,
+        "role": "filler",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:stripped_dark_oak_wood",
+        "count": 161,
+        "share": 12.3,
+        "role": "trunk",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:dead_bush",
+        "count": 111,
+        "share": 8.5,
+        "role": "filler",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:dark_oak_slab",
+        "count": 18,
+        "share": 1.4,
+        "role": "limb",
+        "conquest": ""
+      },
+      {
+        "block": "minecraft:dark_oak_stairs",
+        "count": 4,
+        "share": 0.3,
+        "role": "limb",
+        "conquest": ""
+      }
+    ]
+  }
+}

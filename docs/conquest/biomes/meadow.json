@@ -1,0 +1,47 @@
+{
+  "id": "meadow",
+  "name": "Meadow",
+  "azgaar": [
+    "Grassland"
+  ],
+  "status": "ready",
+  "notes": "Open grass with isolated trees, never groups. Density is the whole point here -- push it above ~0.04 and it stops being grassland.",
+  "surface": {
+    "top": "conquest:grass",
+    "under": "conquest:unfertile_loamy_dirt"
+  },
+  "trees": {
+    "density": 0.03,
+    "sizes": {
+      "xs": 20,
+      "s": 35,
+      "m": 30,
+      "l": 15,
+      "xl": 0
+    },
+    "species": {
+      "qf/english_oak/green": 30,
+      "qf/sugar_maple/green": 16,
+      "qf/horse_chestnut/green": 13,
+      "qf/quaking_aspen/green": 7,
+      "axiom/survival_oak/default": 14,
+      "axiom/common_ash/default": 10,
+      "axiom/white_poplar/default": 10
+    },
+    "stumps": {
+      "density": 0.0,
+      "groups": {}
+    }
+  },
+  "groundCover": {
+    "conquest:common_meadow_grass": 28,
+    "conquest:timothy_grass": 20,
+    "conquest:kentucky_bluegrass": 14,
+    "conquest:red_clover_flowers": 10,
+    "conquest:oxeye_daisy": 8,
+    "conquest:cornflower": 7,
+    "conquest:wild_daisy": 7,
+    "conquest:poppy": 6
+  },
+  "props": {}
+}
