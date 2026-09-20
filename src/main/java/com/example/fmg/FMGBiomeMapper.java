@@ -16,40 +16,56 @@ import net.minecraft.world.biome.BiomeKeys;
 
 /**
  * Maps FMG biome data to vanilla Minecraft biomes.
- * Minecraft 1.21.4 compatible (dynamic registries).
+ *
+ * <p>The primary path is {@link FMGBiomeVariantMap}: a precomputed, per-cell
+ * assignment that picks a rich vanilla variant per contiguous Azgaar-named
+ * region (see that class for why). This class resolves the final
+ * {@link RegistryEntry} from the {@link RegistryKey} it returns, and provides
+ * the plain 1:1 name mapping ({@link #legacyKeyFor}) as the fallback for any
+ * cell the variant map didn't cover (should be rare -- essentially never,
+ * since the variant map assigns every cell it sees).
  */
 public final class FMGBiomeMapper {
 
     private static final Pattern NON_WORD = Pattern.compile("[^a-z0-9]");
     private static final Map<String, RegistryKey<Biome>> NAMED_MAPPINGS = FMGBiomeMappingConfig.loadOrCreateMappings();
-    private static final Set<RegistryKey<Biome>> PALETTE_KEYS = buildPaletteKeys();
 
     private FMGBiomeMapper() {}
 
     // ===== Public API =====
 
-    public static Set<RegistryKey<Biome>> paletteKeys() {
-        return PALETTE_KEYS;
+    /** Every biome this profile's mapping can produce, for the biome source to declare. */
+    public static Set<RegistryKey<Biome>> paletteKeys(com.example.profile.FmgContentProfile profile) {
+        return buildPaletteKeys(profile);
+    }
+
+    /** Lowercase alnum-only key -- shared by {@link FMGBiomeVariantMap} and the content profile. */
+    static String normalize(String rawName) {
+        if (rawName == null || rawName.isBlank()) return "";
+        return NON_WORD.matcher(rawName.toLowerCase(Locale.ROOT)).replaceAll("");
+    }
+
+    /** The plain 1:1 name mapping, with no variants -- the fallback when the variant map has nothing for a cell. */
+    static RegistryKey<Biome> legacyKeyFor(String normalizedName) {
+        return NAMED_MAPPINGS.get(normalizedName);
     }
 
     public static RegistryEntry<Biome> resolve(
+            String fmgExport,
+            boolean richBiomes,
+            com.example.profile.FmgContentProfile profile,
             RegistryEntryLookup<Biome> biomes,
             FMGMapData mapData,
             int worldX,
             int worldZ
     ) {
-        return resolve(key -> lookup(biomes, key), mapData, worldX, worldZ);
+        return resolve(fmgExport, richBiomes, profile, key -> lookup(biomes, key), mapData, worldX, worldZ);
     }
 
     public static RegistryEntry<Biome> resolve(
-            RegistryEntryLookup<Biome> biomes,
-            FMGMapData mapData,
-            FMGCell cell
-    ) {
-        return resolve(key -> lookup(biomes, key), mapData, cell);
-    }
-
-    public static RegistryEntry<Biome> resolve(
+            String fmgExport,
+            boolean richBiomes,
+            com.example.profile.FmgContentProfile profile,
             Function<RegistryKey<Biome>, RegistryEntry<Biome>> resolver,
             FMGMapData mapData,
             int worldX,
@@ -67,10 +83,13 @@ public final class FMGBiomeMapper {
         double fmgY = (worldZ - offsetZ) / scale;
 
         FMGCell cell = mapData.findNearestCell(fmgX, fmgY);
-        return resolve(resolver, mapData, cell);
+        return resolve(fmgExport, richBiomes, profile, resolver, mapData, cell);
     }
 
     public static RegistryEntry<Biome> resolve(
+            String fmgExport,
+            boolean richBiomes,
+            com.example.profile.FmgContentProfile profile,
             Function<RegistryKey<Biome>, RegistryEntry<Biome>> resolver,
             FMGMapData mapData,
             FMGCell cell
@@ -79,67 +98,46 @@ public final class FMGBiomeMapper {
             return lookup(resolver, BiomeKeys.PLAINS);
         }
 
-        FMGBiome biomeDef = mapData.getBiome(cell.getBiome());
-        if (biomeDef != null) {
-            // Temporary debug to understand why mappings fall back to PLAINS
-            // if (cell.getI() % 1000 == 0) {
-            //     System.out.println("[FMG] Cell " + cell.getI() + " biome id=" + cell.getBiome()
-            //             + " name='" + biomeDef.getName() + "'");
-            // }
-            RegistryEntry<Biome> named = mapByName(
-                    resolver,
-                    biomeDef.getName(),
-                    0.5,    // height placeholder; mapping is 1:1 by name
-                    false,  // cold placeholder
-                    false   // hot placeholder
-            );
-            if (named != null) {
-                return named;
-            }
+        RegistryKey<Biome> key = richBiomes
+                ? FMGBiomeVariantMap.get(fmgExport, mapData, profile).keyFor(cell)
+                : null;
+        if (key == null) {
+            FMGBiome biomeDef = mapData.getBiome(cell.getBiome());
+            key = biomeDef != null ? mapByName(normalize(biomeDef.getName()), cell) : null;
         }
-        return lookup(resolver, BiomeKeys.PLAINS);
+        return lookup(resolver, key != null ? key : BiomeKeys.PLAINS);
     }
 
     // ===== Internals =====
 
-        private static RegistryEntry<Biome> mapByName(
-            Function<RegistryKey<Biome>, RegistryEntry<Biome>> resolver,
-            String rawName,
-            double height,
-            boolean cold,
-            boolean hot
-    ) {
-        if (rawName == null || rawName.isEmpty()) {
+    /** Last-resort fallback when even the variant map has nothing -- the old heuristics, unchanged. */
+    private static RegistryKey<Biome> mapByName(String normalized, FMGCell cell) {
+        if (normalized.isEmpty()) {
             return null;
         }
 
-        String normalized = NON_WORD
-                .matcher(rawName.toLowerCase(Locale.ROOT))
-                .replaceAll("");
-
-        RegistryKey<Biome> key = NAMED_MAPPINGS.get(normalized);
+        RegistryKey<Biome> key = legacyKeyFor(normalized);
         if (key != null) {
-            return lookup(resolver, key);
+            return key;
         }
 
         if (normalized.contains("mount")) {
-            return lookup(resolver, cold ? BiomeKeys.SNOWY_SLOPES : BiomeKeys.STONY_PEAKS);
+            return BiomeKeys.STONY_PEAKS;
         }
         if (normalized.contains("swamp") || normalized.contains("wet")) {
-            return lookup(resolver, cold ? BiomeKeys.SNOWY_TAIGA : BiomeKeys.SWAMP);
+            return BiomeKeys.SWAMP;
         }
         if (normalized.contains("forest")) {
-            return lookup(resolver, hot ? BiomeKeys.JUNGLE : (cold ? BiomeKeys.TAIGA : BiomeKeys.FOREST));
+            return BiomeKeys.FOREST;
         }
         if (normalized.contains("tundra") || normalized.contains("glacier")) {
-            return lookup(resolver, BiomeKeys.SNOWY_TAIGA);
+            return BiomeKeys.SNOWY_TAIGA;
         }
         if (normalized.contains("steppe")) {
-            return lookup(resolver, BiomeKeys.WINDSWEPT_SAVANNA);
+            return BiomeKeys.WINDSWEPT_SAVANNA;
         }
-
-        if (height < 0.2) {
-            return lookup(resolver, BiomeKeys.MANGROVE_SWAMP);
+        if (cell != null && cell.getH() < 20) {
+            return BiomeKeys.MANGROVE_SWAMP;
         }
 
         return null;
@@ -172,32 +170,21 @@ public final class FMGBiomeMapper {
                 );
     }
 
-    private static Set<RegistryKey<Biome>> buildPaletteKeys() {
+    private static Set<RegistryKey<Biome>> buildPaletteKeys(com.example.profile.FmgContentProfile profile) {
         Set<RegistryKey<Biome>> keys = new LinkedHashSet<>(NAMED_MAPPINGS.values());
+        keys.addAll(profile.allBiomeKeys());
         Collections.addAll(
                 keys,
                 BiomeKeys.DEEP_OCEAN,
                 BiomeKeys.OCEAN,
                 BiomeKeys.BEACH,
-            BiomeKeys.LUSH_CAVES,
-            BiomeKeys.DRIPSTONE_CAVES,
-            BiomeKeys.DEEP_DARK,
-                BiomeKeys.SNOWY_SLOPES,
-                BiomeKeys.STONY_PEAKS,
-                BiomeKeys.GROVE,
-                BiomeKeys.WINDSWEPT_HILLS,
-                BiomeKeys.SAVANNA_PLATEAU,
-                BiomeKeys.SNOWY_PLAINS,
-                BiomeKeys.MANGROVE_SWAMP,
-                BiomeKeys.SNOWY_TAIGA,
-                BiomeKeys.JUNGLE,
-                BiomeKeys.BADLANDS
+                BiomeKeys.LUSH_CAVES,
+                BiomeKeys.DRIPSTONE_CAVES,
+                BiomeKeys.DEEP_DARK
         );
         if (!keys.contains(BiomeKeys.PLAINS)) {
             keys.add(BiomeKeys.PLAINS);
         }
         return Collections.unmodifiableSet(keys);
     }
-
-
 }

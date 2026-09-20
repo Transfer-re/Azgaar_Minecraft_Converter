@@ -3,7 +3,10 @@
 	"package": "com.example.mixin.client",
 	"compatibilityLevel": "JAVA_21",
 	"client": [
-		"ExampleClientMixin"
+		"CreateWorldScreenMixin",
+		"ExampleClientMixin",
+		"ScreenBakeOverlayMixin",
+		"WorldCreatorMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1

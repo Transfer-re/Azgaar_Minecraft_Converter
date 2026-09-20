@@ -18,8 +18,12 @@ public class FMGHeightSampler {
     public static final double SAMPLE_SCALE = DEFAULT_SAMPLE_SCALE;
 
     public static double sampleScale() {
-        // Read from global config via FMGMapDataCache (cached).
-        // Falls back to DEFAULT_SAMPLE_SCALE when config is missing/invalid.
+        // Prefer the loaded world's per-world scale (from its MapInfo); fall back
+        // to the global config file for tooling / data-gen / no world loaded.
+        com.example.worldmap.MapInfo mapInfo = com.example.worldgen.FmgWorldSettings.current();
+        if (mapInfo != null && Double.isFinite(mapInfo.scale()) && mapInfo.scale() > 0.0) {
+            return mapInfo.scale();
+        }
         double s = FMGMapDataCache.sampleScale();
         if (!Double.isFinite(s) || s <= 0.0) {
             return DEFAULT_SAMPLE_SCALE;

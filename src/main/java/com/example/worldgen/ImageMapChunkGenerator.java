@@ -13,7 +13,6 @@ import com.example.fmg.FMGProvince;
 import com.example.fmg.FMGRoute;
 import com.example.fmg.FMGRouteSampler;
 import com.example.fmg.FMGState;
-import com.example.fmg.FMRiverSampler;
 import com.example.mixin.NoiseConfigAccessor;
 import com.example.worldmap.MapInfo;
 import com.example.worldmap.runtime.MapImageCache;
@@ -79,6 +78,12 @@ public final class ImageMapChunkGenerator extends ChunkGenerator {
 
     private final DensityFunction heightCap;
     private final AtomicBoolean noiseRouterPatched = new AtomicBoolean(false);
+    private volatile boolean cavesApplied = false;
+    private volatile boolean worldSeedKnown = false;
+    private volatile long worldSeed;
+
+    /** Working-grid padding around each chunk for route shaping (see computeGrid). */
+    private static final int ROUTE_PAD = 20;
 
     public ImageMapChunkGenerator(
             BiomeSource biomeSource,
@@ -88,6 +93,14 @@ public final class ImageMapChunkGenerator extends ChunkGenerator {
         super(biomeSource);
         this.delegateSettings = settings;
         this.mapInfo = mapInfo;
+        // NOTE: FmgWorldSettings.setCurrent is deliberately NOT called here.
+        // This constructor runs for every decode of an image_map generator --
+        // including throwaway ones from registry loading (e.g. the datapack's
+        // default fmg_test.json world preset), not just the actually-running
+        // world -- so setting the process-wide "current" settings here let a
+        // stray decode silently clobber the real world's scale/height for any
+        // chunk generated afterward. It's set instead from ServerWorldEvents.LOAD
+        // in FantasyMapGenerator, gated to the real overworld's generator.
 
         this.columnCache = ThreadLocal.withInitial(() -> new ChunkColumnCache(mapInfo));
 
@@ -128,16 +141,55 @@ public final class ImageMapChunkGenerator extends ChunkGenerator {
             base.spawnTarget(),
             mapInfo.seaLevel(),
             base.mobGenerationDisabled(),
+            // Aquifers off: the constant sea-level aquifer fills every sub-sea-level
+            // air cell with water, so FMG oceans stay full right up to the shore.
+            // (The real aquifer's flooded/dry noise leaves a ragged band of exposed
+            // seafloor at the coast because it keys off vanilla continentalness,
+            // which has nothing to do with where the FMG landmass is.)
             false,
             false,
             base.usesLegacyRandom()
         );
         this.runtimeSettings = RegistryEntry.of(fixedSettings);
         this.delegate = new NoiseChunkGenerator(biomeSource, this.runtimeSettings);
+
+        // The expensive per-map builds (heightfield / routes / rivers / climate)
+        // now happen in FmgBake.ensureBaked on ServerWorldEvents.LOAD -- on the
+        // server thread, before any chunk generates, and persisted to the world
+        // folder. If that doesn't run (non-server tooling), the lazy builders
+        // still fire on first use.
     }
 
     public MapInfo mapInfo() {
         return mapInfo;
+    }
+
+    // ---- fractal detail noise (analytic, per column) ----
+
+    private static com.example.heightmap.HeightPostProcess.FractalDetail detailPass(MapInfo mapInfo) {
+        // Per-world switch + amplitude come from MapInfo (the create-world screen);
+        // frequency / octaves / fade stay in the global heightmap.json.
+        if (!mapInfo.surfaceDetail() || mapInfo.detailAmplitude() == 0.0) {
+            return null;
+        }
+        com.example.heightmap.HeightmapPostConfig cfg = com.example.heightmap.HeightmapPostConfig.get();
+        if (!cfg.enabled) {
+            return null;
+        }
+        com.example.heightmap.HeightPostProcess.FractalDetail d = cfg.detail.toPass();
+        d.amplitude = mapInfo.detailAmplitude();
+        return d;
+    }
+
+    /** Per-column height offset from the configured detail-noise pass, or 0 if disabled. */
+    static double detailOffset(MapInfo mapInfo, int worldX, int worldZ, double currentHeight) {
+        com.example.heightmap.HeightPostProcess.FractalDetail d = detailPass(mapInfo);
+        if (d == null) return 0.0;
+        com.example.heightmap.HeightmapPostConfig cfg = com.example.heightmap.HeightmapPostConfig.get();
+        long base = cfg.seed != 0 ? cfg.seed
+                : (mapInfo.fmgExport() == null ? 0 : mapInfo.fmgExport().hashCode());
+        long ns = com.example.heightmap.HeightPostProcess.FractalDetail.noiseSeed(base);
+        return d.deltaAt(worldX, worldZ, currentHeight, mapInfo.seaLevel(), ns);
     }
 
     @Override
@@ -162,7 +214,9 @@ public final class ImageMapChunkGenerator extends ChunkGenerator {
         // Let vanilla surface rules decide the top blocks per-biome.
         delegate.buildSurface(region, structures, noiseConfig, chunk);
 
-        // Then stamp route blocks on top of the finished surface.
+        // Carve water / waterfalls / arch bridges first, then routes (which
+        // now skip river columns), all before feature & vegetation placement.
+        applyRivers(chunk);
         applyRoutes(chunk);
     }
 
@@ -218,18 +272,39 @@ public final class ImageMapChunkGenerator extends ChunkGenerator {
                 Identifier.of("minecraft", "villages")
         );
         var filtered = FilteringRegistryWrapper.excludingKey(structureSetRegistry, villagesKey);
+        this.worldSeed = seed;
+        this.worldSeedKnown = true;
         return super.createStructurePlacementCalculator(filtered, noiseConfig, seed);
     }
 
-    private void patchNoiseRouterOnce(NoiseConfig noiseConfig) {
-        if (!noiseRouterPatched.compareAndSet(false, true)) {
+    private synchronized void patchNoiseRouterOnce(NoiseConfig noiseConfig) {
+        if (cavesApplied) {
             return;
         }
+        NoiseConfigAccessor accessor = (NoiseConfigAccessor) (Object) noiseConfig;
 
-        // Vanilla NoiseChunkGenerator uses noiseConfig.getNoiseRouter() during fill.
-        // NoiseConfig is created/cached by the ChunkGeneratorSettings registry key.
-        // We point our FMG dimension at a distinct settings key (aliasing the vanilla overworld settings)
-        // so this patch only affects the FMG dimension and not the real minecraft:overworld.
+        // Preferred path: a fully resolved router built from the FMG noise
+        // settings -- initialDensity = the height step (surface stays locked to
+        // the map), finalDensity = the step with vanilla 1.18+ noise caves
+        // carved in. NoiseConfig.create binds all the noise samplers the way the
+        // game does.
+        if (worldSeedKnown && FmgNoiseCaves.ready()) {
+            NoiseRouter resolved = FmgNoiseCaves.buildResolvedRouter(
+                    this.delegateSettings.value(), this.heightCap, mapInfo.seaLevel(), this.worldSeed);
+            if (resolved != null) {
+                accessor.fantasymapgenerator$setNoiseRouter(resolved);
+                noiseRouterPatched.set(true);
+                cavesApplied = true;
+                return;
+            }
+        }
+
+        // Fallback (registries/seed not available yet -- at worst the first few
+        // spawn chunks): bare height step for both densities, no noise caves.
+        // Not latched, so a later call installs the real router.
+        if (noiseRouterPatched.get()) {
+            return;
+        }
         NoiseRouter base = noiseConfig.getNoiseRouter();
         NoiseRouter patched = new NoiseRouter(
                 base.barrierNoise(),
@@ -248,8 +323,8 @@ public final class ImageMapChunkGenerator extends ChunkGenerator {
                 base.veinRidged(),
                 base.veinGap()
         );
-
-        ((NoiseConfigAccessor) (Object) noiseConfig).fantasymapgenerator$setNoiseRouter(patched);
+        accessor.fantasymapgenerator$setNoiseRouter(patched);
+        noiseRouterPatched.set(true);
     }
 
     @Override
@@ -287,6 +362,182 @@ public final class ImageMapChunkGenerator extends ChunkGenerator {
         text.add("FMG province: " + provinceName);
     }
 
+    private static final int[][] DIRS4 = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
+
+    /**
+     * Water, waterfalls and arch bridges for river columns. Runs after the
+     * vanilla surface builder and before {@link #applyRoutes} / feature gen.
+     */
+    private void applyRivers(Chunk chunk) {
+        ChunkColumnCache cache = columnCache.get();
+        ChunkPos cp = chunk.getPos();
+        int minY = getMinimumY();
+        int maxY = getWorldHeight();
+        BlockState water = Blocks.WATER.getDefaultState();
+        BlockState air = Blocks.AIR.getDefaultState();
+        com.example.profile.FmgContentProfile profile = MapImageCache.get(mapInfo).profile();
+        BlockState brick = profile.block(profile.blocks.bridge);
+        var rcfg = com.example.heightmap.HeightmapPostConfig.get().rivers;
+        BlockPos.Mutable m = new BlockPos.Mutable();
+
+        // Effective per-column water surface: from the carve, then a relaxation
+        // pass that fills 1-wide dry pockets a scalloped channel edge leaves
+        // between the 4-connected river columns (grass/sugar-cane bait otherwise).
+        int[] effWater = new int[256];
+        int[] effBed = new int[256];
+        for (int lx = 0; lx < 16; lx++) {
+            for (int lz = 0; lz < 16; lz++) {
+                int i = (lx << 4) | lz;
+                effWater[i] = cache.getRiverWaterY(cp.getStartX() + lx, cp.getStartZ() + lz);
+                effBed[i] = cache.getRiverBedY(cp.getStartX() + lx, cp.getStartZ() + lz);
+            }
+        }
+        for (int pass = 0; pass < 3; pass++) {
+            for (int lx = 0; lx < 16; lx++) {
+                for (int lz = 0; lz < 16; lz++) {
+                    int i = (lx << 4) | lz;
+                    if (effWater[i] >= 0) continue;
+                    int wx = cp.getStartX() + lx;
+                    int wz = cp.getStartZ() + lz;
+                    int nBest = -1, wet = 0;
+                    for (int[] dir : DIRS4) {
+                        int nlx = lx + dir[0], nlz = lz + dir[1];
+                        int nWater = (nlx >= 0 && nlx < 16 && nlz >= 0 && nlz < 16)
+                                ? effWater[(nlx << 4) | nlz]
+                                : cache.getRiverWaterY(wx + dir[0], wz + dir[1]);
+                        if (nWater >= 0) {
+                            wet++;
+                            nBest = (nBest < 0) ? nWater : Math.min(nBest, nWater);
+                        }
+                    }
+                    int top = cache.getHeight(wx, wz) - 1;
+                    if (wet >= 2 && nBest >= 0 && top < nBest) {
+                        effWater[i] = nBest;
+                        effBed[i] = Math.min(top, nBest - 1);
+                    }
+                }
+            }
+        }
+
+        for (int lx = 0; lx < 16; lx++) {
+            for (int lz = 0; lz < 16; lz++) {
+                int wx = cp.getStartX() + lx;
+                int wz = cp.getStartZ() + lz;
+
+                int deckY = cache.getBridgeDeckY(wx, wz);
+                int waterY = effWater[(lx << 4) | lz];
+
+                if (waterY >= 0) {
+                    int bedY = effBed[(lx << 4) | lz];
+                    if (bedY < minY + 1) bedY = minY + 1;
+                    if (bedY >= waterY) bedY = waterY - 1;
+
+                    // solid bed: replace whatever the surface builder left, down
+                    // a couple blocks, so there's never dirt/grass under the water
+                    for (int y = bedY; y >= bedY - 1 && y > minY; y--) {
+                        m.set(wx, y, wz);
+                        chunk.setBlockState(m, riverBedBlock(profile, chunk, wx, y, wz), false);
+                    }
+
+                    // water column
+                    for (int y = bedY + 1; y <= waterY && y < maxY - 1; y++) {
+                        m.set(wx, y, wz);
+                        chunk.setBlockState(m, water, false);
+                    }
+                    // let the surface water settle/flow on chunk load so it
+                    // seals any remaining scallop it borders
+                    if (waterY > minY && waterY < maxY - 1) {
+                        m.set(wx, waterY, wz);
+                        chunk.markBlockForPostProcessing(m.toImmutable());
+                    }
+                    // clear anything left just above the surface
+                    for (int y = waterY + 1; y <= waterY + 4 && y < maxY - 1; y++) {
+                        m.set(wx, y, wz);
+                        BlockState s = chunk.getBlockState(m);
+                        if (!s.isAir() && !s.isOf(Blocks.WATER)) chunk.setBlockState(m, air, false);
+                    }
+                    // waterfall: a higher neighbour pool spills into this column
+                    int cap = waterY + rcfg.maxWaterfallDrop + 2;
+                    for (int[] dir : DIRS4) {
+                        int nWater = cache.getRiverWaterY(wx + dir[0], wz + dir[1]);
+                        if (nWater >= waterY + 2) {
+                            for (int y = waterY + 1; y <= Math.min(nWater, cap) && y < maxY - 1; y++) {
+                                m.set(wx, y, wz);
+                                chunk.setBlockState(m, water, false);
+                            }
+                        }
+                    }
+                }
+
+                if (deckY >= 0) {
+                    int archY = cache.getBridgeArchY(wx, wz);
+                    if (archY < 0 || archY >= deckY) archY = deckY - 1;
+                    boolean sideCol = cache.getBridgeSide(wx, wz) == 1;
+
+                    // structural underside (the "bottom", cobblestone)
+                    if (waterY >= 0) {
+                        for (int y = waterY + 1; y < archY && y < maxY - 1; y++) {
+                            m.set(wx, y, wz);
+                            if (!chunk.getBlockState(m).isOf(Blocks.WATER)) chunk.setBlockState(m, air, false);
+                        }
+                        for (int y = Math.max(minY + 1, archY); y < deckY && y < maxY - 1; y++) {
+                            m.set(wx, y, wz);
+                            chunk.setBlockState(m, brick, false);
+                        }
+                    } else {
+                        int ground = Math.max(minY + 1, cache.getHeight(wx, wz) - 1);
+                        for (int y = ground; y < deckY && y < maxY - 1; y++) {
+                            m.set(wx, y, wz);
+                            chunk.setBlockState(m, brick, false);
+                        }
+                    }
+
+                    // walkway floor (the "top", same cobblestone)
+                    if (deckY > minY && deckY < maxY - 1) {
+                        m.set(wx, deckY, wz);
+                        chunk.setBlockState(m, brick, false);
+                    }
+
+                    // sides get a parapet one above the walkway; the middle is
+                    // kept open (>= 1 block headroom) so you can walk through
+                    for (int y = deckY + 1; y <= deckY + 4 && y < maxY - 1; y++) {
+                        m.set(wx, y, wz);
+                        if (sideCol && y == deckY + 1) {
+                            chunk.setBlockState(m, brick, false);
+                        } else if (!chunk.getBlockState(m).isAir()) {
+                            chunk.setBlockState(m, air, false);
+                        }
+                    }
+
+                    // road marker on the walkway (above the parapet on side
+                    // columns) so bridges stay recognisable as road
+                    int markerY = deckY + (sideCol ? 2 : 1);
+                    if (markerY < maxY - 1) {
+                        m.set(wx, markerY, wz);
+                        chunk.setBlockState(m, RoadMarker.state(), false);
+                    }
+                }
+            }
+        }
+    }
+
+    private BlockState riverBedBlock(com.example.profile.FmgContentProfile profile,
+                                     Chunk chunk, int x, int y, int z) {
+        int biomeY = y >> 2;
+        RegistryEntry<Biome> biome = chunk.getBiomeForNoiseGen(x >> 2, biomeY, z >> 2);
+        boolean desert = isBiome(biome, BiomeKeys.DESERT) || biome.isIn(BiomeTags.IS_BADLANDS);
+        List<com.example.profile.FmgContentProfile.Weighted> palette =
+                profile.blocks.riverBed.get(desert ? "desert" : "default");
+        if (palette == null) {
+            palette = profile.blocks.riverBed.get("default");
+        }
+        // coherent noise rather than a per-block hash, so the bed reads as shoals
+        // and gravel runs instead of speckle
+        double scale = 1.0 / Math.max(1.0, profile.blocks.riverBedPatchScale);
+        double roll = com.example.heightmap.HeightPostProcess.valueNoise(x * scale, z * scale, 0x5A4DL);
+        return profile.pickBlockByRoll(palette, roll);
+    }
+
     private void applyRoutes(Chunk chunk) {
         ChunkPos chunkPos = chunk.getPos();
         int minY = getMinimumY();
@@ -294,11 +545,15 @@ public final class ImageMapChunkGenerator extends ChunkGenerator {
         int seaLevel = mapInfo.seaLevel();
         BlockPos.Mutable mutable = new BlockPos.Mutable();
         ChunkColumnCache cache = columnCache.get();
+        com.example.profile.FmgContentProfile profile = MapImageCache.get(mapInfo).profile();
 
         for (int localX = 0; localX < 16; localX++) {
             for (int localZ = 0; localZ < 16; localZ++) {
                 int worldX = chunkPos.getStartX() + localX;
                 int worldZ = chunkPos.getStartZ() + localZ;
+                if (cache.getRiverWaterY(worldX, worldZ) >= 0 || cache.getBridgeDeckY(worldX, worldZ) >= 0) {
+                    continue;
+                }
                 int target = cache.getHeight(worldX, worldZ);
 
                 // Our height cap density function produces air at exactly y==target.
@@ -327,7 +582,7 @@ public final class ImageMapChunkGenerator extends ChunkGenerator {
                 boolean isSnowy = isBiome(biome, BiomeKeys.SNOWY_PLAINS) || isBiome(biome, BiomeKeys.SNOWY_TAIGA)
                         || isBiome(biome, BiomeKeys.SNOWY_SLOPES) || isBiome(biome, BiomeKeys.FROZEN_PEAKS);
 
-                BlockState pathBlock = choosePathBlock(routeKind, isDesert, isSnowy, worldX, worldZ);
+                BlockState pathBlock = choosePathBlock(profile, routeKind, isDesert, isSnowy, worldX, worldZ);
                 if (pathBlock == null) {
                     continue;
                 }
@@ -335,10 +590,13 @@ public final class ImageMapChunkGenerator extends ChunkGenerator {
                 mutable.set(worldX, surfaceY, worldZ);
                 chunk.setBlockState(mutable, pathBlock, false);
 
-                // Ensure dirt paths don't immediately revert by having snow layers above them.
+                // Mark every generated road column with the invisible road
+                // marker (see RoadMarker): it keeps snow off the path and is the
+                // signal the town sampler uses to recognise generated roads.
                 mutable.set(worldX, surfaceY + 1, worldZ);
-                if (chunk.getBlockState(mutable).isOf(Blocks.SNOW)) {
-                    chunk.setBlockState(mutable, Blocks.AIR.getDefaultState(), false);
+                BlockState above = chunk.getBlockState(mutable);
+                if (above.isAir() || above.isOf(Blocks.SNOW)) {
+                    chunk.setBlockState(mutable, RoadMarker.state(), false);
                 }
             }
         }
@@ -379,6 +637,26 @@ public final class ImageMapChunkGenerator extends ChunkGenerator {
             return grid.routes[idx(worldX, worldZ)];
         }
 
+        int getRiverWaterY(int worldX, int worldZ) {
+            return getGrid(worldX, worldZ).riverWaterY[idx(worldX, worldZ)];
+        }
+
+        int getRiverBedY(int worldX, int worldZ) {
+            return getGrid(worldX, worldZ).riverBedY[idx(worldX, worldZ)];
+        }
+
+        int getBridgeDeckY(int worldX, int worldZ) {
+            return getGrid(worldX, worldZ).bridgeDeckY[idx(worldX, worldZ)];
+        }
+
+        int getBridgeArchY(int worldX, int worldZ) {
+            return getGrid(worldX, worldZ).bridgeArchY[idx(worldX, worldZ)];
+        }
+
+        int getBridgeSide(int worldX, int worldZ) {
+            return getGrid(worldX, worldZ).bridgeSide[idx(worldX, worldZ)];
+        }
+
         private ChunkGrid getGrid(int worldX, int worldZ) {
             int chunkX = worldX >> 4;
             int chunkZ = worldZ >> 4;
@@ -399,13 +677,12 @@ public final class ImageMapChunkGenerator extends ChunkGenerator {
             int seaLevel = mapInfo.seaLevel();
             final FMGMapData map = data.fmgData();
 
-            final boolean hasBurgs = map != null && map.getInfo() != null && map.getBurgs() != null && !map.getBurgs().isEmpty();
-
-            // Route shaping is done on a padded grid so we can smoothly blend across
-            // chunk edges (noise fill samples neighbor columns frequently).
-            // Burg shaping needs a much larger neighborhood to avoid chunk seams.
-            // Keep this >= burg blend radius.
-            final int pad = hasBurgs ? 64 : 8; // must be >= max(roadRadius, burgBlendRadius)
+            // Route shaping runs on a grid padded past the chunk so the
+            // cross-section + walkability relaxation is fully resolved before we
+            // copy the centre 16x16. It only needs to cover the widest route
+            // radius (~8) plus the walkability propagation reach (8 passes); 20
+            // is 2x that. (An old burg pre-flatten pass wanted 64 -- it's gone.)
+            final int pad = ROUTE_PAD;
             final int size = 16 + pad * 2;
             final int startX = (chunkX << 4) - pad;
             final int startZ = (chunkZ << 4) - pad;
@@ -421,24 +698,18 @@ public final class ImageMapChunkGenerator extends ChunkGenerator {
             float[] nearestSampleT = new float[size * size];
             double[] nearestDistSq = new double[size * size];
 
-            // 1) Sample FMG height (padded area)
+            // 1) Sample FMG height (padded area), plus the analytic fractal-detail
+            // offset (rivers are carved later, in step 5c).
             for (int lx = 0; lx < size; lx++) {
                 for (int lz = 0; lz < size; lz++) {
                     int x = startX + lx;
                     int z = startZ + lz;
                     int index = (lx * size) + lz;
 
-                    int target = data.sampleHeightY(x, z);
+                    double target = data.sampleHeightY(x, z);
+                    target += detailOffset(mapInfo, x, z, target);
 
-                    // River carving from your current generator.
-                    // FMRiverSampler.RiverQuery rq = FMRiverSampler.query(x, z);
-                    // if (rq.hit) {
-                    //     double carved = FMRiverSampler.carvedHeight(rq, seaLevel);
-                    //     int riverBed = (int) Math.floor(carved);
-                    //     target = Math.min(target, riverBed);
-                    // }
-
-                    baseHeights[index] = target;
+                    baseHeights[index] = (int) Math.round(target);
                 }
             }
 
@@ -456,110 +727,67 @@ public final class ImageMapChunkGenerator extends ChunkGenerator {
             final java.util.HashMap<Integer, RouteProfile> profileById = new java.util.HashMap<>();
 
             if (map != null && map.getInfo() != null && map.getRoutes() != null && !map.getRoutes().isEmpty()) {
-                final double mapW = map.getInfo().getWidth();
-                final double mapH = map.getInfo().getHeight();
-                final double scale = FMGHeightSampler.sampleScale();
-                final double offsetX = -(mapW * scale) / 2.0;
-                final double offsetZ = -(mapH * scale) / 2.0;
+                final int stampRadius = (int) Math.ceil(
+                        Math.max(RouteProfile.forKind(FMGRouteSampler.RouteKind.ROAD).maxRadius,
+                                RouteProfile.forKind(FMGRouteSampler.RouteKind.TRAIL).maxRadius) + 1.0);
 
-                // Use a single max radius for stamping to keep the work bounded.
-                final RouteProfile roadProfile = RouteProfile.forKind(FMGRouteSampler.RouteKind.ROAD);
-                final RouteProfile trailProfile = RouteProfile.forKind(FMGRouteSampler.RouteKind.TRAIL);
-                final int stampRadius = (int) Math.ceil(Math.max(roadProfile.maxRadius, trailProfile.maxRadius) + 1.0);
+                // Only the route segments whose bucket overlaps this padded grid,
+                // not all ~200k in the map.
+                java.util.List<com.example.fmg.FMGRouteIndex.Seg> segs = new java.util.ArrayList<>();
+                com.example.fmg.FMGRouteIndex.get(mapInfo.fmgExport(), map)
+                        .collectSegments(startX, startZ, startX + size - 1, startZ + size - 1, segs);
 
-                for (FMGRoute route : map.getRoutes()) {
-                    if (route == null || route.getGroup() == null) {
-                        continue;
+                for (com.example.fmg.FMGRouteIndex.Seg seg : segs) {
+                    RouteProfile profile = profileById.get(seg.routeId);
+                    if (profile == null) {
+                        profile = RouteProfile.forKind(seg.kind);
+                        profileById.put(seg.routeId, profile);
+                        routeKindById.put(seg.routeId, seg.kind);
                     }
-
-                    FMGRouteSampler.RouteKind kind;
-                    if ("roads".equals(route.getGroup())) {
-                        kind = FMGRouteSampler.RouteKind.ROAD;
-                    } else if ("trails".equals(route.getGroup())) {
-                        kind = FMGRouteSampler.RouteKind.TRAIL;
-                    } else {
-                        continue;
-                    }
-
-                    List<FMGRouteSampler.RouteSample> samples = FMGRouteSampler.getSampledRoute(route.getI());
-                    if (samples == null || samples.size() < 2) {
-                        continue;
-                    }
-
-                    RouteProfile profile = RouteProfile.forKind(kind);
-                    routeKindById.put(route.getI(), kind);
-                    profileById.put(route.getI(), profile);
-
                     double maxR2 = profile.maxRadius * profile.maxRadius;
 
-                    // Stamp each spline segment into the local padded grid.
-                    // Using distance-to-segment (not distance-to-sample-point) avoids
-                    // occasional "holes" on steep/curvy sections that can create a
-                    // single large step when the path briefly stops being shaped.
-                    for (int si = 0; si < samples.size() - 1; si++) {
-                        FMGRouteSampler.RouteSample a = samples.get(si);
-                        FMGRouteSampler.RouteSample b = samples.get(si + 1);
+                    double ax = seg.ax, az = seg.az, bx = seg.bx, bz = seg.bz;
+                    int minLX = (int) Math.floor(Math.min(ax, bx) - stampRadius - startX);
+                    int maxLX = (int) Math.ceil(Math.max(ax, bx) + stampRadius - startX);
+                    int minLZ = (int) Math.floor(Math.min(az, bz) - stampRadius - startZ);
+                    int maxLZ = (int) Math.ceil(Math.max(az, bz) + stampRadius - startZ);
+                    if (maxLX < 0 || maxLZ < 0 || minLX >= size || minLZ >= size) {
+                        continue;
+                    }
+                    minLX = Math.max(0, minLX);
+                    minLZ = Math.max(0, minLZ);
+                    maxLX = Math.min(size - 1, maxLX);
+                    maxLZ = Math.min(size - 1, maxLZ);
 
-                        double ax = (a.x() * scale) + offsetX;
-                        double az = (a.y() * scale) + offsetZ;
-                        double bx = (b.x() * scale) + offsetX;
-                        double bz = (b.y() * scale) + offsetZ;
+                    double vx = bx - ax;
+                    double vz = bz - az;
+                    double segLenSq = (vx * vx) + (vz * vz);
 
-                        double segMinX = Math.min(ax, bx) - stampRadius;
-                        double segMaxX = Math.max(ax, bx) + stampRadius;
-                        double segMinZ = Math.min(az, bz) - stampRadius;
-                        double segMaxZ = Math.max(az, bz) + stampRadius;
+                    for (int lx = minLX; lx <= maxLX; lx++) {
+                        double px = startX + lx;
+                        for (int lz = minLZ; lz <= maxLZ; lz++) {
+                            double pz = startZ + lz;
 
-                        int minLX = (int) Math.floor(segMinX - startX);
-                        int maxLX = (int) Math.ceil(segMaxX - startX);
-                        int minLZ = (int) Math.floor(segMinZ - startZ);
-                        int maxLZ = (int) Math.ceil(segMaxZ - startZ);
-
-                        if (maxLX < 0 || maxLZ < 0 || minLX >= size || minLZ >= size) {
-                            continue;
-                        }
-
-                        minLX = Math.max(0, minLX);
-                        minLZ = Math.max(0, minLZ);
-                        maxLX = Math.min(size - 1, maxLX);
-                        maxLZ = Math.min(size - 1, maxLZ);
-
-                        double vx = bx - ax;
-                        double vz = bz - az;
-                        double segLenSq = (vx * vx) + (vz * vz);
-
-                        for (int lx = minLX; lx <= maxLX; lx++) {
-                            double px = startX + lx;
-                            for (int lz = minLZ; lz <= maxLZ; lz++) {
-                                double pz = startZ + lz;
-
-                                double t;
-                                if (segLenSq <= 0.0) {
-                                    t = 0.0;
-                                } else {
-                                    double wx = px - ax;
-                                    double wz = pz - az;
-                                    t = (wx * vx + wz * vz) / segLenSq;
-                                    if (t < 0.0) t = 0.0;
-                                    else if (t > 1.0) t = 1.0;
-                                }
-
-                                double projX = ax + t * vx;
-                                double projZ = az + t * vz;
-                                double dx = px - projX;
-                                double dz = pz - projZ;
-                                double distSq = (dx * dx) + (dz * dz);
-                                if (distSq > maxR2) {
-                                    continue;
-                                }
-
-                                int index = (lx * size) + lz;
-                                if (distSq < nearestDistSq[index]) {
-                                    nearestDistSq[index] = distSq;
-                                    nearestRouteId[index] = route.getI();
-                                    nearestSampleIndex[index] = si;
-                                    nearestSampleT[index] = (float) t;
-                                }
+                            double t;
+                            if (segLenSq <= 0.0) {
+                                t = 0.0;
+                            } else {
+                                t = ((px - ax) * vx + (pz - az) * vz) / segLenSq;
+                                if (t < 0.0) t = 0.0;
+                                else if (t > 1.0) t = 1.0;
+                            }
+                            double dx = px - (ax + t * vx);
+                            double dz = pz - (az + t * vz);
+                            double distSq = (dx * dx) + (dz * dz);
+                            if (distSq > maxR2) {
+                                continue;
+                            }
+                            int index = (lx * size) + lz;
+                            if (distSq < nearestDistSq[index]) {
+                                nearestDistSq[index] = distSq;
+                                nearestRouteId[index] = seg.routeId;
+                                nearestSampleIndex[index] = seg.sampleIndex;
+                                nearestSampleT[index] = (float) t;
                             }
                         }
                     }
@@ -757,34 +985,111 @@ public final class ImageMapChunkGenerator extends ChunkGenerator {
 
             // 6) Copy central 16x16 into the chunk grid, and build a route mask
             // based on the (flat) core distance to the spline.
+            java.util.Arrays.fill(out.riverWaterY, -1);
+            java.util.Arrays.fill(out.riverBedY, -1);
+            java.util.Arrays.fill(out.bridgeDeckY, -1);
+            java.util.Arrays.fill(out.bridgeArchY, -1);
+            java.util.Arrays.fill(out.bridgeSide, -1);
+            com.example.fmg.FMGRiverNetwork rivers = com.example.fmg.FMGRiverNetwork.get(
+                    mapInfo.fmgExport(), map, mapInfo.minY(), mapInfo.maxY(), seaLevel);
+            com.example.heightmap.HeightmapPostConfig.Rivers rcfg =
+                    com.example.heightmap.HeightmapPostConfig.get().rivers;
+
+            // The valley reaches much further than the channel, so gather every
+            // sample that can touch this chunk once and scan that list per column.
+            List<com.example.fmg.FMGRiverNetwork.RiverSample> riverCand =
+                    rivers == null ? List.of() : rivers.collectNear(chunkX, chunkZ);
+            double valleyK = rivers == null ? 0.0 : rivers.valleySmoothK();
+            double valleyReach = rivers == null ? 0.0 : rivers.maxValleyRadius();
+
             for (int localX = 0; localX < 16; localX++) {
                 for (int localZ = 0; localZ < 16; localZ++) {
                     int srcX = localX + pad;
                     int srcZ = localZ + pad;
                     int srcIndex = (srcX * size) + srcZ;
                     int dstIndex = (localX << 4) | localZ;
+                    int worldX = (chunkX << 4) + localX;
+                    int worldZ = (chunkZ << 4) + localZ;
 
-                    out.heights[dstIndex] = shapedHeights[srcIndex];
+                    int terrainHeight = shapedHeights[srcIndex];
+                    out.heights[dstIndex] = terrainHeight;
 
+                    // route mask
+                    FMGRouteSampler.RouteKind routeKind = FMGRouteSampler.RouteKind.NONE;
+                    double routeDist = -1, routeRadius = 0;
                     int routeId = nearestRouteId[srcIndex];
-                    if (routeId < 0) {
-                        out.routes[dstIndex] = FMGRouteSampler.RouteKind.NONE;
-                        continue;
+                    if (routeId >= 0) {
+                        FMGRouteSampler.RouteKind kind = routeKindById.get(routeId);
+                        if (kind != null) {
+                            RouteProfile profile = profileById.get(routeId);
+                            if (profile == null) profile = RouteProfile.forKind(kind);
+                            routeDist = Math.sqrt(nearestDistSq[srcIndex]);
+                            routeRadius = profile.routeBlockRadius;
+                            if (routeDist <= routeRadius) routeKind = kind;
+                        }
                     }
+                    out.routes[dstIndex] = routeKind;
 
-                    FMGRouteSampler.RouteKind kind = routeKindById.get(routeId);
-                    if (kind == null) {
-                        out.routes[dstIndex] = FMGRouteSampler.RouteKind.NONE;
-                        continue;
+                    // river carve -- curved channel bed inside the banks, then a
+                    // constant-slope V-valley outside it, smooth-blended into the
+                    // terrain so the rim is not a crease. Only ever lowers ground.
+                    com.example.fmg.FMGRiverNetwork.RiverSample near = null;
+                    double nearDistSq = Double.MAX_VALUE;
+                    for (com.example.fmg.FMGRiverNetwork.RiverSample s : riverCand) {
+                        double ddx = worldX - s.x;
+                        double ddz = worldZ - s.z;
+                        double d2 = (ddx * ddx) + (ddz * ddz);
+                        if (d2 < nearDistSq) {
+                            nearDistSq = d2;
+                            near = s;
+                        }
                     }
+                    double nearDist = near == null ? 0 : Math.sqrt(nearDistSq);
+                    if (near != null && nearDist <= near.halfWidth + valleyReach + valleyK) {
+                        double d = nearDist;
+                        int surface = near.waterSurfaceY;
 
-                    RouteProfile profile = profileById.get(routeId);
-                    if (profile == null) {
-                        profile = RouteProfile.forKind(kind);
+                        double floorTop = com.example.fmg.FMGRiverNetwork.valleyFloorY(near, d);
+                        int carvedTop = (int) Math.floor(com.example.fmg.FMGRiverNetwork.smoothMin(
+                                terrainHeight - 1.0, floorTop, valleyK));
+                        if (carvedTop + 1 < out.heights[dstIndex]) {
+                            out.heights[dstIndex] = carvedTop + 1;
+                        }
+                        int bedTop = out.heights[dstIndex] - 1;
+                        if (d <= near.halfWidth + rcfg.bankWidth && bedTop < surface) {
+                            out.riverWaterY[dstIndex] = surface;
+                            out.riverBedY[dstIndex] = bedTop;
+                        }
+
+                        // a road that meets the river becomes a cobblestone bridge, not a ford.
+                        // The span reaches out to where the valley side has climbed back
+                        // up to deck height, so the deck lands on the carved ground
+                        // instead of stopping short of it above the valley floor.
+                        int clearance = Math.max(1, rcfg.bridgeClearance);
+                        double bridgeReach = Math.max(rcfg.bankWidth,
+                                (clearance + 2) / Math.max(0.2, near.bankSlope));
+                        if (routeKind != FMGRouteSampler.RouteKind.NONE
+                                && d <= near.halfWidth + bridgeReach) {
+                            double span = near.halfWidth + bridgeReach + 3.0;
+                            double bu = Math.min(1.0, d / span);
+                            // Water is flat through a crossing (FMGRiverNetwork freezes
+                            // the pool there), so the deck is flat over the middle at
+                            // surface+clearance+1 and ramps up to meet the road (top
+                            // solid = height-1) toward the banks.
+                            int flatDeck = surface + clearance + 1;
+                            double rampT = smoothstep(0.35, 1.0, bu);
+                            int deckY = Math.max(flatDeck,
+                                    (int) Math.round(flatDeck + (out.heights[dstIndex] - 1 - flatDeck) * rampT));
+                            int archY = deckY - 1
+                                    - (int) Math.round(rcfg.bridgeArchRise * Math.sqrt(Math.max(0.0, 1.0 - bu * bu)));
+                            archY = Math.max(archY, surface + clearance);   // never dam the river
+                            out.bridgeDeckY[dstIndex] = deckY;
+                            out.bridgeArchY[dstIndex] = Math.min(archY, deckY - 1);
+                            // outer ~1.2 block ring of the road width -> the sides/parapets
+                            out.bridgeSide[dstIndex] = (routeDist >= routeRadius - 1.2) ? 1 : 0;
+                            out.routes[dstIndex] = FMGRouteSampler.RouteKind.NONE;
+                        }
                     }
-
-                    double dist = Math.sqrt(nearestDistSq[srcIndex]);
-                    out.routes[dstIndex] = dist <= profile.routeBlockRadius ? kind : FMGRouteSampler.RouteKind.NONE;
                 }
             }
 
@@ -1137,6 +1442,16 @@ public final class ImageMapChunkGenerator extends ChunkGenerator {
         private static final class ChunkGrid {
             final int[] heights = new int[16 * 16];
             final FMGRouteSampler.RouteKind[] routes = new FMGRouteSampler.RouteKind[16 * 16];
+            /** Water surface Y per column, or -1 where there is no river. */
+            final int[] riverWaterY = new int[16 * 16];
+            /** Carved bed top-solid Y per column (shelves toward the banks), or -1. */
+            final int[] riverBedY = new int[16 * 16];
+            /** Deck (walkway floor) Y for a bridge where a road meets a river, or -1. */
+            final int[] bridgeDeckY = new int[16 * 16];
+            /** Bottom Y of the arch ring / structural underside at this column, or -1. */
+            final int[] bridgeArchY = new int[16 * 16];
+            /** 1 = bridge side/parapet column, 0 = open walkway column, -1 = not a bridge. */
+            final int[] bridgeSide = new int[16 * 16];
         }
     }
 
@@ -1203,73 +1518,46 @@ public final class ImageMapChunkGenerator extends ChunkGenerator {
         }
     }
 
+    /**
+     * Road/trail surface from the world's content profile. The palette is keyed
+     * by terrain flavour ({@code desert} / {@code snowy} / {@code default}), so a
+     * Conquest profile can swap in its own materials without touching this code.
+     */
     private static BlockState choosePathBlock(
+            com.example.profile.FmgContentProfile profile,
             FMGRouteSampler.RouteKind kind,
             boolean isDesert,
             boolean isSnowy,
             int worldX,
             int worldZ
     ) {
+        String flavour = isDesert ? "desert" : (isSnowy ? "snowy" : "default");
+        com.example.profile.FmgContentProfile.RoadPalette palette = profile.blocks.roads.get(flavour);
+        if (palette == null) {
+            palette = profile.blocks.roads.get("default");
+        }
+        if (palette == null) {
+            return null;
+        }
+
+        List<com.example.profile.FmgContentProfile.Weighted> entries;
+        if (kind == FMGRouteSampler.RouteKind.TRAIL) {
+            entries = palette.trail;
+        } else if (kind == FMGRouteSampler.RouteKind.ROAD) {
+            entries = palette.road;
+        } else {
+            return null;
+        }
+        if (entries == null || entries.isEmpty()) {
+            return null;
+        }
+
         // Deterministic pseudo-random based on world coordinates so
         // routes look varied but stable between runs.
         long seed = (long) worldX * 341873128712L ^ (long) worldZ * 132897987541L;
         seed ^= (seed >>> 13);
         seed *= 0x5DEECE66DL;
-        int r = (int) (seed & 0x7FFFFFFF);
-
-        if (kind == FMGRouteSampler.RouteKind.TRAIL) {
-            if (isDesert) {
-                // Desert trails: mostly sand with occasional birch planks.
-                int v = r % 4; // 0-3
-                if (v == 2) {
-                    return Blocks.BIRCH_PLANKS.getDefaultState();
-                }
-                return Blocks.SAND.getDefaultState();
-            }
-
-            if (isSnowy) {
-                // Snowy trails: cobblestone and gravel, no snow on top.
-                int v = r % 4;
-                if (v < 2) {
-                    return Blocks.COBBLESTONE.getDefaultState();
-                }
-                return Blocks.GRAVEL.getDefaultState();
-            }
-            return Blocks.DIRT_PATH.getDefaultState();
-        }
-
-        if (kind == FMGRouteSampler.RouteKind.ROAD) {
-            if (isDesert) {
-                // Desert roads: terracotta core with granite variations.
-                int v = r % 8;
-                if (v < 3) {
-                    return Blocks.TERRACOTTA.getDefaultState();
-                } else if (v < 5) {
-                    return Blocks.GRANITE.getDefaultState();
-                } else if (v < 7) {
-                    return Blocks.POLISHED_GRANITE.getDefaultState();
-                }
-                // Occasional sand to help it fade into surroundings.
-                return Blocks.SAND.getDefaultState();
-            }
-
-            if (isSnowy) {
-                // Snowy roads: cobblestone/gravel base with andesite/stone bricks.
-                int v = r % 8;
-                if (v < 2) {
-                    return Blocks.COBBLESTONE.getDefaultState();
-                } else if (v < 4) {
-                    return Blocks.GRAVEL.getDefaultState();
-                } else if (v < 6) {
-                    return Blocks.ANDESITE.getDefaultState();
-                }
-                return Blocks.STONE_BRICKS.getDefaultState();
-            }
-
-            return Blocks.DIRT_PATH.getDefaultState();
-        }
-
-        return null;
+        return profile.pickBlock(entries, seed);
     }
 
     private static boolean isBiome(RegistryEntry<Biome> biome, net.minecraft.registry.RegistryKey<Biome> key) {

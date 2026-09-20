@@ -32,6 +32,11 @@ public class FMGMapData {
     private Map<Integer, FMGProvince> provinceMap;
     private Map<Integer, Integer> cellToProvince = new HashMap<>();
 
+    // Per grid-cell climate (grid.cells), indexed by grid cell id == array pos.
+    // A pack cell reaches these through cell.getG().
+    private int[] gridPrec;
+    private int[] gridCoastT;
+
     // Accelerate nearest-cell queries (used by Debug HUD + height sampling).
     // This is transient runtime state derived from cells.
     private transient KdNode cellKdRoot;
@@ -54,6 +59,24 @@ public class FMGMapData {
     // Getters and setters
     public FMGMapInfo getInfo() { return info; }
     public void setInfo(FMGMapInfo info) { this.info = info; }
+
+    public int[] getGridPrec() { return gridPrec; }
+    public void setGridPrec(int[] gridPrec) { this.gridPrec = gridPrec; }
+
+    public int[] getGridCoastT() { return gridCoastT; }
+    public void setGridCoastT(int[] gridCoastT) { this.gridCoastT = gridCoastT; }
+
+    /** Precipitation (0..~84, higher = wetter) for a pack cell, or {@code -1} if unavailable. */
+    public int precForCell(FMGCell cell) {
+        int g = cell == null ? -1 : cell.getG();
+        return (gridPrec != null && g >= 0 && g < gridPrec.length) ? gridPrec[g] : -1;
+    }
+
+    /** Signed coast-ring distance (+inland, -offshore) for a pack cell, or {@code 0} if unavailable. */
+    public int coastRingForCell(FMGCell cell) {
+        int g = cell == null ? -1 : cell.getG();
+        return (gridCoastT != null && g >= 0 && g < gridCoastT.length) ? gridCoastT[g] : 0;
+    }
     
     public List<FMGCell> getCells() { return cells; }
     public void setCells(List<FMGCell> cells) {

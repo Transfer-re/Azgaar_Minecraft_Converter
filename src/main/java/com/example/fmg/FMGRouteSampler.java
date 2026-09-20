@@ -16,6 +16,11 @@ import com.example.util.CatmullRomSpline;
  */
 public final class FMGRouteSampler {
 
+    // Match the painted-path radii used by the generator's route stamping.
+    // These are in WORLD BLOCKS and should not change when sampleScale changes.
+    private static final double TRAIL_RADIUS_BLOCKS = 2.4;
+    private static final double ROAD_RADIUS_BLOCKS = 4.4;
+
     public enum RouteKind {
         NONE,
         TRAIL,
@@ -115,14 +120,14 @@ public final class FMGRouteSampler {
 
             String group = route.getGroup();
             RouteKind kind;
-            double threshold;
+            double thresholdBlocks;
 
             if ("trails".equals(group)) {
                 kind = RouteKind.TRAIL;
-                threshold = 0.35; // ~2 blocks wide in world space
+                thresholdBlocks = TRAIL_RADIUS_BLOCKS;
             } else if ("roads".equals(group)) {
                 kind = RouteKind.ROAD;
-                threshold = 0.6;  // ~3.5 blocks wide in world space
+                thresholdBlocks = ROAD_RADIUS_BLOCKS;
             } else {
                 continue;
             }
@@ -133,7 +138,8 @@ public final class FMGRouteSampler {
             double bestForRoute = distanceToSampledPolyline(fmgX, fmgY, samples);
             if (bestForRoute < 0) continue;
 
-            double score = bestForRoute / threshold;
+            double distBlocks = bestForRoute * scale;
+            double score = distBlocks / thresholdBlocks;
             if (score <= 1.0 && score < bestScore) {
                 bestScore = score;
                 bestKind = kind;

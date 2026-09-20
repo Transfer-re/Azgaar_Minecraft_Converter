@@ -78,6 +78,15 @@ public class FMGMapLoader {
                 mapData.setProvinces(parseProvinces(root.getAsJsonArray("provinces")));
             }
 
+            // Grid cells carry precipitation and a signed coast-ring distance
+            // that the pack cells don't; pack cell.g indexes into this array.
+            if (root.has("grid")) {
+                JsonObject grid = root.getAsJsonObject("grid");
+                if (grid.has("cells")) {
+                    parseGridClimate(grid.getAsJsonArray("cells"), mapData);
+                }
+            }
+
             // FMG exports can represent biomes either as an array of
             // objects ("biomes") or as a columnar structure
             // ("biomesData" with parallel i/name/color arrays).
@@ -122,6 +131,20 @@ public class FMGMapLoader {
         return info;
     }
     
+    /** Reads precipitation and signed coast-ring distance from grid.cells into parallel arrays. */
+    private static void parseGridClimate(JsonArray gridCells, FMGMapData mapData) {
+        int n = gridCells.size();
+        int[] prec = new int[n];
+        int[] coastT = new int[n];
+        for (int idx = 0; idx < n; idx++) {
+            JsonObject c = gridCells.get(idx).getAsJsonObject();
+            prec[idx] = c.has("prec") ? c.get("prec").getAsInt() : 0;
+            coastT[idx] = c.has("t") ? c.get("t").getAsInt() : 0;
+        }
+        mapData.setGridPrec(prec);
+        mapData.setGridCoastT(coastT);
+    }
+
     private static List<FMGCell> parseCells(JsonArray cellsArray) {
         List<FMGCell> cells = new ArrayList<>();
         
@@ -157,6 +180,7 @@ public class FMGMapLoader {
                 cell.setC(c);
             }
             
+            if (cellObj.has("g")) cell.setG(cellObj.get("g").getAsInt());
             if (cellObj.has("h")) cell.setH(cellObj.get("h").getAsInt());
             if (cellObj.has("biome")) cell.setBiome(cellObj.get("biome").getAsInt());
             if (cellObj.has("fl")) cell.setFl(cellObj.get("fl").getAsInt());

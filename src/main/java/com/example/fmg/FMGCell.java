@@ -11,6 +11,7 @@ public class FMGCell {
     private double[] p;      // Position [x, y]
     private int[] v;         // Vertex indices around the cell (pack.cells.v)
     private int[] c;         // Neighboring cell indices (pack.cells.c)
+    private int g = -1;      // Grid cell index (pack.cells.g) -> grid.cells[g] for prec / coast distance
     private int h;           // Height/elevation
     private int biome;       // Biome ID
     private int fl;          // Flux (water flow)
@@ -37,7 +38,10 @@ public class FMGCell {
 
     public int[] getC() { return c; }
     public void setC(int[] c) { this.c = c; }
-    
+
+    public int getG() { return g; }
+    public void setG(int g) { this.g = g; }
+
     public int getH() { return h; }
     public void setH(int h) { this.h = h; }
     

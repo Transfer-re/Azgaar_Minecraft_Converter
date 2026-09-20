@@ -9,10 +9,10 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.example.fmg.FMGHeightSampler;
 import com.example.fmg.FMGMapData;
 import com.example.fmg.FMGMapLoader;
 import com.example.fmg.FMGRouteSampler;
-import com.example.fmg.FMRiverSampler;
 
 import net.fabricmc.loader.api.FabricLoader;
 
@@ -35,9 +35,41 @@ public final class FMGMapDataCache {
             throw new IllegalArgumentException("fmg_export must be defined");
         }
 
-        Path defaultPath = resolve(rawPath);
-        Path resolved = resolveConfiguredOverrideOrDefault(defaultPath);
+        Path resolved = resolveMapJson(rawPath);
         return CACHE.computeIfAbsent(resolved, FMGMapDataCache::read);
+    }
+
+    /**
+     * Resolve the JSON file to actually load, preferring the copy inside the
+     * world folder ({@code <world>/fmg/map.json}) so a saved world is
+     * self-contained. On the first load of a world whose local copy is missing,
+     * the source JSON is copied in.
+     */
+    private static Path resolveMapJson(String rawPath) {
+        Path fmgDir = com.example.worldgen.FmgWorldSettings.fmgDir();
+        Path localCopy = fmgDir == null ? null : fmgDir.resolve("map.json");
+
+        if (localCopy != null && Files.isRegularFile(localCopy)) {
+            return localCopy.normalize();
+        }
+
+        // Inside a running FMG world the per-world MapInfo path wins; the global
+        // config.json mapJsonPath override is only a fallback for tooling.
+        Path source = fmgDir != null
+                ? resolve(rawPath)
+                : resolveConfiguredOverrideOrDefault(resolve(rawPath));
+
+        if (localCopy != null && Files.isRegularFile(source)) {
+            try {
+                Files.createDirectories(fmgDir);
+                Files.copy(source, localCopy);
+                LOGGER.info("Copied FMG export into world folder: {}", localCopy);
+                return localCopy.normalize();
+            } catch (IOException ex) {
+                LOGGER.warn("Could not copy FMG export into the world folder (using {} directly)", source, ex);
+            }
+        }
+        return source;
     }
 
     public static void invalidate() {
@@ -103,7 +135,11 @@ public final class FMGMapDataCache {
             FMGMapData data = FMGMapLoader.loadMap(path);
 
             FMGRouteSampler.build(data);
-            FMRiverSampler.build(data);
+            // Prefer a persisted bake for the (slow) heightfield; otherwise build
+            // it now on the world-load thread rather than on a gen worker.
+            if (!com.example.worldgen.FmgBake.applyBakedHeightField(data)) {
+                FMGHeightSampler.sampleHeight(data, 0, 0);
+            }
 
             return data;
         } catch (IOException ex) {
