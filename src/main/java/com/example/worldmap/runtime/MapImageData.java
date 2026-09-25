@@ -49,9 +49,15 @@ public final class MapImageData {
         return Math.max(min, Math.min(maxInclusive, sampled));
     }
 
+    /** The content profile this world generates with (biome mapping + block palettes). */
+    public com.example.profile.FmgContentProfile profile() {
+        return com.example.profile.FmgProfiles.get(definition.profile());
+    }
+
     /** Resolve FMG biomes using the provided biome registry lookup. */
     public RegistryEntry<Biome> sampleFmgBiome(RegistryEntryLookup<Biome> biomes, int worldX, int worldZ) {
-        return FMGBiomeMapper.resolve(biomes, fmgData, worldX, worldZ);
+        return FMGBiomeMapper.resolve(definition.fmgExport(), definition.richBiomes(), profile(),
+                biomes, fmgData, worldX, worldZ);
     }
 
     public RegistryEntry<Biome> sampleFmgBiome(
@@ -60,7 +66,8 @@ public final class MapImageData {
             int worldX,
             int worldZ
     ) {
-        RegistryEntry<Biome> resolved = FMGBiomeMapper.resolve(resolver, fmgData, worldX, worldZ);
+        RegistryEntry<Biome> resolved = FMGBiomeMapper.resolve(
+                definition.fmgExport(), definition.richBiomes(), profile(), resolver, fmgData, worldX, worldZ);
         return resolved != null ? resolved : fallback;
     }
 }

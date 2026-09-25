@@ -9,6 +9,8 @@ import com.example.border.BorderDataPayload;
 import com.example.worldmap.runtime.PlayerRegionTracker;
 
 import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerWorldEvents;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.fabricmc.fabric.api.resource.ResourcePackActivationType;
@@ -30,6 +32,35 @@ public class FantasyMapGenerator implements ModInitializer {
 		PayloadTypeRegistry.playS2C().register(BorderDataPayload.ID, BorderDataPayload.CODEC);
 		FMGGenerators.register();
 		FMGCommands.register();
+
+		// Grab the density-function registry before world load so the FMG chunk
+		// generator can carve vanilla-style noise caves into its heightmap, and
+		// record the save directory so per-world FMG data resolves against it.
+		ServerLifecycleEvents.SERVER_STARTING.register(server -> {
+			com.example.worldgen.FmgNoiseCaves.capture(server.getRegistryManager());
+			com.example.worldgen.FmgWorldSettings.setSaveDir(
+				server.getSavePath(net.minecraft.util.WorldSavePath.ROOT));
+		});
+		ServerLifecycleEvents.SERVER_STOPPED.register(server -> {
+			com.example.worldgen.FmgWorldSettings.clear();
+			com.example.worldmap.runtime.FMGMapDataCache.invalidate();
+		});
+
+		// One-time "Preparing Fantasy Map..." bake (heightfield / roads / rivers /
+		// climate -> <world>/fmg/bake), before spawn-chunk generation.
+		ServerWorldEvents.LOAD.register((server, world) -> {
+			if (world.getRegistryKey() != net.minecraft.world.World.OVERWORLD) {
+				return;
+			}
+			if (world.getChunkManager().getChunkGenerator()
+					instanceof com.example.worldgen.ImageMapChunkGenerator fmg) {
+				// The only point guaranteed to be the real, running world's own
+				// generator -- not a throwaway decode from registry loading (see
+				// the note in ImageMapChunkGenerator's constructor).
+				com.example.worldgen.FmgWorldSettings.setCurrent(fmg.mapInfo());
+				com.example.worldgen.FmgBake.ensureBaked(server, fmg.mapInfo());
+			}
+		});
 		PlayerRegionTracker.register();
 		com.example.worldmap.runtime.PlayerBorderViewer.register();
 

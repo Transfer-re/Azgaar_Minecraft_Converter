@@ -128,6 +128,35 @@ public final class ColorMapBiomeSource extends BiomeSource {
         return mapInfo;
     }
 
+    /** The content profile this world generates with (biome mapping + block palettes). */
+    private com.example.profile.FmgContentProfile profile() {
+        com.example.profile.FmgContentProfile p = profile;
+        if (p == null) {
+            p = com.example.profile.FmgProfiles.get(mapInfo.profile());
+            profile = p;
+        }
+        return p;
+    }
+
+    private volatile com.example.profile.FmgContentProfile profile;
+
+    /**
+     * Mushroom fields is the one vanilla biome that has no place on a fantasy
+     * continent map -- it only exists in vanilla as a rare mid-ocean freak. The
+     * vanilla table hands it back at the most-oceanic continentalness slice, so
+     * swap it for deep ocean (its natural neighbour there).
+     */
+    private RegistryEntry<Biome> filterBiome(RegistryEntry<Biome> biome) {
+        if (biome != null && biome.matchesKey(BiomeKeys.MUSHROOM_FIELDS)) {
+            RegistryEntry.Reference<Biome> replacement =
+                    biomeLookup.getOptional(BiomeKeys.DEEP_OCEAN).orElse(null);
+            if (replacement != null) {
+                return replacement;
+            }
+        }
+        return biome;
+    }
+
     @Override
     protected MapCodec<? extends BiomeSource> getCodec() {
         return CODEC;
@@ -136,40 +165,53 @@ public final class ColorMapBiomeSource extends BiomeSource {
     @Override
     public RegistryEntry<Biome> getBiome(int biomeX, int biomeY, int biomeZ, MultiNoiseUtil.MultiNoiseSampler sampler) {
         MapImageData data = MapImageCache.get(mapInfo);
-
-        // Cave biomes are 3D; our FMG mapping is 2D (XZ only). To keep FMG surface biomes while
-        // still allowing cave biomes, switch to an underground biome selection below a depth.
+        int blockX = quartToBlock(biomeX);
         int blockY = quartToBlock(biomeY);
+        int blockZ = quartToBlock(biomeZ);
+        int seaLevel = mapInfo.seaLevel();
+
+        // Carved rivers get minecraft:river along the channel, near the water,
+        // so biome-colour mods tint them. Both code paths, near sea level only.
+        if (blockY >= seaLevel - 24 && blockY <= seaLevel + 90) {
+            com.example.fmg.FMGRiverNetwork rivers = com.example.fmg.FMGRiverNetwork.get(
+                    mapInfo.fmgExport(), data.fmgData(), mapInfo.minY(), mapInfo.maxY(), seaLevel);
+            com.example.fmg.FMGRiverNetwork.Hit riverHit = rivers.query(blockX, blockZ);
+            if (riverHit != null && riverHit.distance <= riverHit.sample.halfWidth + 1.0) {
+                int w = riverHit.sample.waterSurfaceY;
+                if (blockY >= w - riverHit.sample.centerDepth - 4 && blockY <= w + 6) {
+                    RegistryEntry.Reference<Biome> river =
+                            biomeLookup.getOptional(profile().biomeKey(profile().biomes.river)).orElse(null);
+                    if (river != null) return river;
+                }
+            }
+        }
+
+        // ---- cave picker + name+variant FMG biome mapping ----
         if (blockY <= undergroundY) {
             if (undergroundSource != null) {
                 return undergroundSource.getBiome(biomeX, biomeY, biomeZ, sampler);
             }
-
-            // Back-compat fallback: previous deterministic cave-biome selection.
             RegistryEntry<Biome> cave = pickUndergroundBiome(biomeX, biomeY, biomeZ);
             if (cave != null) return cave;
         }
 
-        // Use FMG's biome mapping based on FMG JSON data and biome registry.
-        int blockX = quartToBlock(biomeX);
-        int blockZ = quartToBlock(biomeZ);
-
-        RegistryEntry<Biome> surfaceBiome = data.sampleFmgBiome(biomeLookup, blockX, blockZ);
-
-        // Special rule: stop "ocean" biome from extending upward.
-        // If FMG says this column is ocean, then for blocks at/above sea level
-        // (y >= 63 by default), use BEACH instead.
-        int seaLevel = mapInfo.seaLevel();
-        if (surfaceBiome != null
-                && blockY >= seaLevel
-                && (surfaceBiome.isIn(BiomeTags.IS_OCEAN)
-                        || surfaceBiome.matchesKey(BiomeKeys.OCEAN)
-                        || surfaceBiome.matchesKey(BiomeKeys.DEEP_OCEAN))) {
-            RegistryEntry.Reference<Biome> beach = biomeLookup.getOptional(BiomeKeys.BEACH).orElse(null);
+        RegistryEntry<Biome> surfaceBiome = filterBiome(data.sampleFmgBiome(biomeLookup, blockX, blockZ));
+        if (surfaceBiome != null && blockY >= seaLevel && isOceanLike(surfaceBiome)) {
+            boolean cold = surfaceBiome.matchesKey(BiomeKeys.FROZEN_OCEAN)
+                    || surfaceBiome.matchesKey(BiomeKeys.DEEP_FROZEN_OCEAN)
+                    || surfaceBiome.matchesKey(BiomeKeys.COLD_OCEAN)
+                    || surfaceBiome.matchesKey(BiomeKeys.DEEP_COLD_OCEAN);
+            RegistryEntry.Reference<Biome> beach = biomeLookup.getOptional(profile().biomeKey(
+                    cold ? profile().biomes.snowyBeach : profile().biomes.beach)).orElse(null);
             return beach != null ? beach : surfaceBiome;
         }
-
         return surfaceBiome;
+    }
+
+    private static boolean isOceanLike(RegistryEntry<Biome> biome) {
+        return biome.isIn(BiomeTags.IS_OCEAN)
+                || biome.matchesKey(BiomeKeys.OCEAN)
+                || biome.matchesKey(BiomeKeys.DEEP_OCEAN);
     }
 
     private RegistryEntry<Biome> pickUndergroundBiome(int biomeX, int biomeY, int biomeZ) {
@@ -189,7 +231,7 @@ public final class ColorMapBiomeSource extends BiomeSource {
             // Deeper => more likely deep dark.
             double ddThreshold = lerp(0.70, 0.48, clamp01((-48 - blockY) / 96.0));
             if (dd > ddThreshold) {
-                return biomeLookup.getOptional(BiomeKeys.DEEP_DARK).orElse(null);
+                return biomeLookup.getOptional(profile().biomeKey(profile().biomes.deepDark)).orElse(null);
             }
         }
 
@@ -198,10 +240,10 @@ public final class ColorMapBiomeSource extends BiomeSource {
         double band = lerp(0.55, 0.30, depth01);
 
         if (cave > band) {
-            return biomeLookup.getOptional(BiomeKeys.LUSH_CAVES).orElse(null);
+            return biomeLookup.getOptional(profile().biomeKey(profile().biomes.lushCaves)).orElse(null);
         }
         if (cave < -band) {
-            return biomeLookup.getOptional(BiomeKeys.DRIPSTONE_CAVES).orElse(null);
+            return biomeLookup.getOptional(profile().biomeKey(profile().biomes.dripstoneCaves)).orElse(null);
         }
 
         return null;
@@ -279,17 +321,21 @@ public final class ColorMapBiomeSource extends BiomeSource {
 
     @Override
     protected java.util.stream.Stream<RegistryEntry<Biome>> biomeStream() {
-        // Expose the palette used by FMGBiomeMapper so the engine has
-        // a reasonable biome set to work with.
-        Stream<RegistryEntry<Biome>> fmg = FMGBiomeMapper.paletteKeys().stream()
+        // Every biome the name+variant mapper (FMGBiomeMapper/FMGBiomeVariantMap)
+        // can produce, plus RIVER.
+        Stream<net.minecraft.registry.RegistryKey<Biome>> keys =
+                Stream.concat(FMGBiomeMapper.paletteKeys(profile()).stream(),
+                        Stream.of(profile().biomeKey(profile().biomes.river)));
+
+        Stream<RegistryEntry<Biome>> resolved = keys
                 .map(key -> biomeLookup.getOptional(key))
-                .flatMap(optional -> optional.map(Stream::of).orElseGet(Stream::empty));
+                .<RegistryEntry<Biome>>flatMap(optional -> optional.map(Stream::of).orElseGet(Stream::empty))
+                .distinct();
 
         if (undergroundSource == null) {
-            return fmg;
+            return resolved;
         }
-
-        return Stream.concat(fmg, undergroundSource.getBiomes().stream()).distinct();
+        return Stream.concat(resolved, undergroundSource.getBiomes().stream()).distinct();
     }
 
     private static int quartToBlock(int coord) {
