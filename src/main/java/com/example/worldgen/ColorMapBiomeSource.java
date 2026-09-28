@@ -195,7 +195,8 @@ public final class ColorMapBiomeSource extends BiomeSource {
             if (cave != null) return cave;
         }
 
-        RegistryEntry<Biome> surfaceBiome = filterBiome(data.sampleFmgBiome(biomeLookup, blockX, blockZ));
+        int[] at = com.example.fmg.FMGBiomeMapper.warped(profile(), blockX, blockZ);
+        RegistryEntry<Biome> surfaceBiome = filterBiome(data.sampleFmgBiome(biomeLookup, at[0], at[1]));
         if (surfaceBiome != null && blockY >= seaLevel && isOceanLike(surfaceBiome)) {
             boolean cold = surfaceBiome.matchesKey(BiomeKeys.FROZEN_OCEAN)
                     || surfaceBiome.matchesKey(BiomeKeys.DEEP_FROZEN_OCEAN)
@@ -206,6 +207,16 @@ public final class ColorMapBiomeSource extends BiomeSource {
             return beach != null ? beach : surfaceBiome;
         }
         return surfaceBiome;
+    }
+
+    /**
+     * Id of the land biome whose ground palette a column uses: the same warped
+     * map lookup as {@link #getBiome}, without the river and beach overrides.
+     */
+    public String landBiomeId(int blockX, int blockZ) {
+        MapImageData data = MapImageCache.get(mapInfo);
+        return com.example.fmg.FMGBiomeMapper.resolveKey(mapInfo.fmgExport(), mapInfo.richBiomes(), profile(),
+                data.fmgData(), blockX, blockZ).getValue().toString();
     }
 
     private static boolean isOceanLike(RegistryEntry<Biome> biome) {

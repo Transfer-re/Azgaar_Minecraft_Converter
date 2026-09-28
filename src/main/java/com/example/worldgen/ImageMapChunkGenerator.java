@@ -248,6 +248,13 @@ public final class ImageMapChunkGenerator extends ChunkGenerator {
         // Let vanilla surface rules decide the top blocks per-biome.
         delegate.buildSurface(region, structures, noiseConfig, chunk);
 
+        // A layered-surface profile (Conquest) then rebuilds the top of every
+        // land column from its ground palettes.
+        LayeredSurface.Context layered = layeredContext(chunk.getPos());
+        if (layered != null) {
+            LayeredSurface.apply(chunk, layered);
+        }
+
         // Carve water / waterfalls / arch bridges first, then routes (which
         // now skip river columns), all before feature & vegetation placement.
         applyRivers(chunk);
@@ -411,6 +418,7 @@ public final class ImageMapChunkGenerator extends ChunkGenerator {
         BlockState air = Blocks.AIR.getDefaultState();
         com.example.profile.FmgContentProfile profile = MapImageCache.get(mapInfo).profile();
         BlockState brick = profile.block(profile.blocks.bridge);
+        LayeredSurface.Context layered = layeredContext(cp);
         var rcfg = com.example.heightmap.HeightmapPostConfig.get().rivers;
         BlockPos.Mutable m = new BlockPos.Mutable();
 
@@ -470,7 +478,10 @@ public final class ImageMapChunkGenerator extends ChunkGenerator {
                     // a couple blocks, so there's never dirt/grass under the water
                     for (int y = bedY; y >= bedY - 1 && y > minY; y--) {
                         m.set(wx, y, wz);
-                        chunk.setBlockState(m, riverBedBlock(profile, chunk, wx, y, wz), false);
+                        BlockState bed = layered != null
+                                ? LayeredSurface.bedBlock(layered, wx, wz, waterY + 1.0 - (bedY + 1.0))
+                                : riverBedBlock(profile, chunk, wx, y, wz);
+                        chunk.setBlockState(m, bed, false);
                     }
 
                     // water column
@@ -556,6 +567,49 @@ public final class ImageMapChunkGenerator extends ChunkGenerator {
                 }
             }
         }
+    }
+
+    /** Y at which the altitude ramps read 100 (the map's top); computed once. */
+    private volatile double altTop = Double.NaN;
+
+    /**
+     * Everything the layered surface needs for this chunk, or null when the
+     * world's profile has no surface palettes (vanilla surface rules only).
+     */
+    private LayeredSurface.Context layeredContext(ChunkPos cp) {
+        MapImageData data = MapImageCache.get(mapInfo);
+        com.example.profile.FmgContentProfile profile = data.profile();
+        if (profile.surfacePalettes == null) {
+            return null;
+        }
+        com.example.surface.SurfaceSet set = com.example.surface.SurfaceSet.get(profile.surfacePalettes,
+                net.fabricmc.loader.api.FabricLoader.getInstance().getConfigDir());
+        if (set == null) {
+            return null;
+        }
+        FMGMapData map = data.fmgData();
+        com.example.terrain.TerrainRaster terrain = map == null ? null : map.getTerrain();
+        double top = altTop;
+        if (Double.isNaN(top)) {
+            top = terrain != null ? terrain.maxHeight() : mapInfo.maxY() - 1;
+            altTop = top;
+        }
+        com.example.fmg.FMGRiverNetwork rivers = com.example.fmg.FMGRiverNetwork.get(
+                mapInfo.fmgExport(), map, mapInfo.minY(), mapInfo.maxY(), mapInfo.seaLevel());
+        ChunkColumnCache cache = columnCache.get();
+        LayeredSurface.Columns cols = new LayeredSurface.Columns() {
+            @Override public int height(int x, int z) { return cache.getHeight(x, z); }
+            @Override public double exact(int x, int z) { return cache.getExact(x, z); }
+            @Override public boolean skip(int x, int z) { return cache.isBuiltColumn(x, z); }
+            @Override public int freshWaterY(int x, int z) { return cache.getRiverWaterY(x, z); }
+        };
+        LayeredSurface.BiomeIds biomes = getBiomeSource() instanceof ColorMapBiomeSource cms
+                ? cms::landBiomeId
+                : (x, z) -> null;
+        int seed = mapInfo.fmgExport() == null ? 0 : mapInfo.fmgExport().hashCode();
+        return new LayeredSurface.Context(set, cols, biomes, data::sampleHeightExactY,
+                rivers == null ? List.of() : rivers.collectNear(cp.x, cp.z), terrain,
+                mapInfo.seaLevel(), getMinimumY(), getMinimumY() + getWorldHeight(), top, seed);
     }
 
     private BlockState riverBedBlock(com.example.profile.FmgContentProfile profile,
@@ -678,6 +732,21 @@ public final class ImageMapChunkGenerator extends ChunkGenerator {
             return getGrid(worldX, worldZ).riverWaterY[idx(worldX, worldZ)];
         }
 
+        /** Continuous surface height (the integer height where no layered surface is built). */
+        double getExact(int worldX, int worldZ) {
+            ChunkGrid grid = getGrid(worldX, worldZ);
+            int i = idx(worldX, worldZ);
+            return grid.exact != null ? grid.exact[i] : grid.heights[i];
+        }
+
+        /** Road, bridge or river column: the layered surface leaves it to the generator. */
+        boolean isBuiltColumn(int worldX, int worldZ) {
+            ChunkGrid grid = getGrid(worldX, worldZ);
+            int i = idx(worldX, worldZ);
+            return grid.routes[i] != FMGRouteSampler.RouteKind.NONE
+                    || grid.bridgeDeckY[i] >= 0 || grid.riverWaterY[i] >= 0;
+        }
+
         int getRiverBedY(int worldX, int worldZ) {
             return getGrid(worldX, worldZ).riverBedY[idx(worldX, worldZ)];
         }
@@ -730,6 +799,9 @@ public final class ImageMapChunkGenerator extends ChunkGenerator {
 
             int[] baseHeights = new int[size * size];
             int[] shapedHeights = new int[size * size];
+            // continuous twin of the heights, for the layered surface only
+            boolean layered = data.profile().surfacePalettes != null;
+            double[] exactPad = layered ? new double[size * size] : null;
 
             // These arrays store the nearest spline sample for each cell (if any),
             // letting us treat the road network as a 1D chain (along the spline)
@@ -747,7 +819,17 @@ public final class ImageMapChunkGenerator extends ChunkGenerator {
                     int z = startZ + lz;
                     int index = (lx * size) + lz;
 
-                    baseHeights[index] = (int) Math.round(terrainY(mapInfo, data, x, z));
+                    if (exactPad == null) {
+                        baseHeights[index] = (int) Math.round(terrainY(mapInfo, data, x, z));
+                    } else {
+                        // same integer as terrainY, from one sample
+                        double hx = data.sampleHeightExactY(x, z);
+                        int hi = (int) Math.round(hx);
+                        double det = (map != null && map.getTerrain() != null)
+                                ? 0.0 : detailOffset(mapInfo, x, z, hi);
+                        baseHeights[index] = (int) Math.round(hi + det);
+                        exactPad[index] = hx + det;
+                    }
                 }
             }
 
@@ -967,6 +1049,9 @@ public final class ImageMapChunkGenerator extends ChunkGenerator {
                     }
 
                     shapedHeights[index] = (int) Math.round(target);
+                    if (exactPad != null) {
+                        exactPad[index] = target;
+                    }
                 }
             }
 
@@ -1123,6 +1208,9 @@ public final class ImageMapChunkGenerator extends ChunkGenerator {
             java.util.Arrays.fill(out.bridgeDeckY, -1);
             java.util.Arrays.fill(out.bridgeArchY, -1);
             java.util.Arrays.fill(out.bridgeSide, -1);
+            if (exactPad != null) {
+                out.exact = new double[16 * 16];
+            }
             // The valley reaches much further than the channel, so every sample
             // that can touch this chunk (riverCand, gathered in 4b) is scanned per column.
             double valleyK = rivers == null ? 0.0 : rivers.valleySmoothK();
@@ -1140,6 +1228,12 @@ public final class ImageMapChunkGenerator extends ChunkGenerator {
 
                     int terrainHeight = shapedHeights[srcIndex];
                     out.heights[dstIndex] = terrainHeight;
+                    if (out.exact != null) {
+                        // integer-only edits (walkability, bridge ramps) move a
+                        // column by a whole block; those columns stay whole blocks
+                        double e = exactPad[srcIndex];
+                        out.exact[dstIndex] = Math.abs(e - terrainHeight) < 1.0 ? e : terrainHeight;
+                    }
 
                     // route mask
                     FMGRouteSampler.RouteKind routeKind = FMGRouteSampler.RouteKind.NONE;
@@ -1196,6 +1290,15 @@ public final class ImageMapChunkGenerator extends ChunkGenerator {
                         }
                         if (carvedTop + 1 < out.heights[dstIndex]) {
                             out.heights[dstIndex] = carvedTop + 1;
+                        }
+                        if (out.exact != null) {
+                            // the same smooth valley, without the floor to a whole block
+                            double ec = com.example.fmg.FMGRiverNetwork.smoothMin(
+                                    out.exact[dstIndex] - 1.0, floorTop, valleyK) + 1.0;
+                            if (ec < out.exact[dstIndex]) out.exact[dstIndex] = ec;
+                            if (Math.abs(out.exact[dstIndex] - out.heights[dstIndex]) >= 1.0) {
+                                out.exact[dstIndex] = out.heights[dstIndex];
+                            }
                         }
                         int bedTop = out.heights[dstIndex] - 1;
                         if (d <= near.halfWidth + rcfg.bankWidth && bedTop < surface) {
@@ -1674,6 +1777,11 @@ public final class ImageMapChunkGenerator extends ChunkGenerator {
             final int[] bridgeSide = new int[16 * 16];
             /** 1 = dry span over the river's dent (deck + beam only, open below); 0 = solid to the ground. */
             final byte[] bridgeSpan = new byte[16 * 16];
+            /**
+             * Continuous surface height per column, within one block of
+             * {@link #heights}; only built for a layered-surface profile, else null.
+             */
+            double[] exact;
         }
     }
 

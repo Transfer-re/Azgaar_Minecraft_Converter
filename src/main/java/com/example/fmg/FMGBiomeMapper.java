@@ -108,6 +108,50 @@ public final class FMGBiomeMapper {
         return lookup(resolver, key != null ? key : BiomeKeys.PLAINS);
     }
 
+    /**
+     * The land biome key for a block column, with the profile's
+     * {@code biomeEdgeWarp} applied -- the same lookup the biome source makes, so
+     * the layered surface picks its palette where the biome actually changes.
+     * Never the river/beach override: those take the land biome's palette.
+     */
+    public static RegistryKey<Biome> resolveKey(
+            String fmgExport,
+            boolean richBiomes,
+            com.example.profile.FmgContentProfile profile,
+            FMGMapData mapData,
+            int worldX,
+            int worldZ
+    ) {
+        if (mapData == null || mapData.getInfo() == null) {
+            return BiomeKeys.PLAINS;
+        }
+        int[] w = warped(profile, worldX, worldZ);
+        double scale = FMGHeightSampler.sampleScale();
+        double offsetX = -(mapData.getInfo().getWidth() * scale) / 2.0;
+        double offsetZ = -(mapData.getInfo().getHeight() * scale) / 2.0;
+        FMGCell cell = mapData.findNearestCell((w[0] - offsetX) / scale, (w[1] - offsetZ) / scale);
+        if (cell == null) {
+            return BiomeKeys.PLAINS;
+        }
+        RegistryKey<Biome> key = richBiomes
+                ? FMGBiomeVariantMap.get(fmgExport, mapData, profile).keyFor(cell)
+                : null;
+        if (key == null) {
+            FMGBiome biomeDef = mapData.getBiome(cell.getBiome());
+            key = biomeDef != null ? mapByName(normalize(biomeDef.getName()), cell) : null;
+        }
+        return key != null ? key : BiomeKeys.PLAINS;
+    }
+
+    /** Block position displaced by the profile's biome-edge warp (unchanged when it is 0). */
+    public static int[] warped(com.example.profile.FmgContentProfile profile, int worldX, int worldZ) {
+        if (profile == null || profile.biomeEdgeWarp <= 0.0) {
+            return new int[] {worldX, worldZ};
+        }
+        double[] d = com.example.surface.SurfaceNoise.warp(profile.biomeEdgeWarp, worldX, worldZ);
+        return new int[] {worldX + (int) Math.round(d[0]), worldZ + (int) Math.round(d[1])};
+    }
+
     // ===== Internals =====
 
     /** Last-resort fallback when even the variant map has nothing -- the old heuristics, unchanged. */

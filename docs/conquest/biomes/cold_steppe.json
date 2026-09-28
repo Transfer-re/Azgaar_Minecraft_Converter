@@ -7,8 +7,9 @@
   "status": "ready",
   "notes": "Dry, cold and treeless. Deliberately sparse -- most of the ground should be bare soil showing between clumps.",
   "surface": {
-    "top": "conquest:dead_grass",
-    "under": "conquest:dark_sandy_soil"
+    "top": "minecraft:grass_block",
+    "under": "conquest:dark_sandy_soil",
+    "stone": "conquest:brown_granite"
   },
   "trees": {
     "density": 0.0,
@@ -36,5 +37,272 @@
   "props": {
     "conquest:mudstone_rocks": 10,
     "conquest:smooth_pebbles": 6
+  },
+  "palette": {
+    "tints": {
+      "grass": "#a8a26a",
+      "foliage": "#8a8d58",
+      "water": "#3a5c86"
+    },
+    "soil": "conquest:dark_sandy_soil",
+    "stone": "brown_granite",
+    "soilDepth": 2,
+    "clump": 4.0,
+    "patch": 28.0,
+    "sub": [
+      {
+        "id": "feathergrass_steppe",
+        "name": "Feathergrass steppe",
+        "weight": 45,
+        "mix": {
+          "grass_block": 35,
+          "grassy_dirt": 30,
+          "dark_sandy_soil": 20,
+          "rocky_sandy_soil": 15
+        }
+      },
+      {
+        "id": "gravel_pan",
+        "name": "Gravel pan",
+        "weight": 25,
+        "mix": {
+          "rocky_sandy_soil": 40,
+          "dark_sandy_soil": 30,
+          "gray_gravel": 30
+        }
+      },
+      {
+        "id": "loess_bank",
+        "name": "Loess bank",
+        "weight": 15,
+        "mix": {
+          "medium_yellow_dirt": 35,
+          "dusty_yellow_dirt": 35,
+          "grassy_dirt": 30
+        }
+      },
+      {
+        "id": "saline_flat",
+        "name": "Saline flat",
+        "weight": 15,
+        "mix": {
+          "light_cracked_dirt": 40,
+          "dusty_white_dirt": 30,
+          "fine_white_dirt": 15,
+          "white_salt": 15
+        }
+      }
+    ],
+    "ramps": [
+      {
+        "var": "coast",
+        "feather": 1.2,
+        "bands": [
+          {
+            "to": 1.5,
+            "mix": {
+              "wet_gray_sand": 50,
+              "smooth_pebbles": 50
+            }
+          },
+          {
+            "to": 4,
+            "mix": {
+              "gray_sand": 45,
+              "smooth_pebbles": 30,
+              "gray_gravel": 25
+            }
+          },
+          {
+            "to": 6,
+            "mix": {
+              "light_gray_sand": 40,
+              "mossy_small_stones": 60
+            }
+          }
+        ]
+      },
+      {
+        "var": "bank",
+        "feather": 0.9,
+        "bands": [
+          {
+            "to": 1,
+            "mix": {
+              "smooth_pebbles": 60,
+              "wet_gray_sand": 40
+            }
+          },
+          {
+            "to": 2.5,
+            "mix": {
+              "gray_gravel": 40,
+              "mossy_small_stones": 60
+            }
+          }
+        ]
+      },
+      {
+        "var": "slope",
+        "feather": 0.15,
+        "bands": [
+          {
+            "from": 0.65,
+            "mix": {
+              "rocky_sandy_soil": 60,
+              "dark_sandy_soil": 40
+            }
+          },
+          {
+            "from": 1.0,
+            "mix": {
+              "brown_gravel": 50,
+              "gray_gravel": 50
+            }
+          },
+          {
+            "from": 1.45,
+            "mix": {
+              "brown_granite": 60,
+              "light_brown_granite": 40
+            }
+          },
+          {
+            "from": 2.1,
+            "mix": {
+              "brown_granite": 100
+            }
+          }
+        ]
+      }
+    ],
+    "bed": {
+      "var": "depth",
+      "feather": 0.8,
+      "bands": [
+        {
+          "to": 2,
+          "mix": {
+            "smooth_pebbles": 60,
+            "wet_gray_sand": 40
+          }
+        },
+        {
+          "to": 99,
+          "mix": {
+            "gray_gravel": 50,
+            "dark_silt": 50
+          }
+        }
+      ]
+    },
+    "notes": "Turf only survives as the dry-tinted minority. Most of the ground should read as bare soil between clumps.",
+    "materials": {
+      "grass_block": {
+        "layer": "conquest:grass_block_layer",
+        "full": "minecraft:grass_block",
+        "group": "grass",
+        "note": "plain turf; the default green"
+      },
+      "grassy_dirt": {
+        "layer": "conquest:grassy_dirt_layer",
+        "full": "minecraft:dirt",
+        "group": "grass",
+        "note": "worn turf, dirt showing through; layer-only, vanilla dirt underneath"
+      },
+      "dark_sandy_soil": {
+        "layer": "conquest:dark_sandy_soil_slab",
+        "full": "conquest:dark_sandy_soil",
+        "group": "soil"
+      },
+      "rocky_sandy_soil": {
+        "layer": "conquest:rocky_sandy_soil_slab",
+        "full": "conquest:rocky_sandy_soil",
+        "group": "soil",
+        "note": "16 weighted random variants"
+      },
+      "gray_gravel": {
+        "layer": "conquest:gray_gravel_layer",
+        "full": "conquest:gray_gravel",
+        "group": "gravel"
+      },
+      "medium_yellow_dirt": {
+        "layer": "conquest:medium_yellow_dirt_slab",
+        "full": "conquest:medium_yellow_dirt",
+        "group": "soil"
+      },
+      "dusty_yellow_dirt": {
+        "layer": "conquest:dusty_yellow_dirt_slab",
+        "full": "conquest:dusty_yellow_dirt",
+        "group": "soil"
+      },
+      "light_cracked_dirt": {
+        "layer": "conquest:light_cracked_dirt_slab",
+        "full": "conquest:light_cracked_dirt",
+        "group": "soil",
+        "note": "dry pan"
+      },
+      "dusty_white_dirt": {
+        "layer": "conquest:dusty_white_dirt_slab",
+        "full": "conquest:dusty_white_dirt",
+        "group": "soil"
+      },
+      "fine_white_dirt": {
+        "layer": "conquest:fine_white_dirt_slab",
+        "full": "conquest:fine_white_dirt",
+        "group": "soil"
+      },
+      "white_salt": {
+        "layer": "conquest:white_salt_layer",
+        "full": "conquest:white_salt",
+        "group": "sand",
+        "note": "salt crust"
+      },
+      "wet_gray_sand": {
+        "layer": "conquest:wet_gray_sand_layer",
+        "full": "conquest:wet_gray_sand",
+        "group": "sand"
+      },
+      "smooth_pebbles": {
+        "layer": "conquest:smooth_pebbles_layer",
+        "full": "conquest:smooth_pebbles",
+        "group": "gravel"
+      },
+      "gray_sand": {
+        "layer": "conquest:gray_sand_layer",
+        "full": "conquest:gray_sand",
+        "group": "sand"
+      },
+      "light_gray_sand": {
+        "layer": "conquest:light_gray_sand_layer",
+        "full": "conquest:light_gray_sand",
+        "group": "sand"
+      },
+      "mossy_small_stones": {
+        "layer": "conquest:mossy_small_stones_layer",
+        "full": "conquest:mossy_small_stones",
+        "group": "gravel"
+      },
+      "brown_gravel": {
+        "layer": "conquest:brown_gravel_layer",
+        "full": "conquest:brown_gravel",
+        "group": "gravel"
+      },
+      "brown_granite": {
+        "layer": "conquest:brown_granite_slab",
+        "full": "conquest:brown_granite",
+        "group": "rock"
+      },
+      "light_brown_granite": {
+        "layer": "conquest:light_brown_granite_slab",
+        "full": "conquest:light_brown_granite",
+        "group": "rock"
+      },
+      "dark_silt": {
+        "layer": "conquest:dark_silt_slab",
+        "full": "conquest:dark_silt",
+        "group": "wet"
+      }
+    }
   }
 }

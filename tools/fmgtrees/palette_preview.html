@@ -1,0 +1,615 @@
+<title>Conquest Ground Palettes</title>
+<meta name="description" content="Per-biome layer-block palettes for the FMG Conquest Reforged variant, rendered from the real textures.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600&family=IBM+Plex+Mono:wght@400;500&family=Source+Sans+3:wght@400;600&display=swap">
+<style>
+:root {
+  --bg: #e8e9e4;
+  --surface: #f5f5f1;
+  --sunk: #dfe1da;
+  --ink: #1c1f1b;
+  --muted: #5b6157;
+  --line: #cdd0c7;
+  --accent: #2d6a5a;
+  --accent-ink: #f5f5f1;
+  --warn: #9a4d1b;
+  --warn-bg: #f3e3d6;
+  --chip: #e2e4dd;
+  --display: "Barlow Condensed", "Arial Narrow", "Roboto Condensed", sans-serif;
+  --body: "Source Sans 3", "Segoe UI", system-ui, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, "Cascadia Mono", Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #151714; --surface: #1e211d; --sunk: #191b18; --ink: #e4e6df;
+    --muted: #9ba293; --line: #343931; --accent: #7fbba5; --accent-ink: #11201b;
+    --warn: #e39a66; --warn-bg: #2c2119; --chip: #262a25;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #151714; --surface: #1e211d; --sunk: #191b18; --ink: #e4e6df;
+  --muted: #9ba293; --line: #343931; --accent: #7fbba5; --accent-ink: #11201b;
+  --warn: #e39a66; --warn-bg: #2c2119; --chip: #262a25;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body {
+  background: var(--bg); color: var(--ink); font: 15px/1.5 var(--body);
+  padding-inline: clamp(16px, 3vw, 40px); padding-block: 0 64px;
+}
+h1, h2, h3 { font-family: var(--display); font-weight: 600; text-wrap: balance; margin: 0; letter-spacing: .01em; }
+h1 { font-size: clamp(32px, 5vw, 48px); line-height: 1.05; }
+h2 { font-size: 30px; line-height: 1.1; }
+h3 { font-size: 19px; line-height: 1.2; }
+p { margin: 0; max-width: 68ch; }
+code, .id { font-family: var(--mono); font-size: 12.5px; }
+.muted { color: var(--muted); }
+.eyebrow { font-family: var(--display); font-size: 14px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.wrap { max-width: 1320px; margin: 0 auto; display: grid; gap: 28px; }
+
+header.top { padding-top: 28px; display: grid; gap: 10px; }
+.stats { display: flex; flex-wrap: wrap; gap: 8px 22px; font-variant-numeric: tabular-nums; }
+.stats b { font-family: var(--display); font-size: 22px; font-weight: 600; }
+
+.notes { background: var(--surface); border: 1px solid var(--line); border-radius: 6px; padding: 18px 20px; display: grid; gap: 12px; }
+.notes ul { margin: 0; padding-left: 18px; display: grid; gap: 8px; max-width: 110ch; }
+.notes li b { font-weight: 600; }
+.flag { color: var(--warn); font-weight: 600; }
+
+.toolbar {
+  position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20;
+  background: color-mix(in srgb, var(--bg) 92%, transparent); backdrop-filter: blur(6px);
+  border-bottom: 1px solid var(--line); margin-inline: calc(-1 * clamp(16px, 3vw, 40px));
+  padding: 10px clamp(16px, 3vw, 40px); display: flex; flex-wrap: wrap; gap: 10px 18px; align-items: center;
+}
+.ctl { display: flex; align-items: center; gap: 8px; font-size: 13px; }
+.ctl > span { color: var(--muted); font-family: var(--display); letter-spacing: .06em; text-transform: uppercase; font-size: 13px; }
+.seg { display: inline-flex; border: 1px solid var(--line); border-radius: 5px; overflow: hidden; }
+.seg button { font: inherit; font-size: 13px; background: var(--surface); color: var(--ink); border: 0; padding: 5px 10px; cursor: pointer; }
+.seg button + button { border-left: 1px solid var(--line); }
+.seg button[aria-pressed="true"] { background: var(--accent); color: var(--accent-ink); }
+button.plain { font: inherit; font-size: 13px; background: var(--surface); color: var(--ink); border: 1px solid var(--line); border-radius: 5px; padding: 5px 10px; cursor: pointer; }
+button:focus-visible, input:focus-visible, a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+input[type=range] { width: 130px; accent-color: var(--accent); }
+.ctl output { font-variant-numeric: tabular-nums; min-width: 2.5ch; font-family: var(--mono); font-size: 12.5px; }
+
+nav.jump { display: flex; flex-wrap: wrap; gap: 6px 14px; }
+nav.jump div { display: flex; flex-wrap: wrap; gap: 6px; align-items: baseline; }
+nav.jump .cat { font-family: var(--display); font-size: 13px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); margin-right: 2px; }
+nav.jump a { color: var(--ink); text-decoration: none; background: var(--chip); border-radius: 4px; padding: 2px 8px; font-size: 13px; }
+nav.jump a:hover { background: var(--accent); color: var(--accent-ink); }
+
+section.biome { background: var(--surface); border: 1px solid var(--line); border-radius: 6px; padding: 20px; display: grid; gap: 16px; scroll-margin-top: 70px; }
+.bhead { display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: baseline; justify-content: space-between; }
+.bhead .left { display: grid; gap: 4px; }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.chip { background: var(--chip); border-radius: 4px; padding: 1px 8px; font-size: 12.5px; }
+.chip.warn { background: var(--warn-bg); color: var(--warn); }
+.tints { display: flex; gap: 12px; align-items: center; font-size: 12.5px; }
+.sw { display: inline-flex; align-items: center; gap: 6px; }
+.sw i { width: 18px; height: 18px; border-radius: 3px; border: 1px solid rgba(0,0,0,.2); display: inline-block; }
+.bnotes { color: var(--muted); max-width: 90ch; }
+
+.bgrid { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 20px; align-items: start; }
+@media (max-width: 1000px) { .bgrid { grid-template-columns: minmax(0, 1fr); } }
+.views { display: grid; gap: 10px; min-width: 0; }
+.canvas-box { position: relative; overflow-x: auto; border-radius: 4px; background: var(--sunk); }
+.canvas-box canvas { display: block; max-width: 100%; height: auto; }
+.canvas-box canvas.map { cursor: crosshair; }
+.caption { font-size: 12.5px; color: var(--muted); display: flex; flex-wrap: wrap; gap: 4px 14px; }
+.legend { display: flex; flex-wrap: wrap; gap: 4px 12px; font-size: 12.5px; }
+.legend i { width: 11px; height: 11px; border-radius: 2px; display: inline-block; margin-right: 5px; vertical-align: -1px; }
+
+.recipe { display: grid; gap: 14px; min-width: 0; }
+.block-h { font-family: var(--display); font-size: 14px; letter-spacing: .07em; text-transform: uppercase; color: var(--muted); border-bottom: 1px solid var(--line); padding-bottom: 3px; }
+.sub { display: grid; gap: 6px; }
+.subhead { display: flex; gap: 8px; align-items: baseline; }
+.subhead b { font-weight: 600; }
+.pct { font-variant-numeric: tabular-nums; color: var(--muted); font-size: 12.5px; }
+.mix { display: flex; flex-wrap: wrap; gap: 6px; }
+.mat { display: grid; grid-template-columns: 32px auto; gap: 0 7px; align-items: center; background: var(--sunk); border-radius: 4px; padding: 3px 8px 3px 3px; font-size: 12.5px; line-height: 1.25; }
+.mat canvas { grid-row: span 2; width: 32px; height: 32px; image-rendering: pixelated; border-radius: 2px; }
+.mat .n { font-weight: 600; }
+.mat .w { color: var(--muted); font-variant-numeric: tabular-nums; }
+.ramp { display: grid; gap: 5px; }
+.ramp .rh { font-size: 12.5px; color: var(--muted); }
+.ramp .rh b { color: var(--ink); font-weight: 600; }
+.band { display: grid; grid-template-columns: 74px minmax(0, 1fr); gap: 8px; align-items: center; }
+.band .edge { font-family: var(--mono); font-size: 12px; color: var(--muted); text-align: right; }
+.column { display: flex; gap: 10px; align-items: center; font-size: 12.5px; flex-wrap: wrap; }
+
+.tooltip { position: fixed; pointer-events: none; z-index: 50; background: var(--ink); color: var(--bg); border-radius: 5px; padding: 8px 10px; font-size: 12.5px; line-height: 1.4; max-width: 340px; box-shadow: 0 4px 18px rgba(0,0,0,.25); }
+.tooltip code { color: inherit; font-size: 12px; }
+
+#catalog { display: grid; gap: 14px; }
+.catgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 10px; }
+.cat-item { background: var(--surface); border: 1px solid var(--line); border-radius: 5px; padding: 8px; display: grid; grid-template-columns: 64px minmax(0, 1fr); gap: 10px; align-items: start; }
+.cat-item canvas { width: 64px; height: 64px; image-rendering: pixelated; border-radius: 3px; }
+.cat-item .ids { display: grid; gap: 1px; font-family: var(--mono); font-size: 11.5px; color: var(--muted); overflow-wrap: anywhere; }
+.cat-item .nm { font-weight: 600; font-size: 13.5px; }
+.cat-item .used { font-size: 12px; color: var(--muted); }
+.spec { background: var(--surface); border: 1px solid var(--line); border-radius: 6px; padding: 18px 20px; display: grid; gap: 10px; }
+.spec ol { margin: 0; padding-left: 20px; display: grid; gap: 6px; max-width: 100ch; }
+#loading { padding: 40px 0; color: var(--muted); }
+@media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto !important; } }
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <div class="eyebrow">FMG · Conquest Reforged 1.20.1 · ground palettes</div>
+    <h1>Conquest Ground Palettes</h1>
+    <p class="muted">Every biome's surface as it will be built: layer blocks (<code>layers=1..8</code>) over full blocks, drawn from the real Conquest and ACRP textures with Continuity's repeat and random variants. The terrain below is the same synthetic patch for every biome (a sea on the left, a river, a hill with a steep east face), so biomes can be compared side by side.</p>
+    <div class="stats" id="stats"></div>
+  </header>
+
+  <div class="notes">
+    <h3>Read this first</h3>
+    <ul>
+      <li><b>Every skin is a layer block.</b> Sands, gravels and forest floors use <code>conquest:*_layer</code>; soils, muds and all rock use <code>conquest:*_slab</code>, which in Conquest also carries <code>layers=1..8</code> (set <code>type=bottom</code>). The layer's sides show the same texture as its top, so the soil block beneath is only visible on steps taller than the layer.</li>
+      <li><b>Tints are half the look.</b> Grass, clover, taiga grass, every "mossy"/"overgrown" block and small stones are greyscale and take the biome grass colour. Each palette sets its own grass/foliage colour.</li>
+      <li class="flag">With ACRP loaded, custom biome ids lose their tints. Polytone maps biome to colormap column with <code>getOrDefault(biome, 0)</code>, so any biome id ACRP does not list gets column 0 (<code>#b7c26c</code>) whatever the biome JSON says. Switch "Tints" to "ACRP fallback" to see it. Fix options are in <code>docs/conquest/palettes.md</code>.</li>
+      <li><b>Not modelled here:</b> Conquest's grass-fringe overlay (it draws grass edges onto neighbouring dirt, sand, gravel and small stones) and connected textures. In game, grass-to-sand edges will look softer than they do here. Plants, trees and props are not drawn.</li>
+      <li><b>Avoided on purpose:</b> ACRP draws "Do not use!" on <code>dry_mud</code> and <code>coarse_sandy_soil</code>. <code>bright_glacier_ice_slab</code> has no <code>layers</code> property. Columnar and tuff stones read as masonry from above.</li>
+    </ul>
+  </div>
+
+  <div class="toolbar" role="toolbar" aria-label="Preview controls">
+    <div class="ctl"><span>Textures</span>
+      <div class="seg" id="pack">
+        <button type="button" id="pack-acrp" data-v="acrp" aria-pressed="true">ACRP + Conquest</button>
+        <button type="button" id="pack-cr" data-v="cr" aria-pressed="false">Conquest only</button>
+      </div></div>
+    <div class="ctl"><span>Tints</span>
+      <div class="seg" id="tintmode">
+        <button type="button" id="tint-pal" data-v="palette" aria-pressed="true">Palette</button>
+        <button type="button" id="tint-acrp" data-v="fallback" aria-pressed="false">ACRP fallback</button>
+      </div></div>
+    <div class="ctl"><span>Overlay</span>
+      <div class="seg" id="overlay">
+        <button type="button" id="ov-none" data-v="none" aria-pressed="true">None</button>
+        <button type="button" id="ov-sub" data-v="sub" aria-pressed="false">Sub-biomes</button>
+        <button type="button" id="ov-ramp" data-v="ramp" aria-pressed="false">Ramps</button>
+      </div></div>
+    <div class="ctl"><label for="alt"><span>Sea-level altitude</span></label>
+      <input type="range" id="alt" min="20" max="92" step="1" value="24"><output id="altv" for="alt">24</output></div>
+    <div class="ctl"><button type="button" class="plain" id="reseed">New terrain</button><output id="seedv" class="muted"></output></div>
+  </div>
+
+  <nav class="jump" id="jump" aria-label="Biomes"></nav>
+  <div id="loading">Decoding textures…</div>
+  <div id="biomes" class="wrap" style="gap:22px"></div>
+
+  <section id="catalog">
+    <div class="bhead"><div class="left"><div class="eyebrow">Every material used</div><h2>Materials catalog</h2></div>
+      <p class="muted" style="max-width:60ch">4 × 4 blocks each, neutral tints, variants as Continuity places them. Hover a biome map to trace any block back to its entry here.</p></div>
+    <div id="catgroups" style="display:grid;gap:18px"></div>
+  </section>
+
+  <section class="spec">
+    <h3>How a column is chosen</h3>
+    <ol>
+      <li>Under water: the <b>bed</b> ramp by water depth picks the mix.</li>
+      <li>Otherwise the <b>sub-biome</b> comes from warped cellular noise at the palette's <code>patch</code> scale, weighted by the sub-biome weights.</li>
+      <li><b>Ramps</b> apply in a fixed order (altitude, coast, bank, slope) and a matching band replaces the mix, so slope beats shore and shore beats altitude. Each variable gets noise of amplitude <code>feather</code> added first, so band edges dither.</li>
+      <li>The material is drawn from the mix with the same cellular noise at <code>clump</code> scale, plus 15% per-block speckle.</li>
+      <li>Height h becomes <code>H8 = round(h·8)</code> eighths: full blocks up to <code>floor((H8−1)/8)</code>, then the material's layer block with <code>layers = H8 − 8·yTop</code>.</li>
+      <li>Under a skin (grass, floor, moss): <code>soilDepth·(1 − slope/1.5)</code> blocks of soil, then stone. Under anything else: the material's own full block for that depth, then stone.</li>
+    </ol>
+    <p class="muted">Slope is rise per block (1.0 = 45°). Coast and bank are horizontal distances in blocks to sea or river water. Altitude is in Azgaar height units (20 = sea level, 100 = the map's highest); the slider sets what sea level maps to, so it can push the patch up through the snow and lichen bands.</p>
+  </section>
+</div>
+<div class="tooltip" id="tip" hidden></div>
+
+<script>
+"use strict";
+const D = /*__PALETTE_DATA__*/null;
+const RES = 32, WL = 62, TW = 64, TH = 40, CELL = 14, SEC = 12;
+const FALLBACK = "#b7c26c", SAND = "#f4f2ef";
+const SUBCOL = ["#e0a23c", "#4f9bd6", "#d9577a", "#5fbf73", "#9a6fd6", "#3fb8b0"];
+const RAMPCOL = { slope: "#e06b3f", coast: "#3f8fe0", bank: "#39b3c9", alt: "#c9c9c9", depth: "#2a5ea8", sub: "rgba(0,0,0,0)" };
+const state = { pack: "acrp", tint: "palette", overlay: "none", alt: 24, seed: 7 };
+const IMG = {}, TINTED = new Map();
+
+// ---- hashing and noise ----------------------------------------------------
+function h32(a, b, c) {
+  let h = Math.imul(a | 0, 0x27d4eb2d) ^ Math.imul(b | 0, 0x165667b1) ^ Math.imul(c | 0, 0x9e3779b1);
+  h = Math.imul(h ^ (h >>> 15), 0x85ebca6b); h = Math.imul(h ^ (h >>> 13), 0xc2b2ae35);
+  return (h ^ (h >>> 16)) >>> 0;
+}
+const u01 = (a, b, c) => h32(a, b, c) / 4294967296;
+function vnoise(x, z, s) {
+  const x0 = Math.floor(x), z0 = Math.floor(z), fx = x - x0, fz = z - z0;
+  const sx = fx * fx * (3 - 2 * fx), sz = fz * fz * (3 - 2 * fz);
+  const a = u01(x0, z0, s), b = u01(x0 + 1, z0, s), c = u01(x0, z0 + 1, s), d = u01(x0 + 1, z0 + 1, s);
+  return a + (b - a) * sx + (c - a) * sz + (a - b - c + d) * sx * sz;
+}
+function fbm(x, z, s) { return (vnoise(x, z, s) + 0.5 * vnoise(x * 2.1, z * 2.1, s + 1) + 0.25 * vnoise(x * 4.3, z * 4.3, s + 2)) / 1.75; }
+function weighted(r, weights, total) { let t = r * total; for (let i = 0; i < weights.length; i++) { if (t < weights[i]) return i; t -= weights[i]; } return weights.length - 1; }
+// warped cellular pick: patches with the right proportions and organic edges
+function cellPick(x, z, scale, seed, weights, total) {
+  const wx = x + (vnoise(x / scale * 1.7, z / scale * 1.7, seed + 11) - 0.5) * scale * 0.9;
+  const wz = z + (vnoise(x / scale * 1.7 + 31.4, z / scale * 1.7 - 12.7, seed + 13) - 0.5) * scale * 0.9;
+  const gx = Math.floor(wx / scale), gz = Math.floor(wz / scale);
+  let best = 1e9, pick = 0;
+  for (let dz = -1; dz <= 1; dz++) for (let dx = -1; dx <= 1; dx++) {
+    const cx = gx + dx, cz = gz + dz;
+    const px = (cx + u01(cx, cz, seed + 1)) * scale, pz = (cz + u01(cx, cz, seed + 2)) * scale;
+    const d = (px - wx) ** 2 + (pz - wz) ** 2;
+    if (d < best) { best = d; pick = u01(cx, cz, seed + 3); }
+  }
+  return weighted(pick, weights, total);
+}
+// Continuity variant index; mirrors palette_preview._variant
+function variant(e, x, z) {
+  if (!e.method || e.n <= 1) return 0;
+  const h = ((Math.imul(x, 73856093) ^ Math.imul(z, 19349663)) >>> 0);
+  const pickW = (count, w) => { w = w || Array(count).fill(1); const tot = w.reduce((a, b) => a + b, 0); let p = h % tot; for (let i = 0; i < count; i++) { if (p < w[i]) return i; p -= w[i]; } return 0; };
+  if (e.method === "repeat") {
+    const tile = ((x % e.w) + e.w) % e.w + (((z % e.h) + e.h) % e.h) * e.w;
+    if (!e.groups) return tile % e.n;
+    const g = e.groups[tile % e.groups.length];
+    return g[0] + pickW(g[1], g[2]);
+  }
+  return pickW(e.n, e.weights);
+}
+
+// ---- textures ---------------------------------------------------------------
+function loadAtlases() {
+  return Promise.all(Object.entries(D.atlas).map(([k, src]) => new Promise(res => {
+    const im = new Image(); im.onload = () => res(); im.onerror = () => res(); im.src = src; IMG[k] = im;
+  })));
+}
+function rgb(hex) { const n = parseInt(hex.slice(1), 16); return [n >> 16 & 255, n >> 8 & 255, n & 255]; }
+function strip(key, hex) {
+  const im = IMG[key];
+  if (!hex || !im) return im;
+  const id = key + hex; let c = TINTED.get(id);
+  if (c) return c;
+  c = document.createElement("canvas"); c.width = im.width; c.height = im.height;
+  const g = c.getContext("2d"); g.drawImage(im, 0, 0);
+  const d = g.getImageData(0, 0, c.width, c.height), p = d.data, [r, gg, b] = rgb(hex);
+  for (let i = 0; i < p.length; i += 4) { p[i] = p[i] * r / 255; p[i + 1] = p[i + 1] * gg / 255; p[i + 2] = p[i + 2] * b / 255; }
+  g.putImageData(d, 0, 0); TINTED.set(id, c); return c;
+}
+function tintFor(kind, tints) {
+  if (!kind) return null;
+  if (kind === "sand") return SAND;
+  if (kind === "foliage") return state.tint === "fallback" ? FALLBACK : tints.foliage;
+  return state.tint === "fallback" ? FALLBACK : tints.grass;
+}
+function drawTop(g, blockId, x, z, dx, dy, s, tints) {
+  const b = D.packs[state.pack][blockId];
+  if (!b) { g.fillStyle = "#f0f"; g.fillRect(dx, dy, s, s); return; }
+  for (const e of b.up) {
+    const src = strip(e.atlas, tintFor(e.kind, tints));
+    if (src) g.drawImage(src, variant(e, x, z) * RES, 0, RES, RES, dx, dy, s, s);
+  }
+}
+function drawSide(g, blockId, k, dx, dy, s, tints) {
+  const b = D.packs[state.pack][blockId];
+  if (!b || !b.side) { g.fillStyle = "#f0f"; g.fillRect(dx, dy, s, s); return; }
+  const layers = b.side[String(k)] || b.side["8"];
+  for (const e of layers) { const src = strip(e.atlas, tintFor(e.kind, tints)); if (src) g.drawImage(src, 0, 0, RES, RES, dx, dy, s, s); }
+}
+function thumb(mat, tints, n, s) {
+  const c = document.createElement("canvas"); c.width = c.height = n * s;
+  const g = c.getContext("2d"); g.imageSmoothingEnabled = false;
+  const id = D.materials[mat] ? D.materials[mat].layer : mat;
+  for (let z = 0; z < n; z++) for (let x = 0; x < n; x++) drawTop(g, id, x + 3, z + 5, x * s, z * s, s, tints);
+  return c;
+}
+
+// ---- synthetic terrain (shared by every biome) --------------------------------
+let T = null;
+function makeTerrain(seed) {
+  const N = TW * TH, h = new Float32Array(N), water = new Uint8Array(N);
+  const sm = t => t <= 0 ? 0 : t >= 1 ? 1 : t * t * (3 - 2 * t);
+  for (let z = 0; z < TH; z++) for (let x = 0; x < TW; x++) {
+    let y = 64 + 2.4 * (fbm(x / 16, z / 16, seed) - 0.5) * 2;
+    // hill, steep on its east face
+    const hx = 49 + 2 * (vnoise(z / 9, 0, seed + 5) - 0.5), hz = 14;
+    const ddx = (x - hx) * (x > hx ? 2.1 : 1), r = Math.hypot(ddx, (z - hz) * 1.05) / 17;
+    if (r < 1) y += 12 * (1 - r * r) ** 2 + 2 * (fbm(x / 5, z / 5, seed + 9) - 0.5);
+    // river, running into the sea
+    const xr = 34 - z * 0.52 + 3 * Math.sin(z / 4.5 + seed);
+    const dr = Math.abs(x - xr);
+    if (dr < 1.45) y = WL - 1.1 - 0.4 * vnoise(x / 3, z / 3, seed + 3);
+    else if (dr < 5.5) y = WL + 0.2 + (y - WL - 0.2) * sm((dr - 1.45) / 4);
+    // sea on the west, with a beach apron
+    const xc = 9 + 3 * Math.sin(z / 6 + seed * 0.7) + 2 * (vnoise(z / 5, 3, seed) - 0.5);
+    if (x < xc) y = Math.min(y, WL - 0.5 - (xc - x) * 0.5);
+    else if (x < xc + 7) y = Math.min(y, WL + 0.15 + (x - xc) * 0.33 + 0.4 * (vnoise(x / 3, z / 3, seed + 4) - 0.5));
+    h[z * TW + x] = y;
+    if (y < WL) water[z * TW + x] = x < xc + 1.5 ? 1 : 2;
+  }
+  const dist = src => {                       // chamfer distance to water type `src`
+    const d = new Float32Array(N).fill(1e9);
+    for (let i = 0; i < N; i++) if (water[i] === src) d[i] = 0;
+    for (let pass = 0; pass < 2; pass++) {
+      const zs = pass ? [TH - 1, -1, -1] : [0, TH, 1], xs = pass ? [TW - 1, -1, -1] : [0, TW, 1];
+      for (let z = zs[0]; z !== zs[1]; z += zs[2]) for (let x = xs[0]; x !== xs[1]; x += xs[2]) {
+        const i = z * TW + x;
+        for (const [ox, oz, c] of [[-1, 0, 1], [0, -1, 1], [-1, -1, 1.414], [1, -1, 1.414]]) {
+          const nx = x + (pass ? -ox : ox), nz = z + (pass ? -oz : oz);
+          if (nx < 0 || nz < 0 || nx >= TW || nz >= TH) continue;
+          d[i] = Math.min(d[i], d[nz * TW + nx] + c);
+        }
+      }
+    }
+    return d;
+  };
+  const slope = new Float32Array(N);
+  const H = (x, z) => h[Math.min(TH - 1, Math.max(0, z)) * TW + Math.min(TW - 1, Math.max(0, x))];
+  for (let z = 0; z < TH; z++) for (let x = 0; x < TW; x++)
+    slope[z * TW + x] = Math.hypot((H(x + 1, z) - H(x - 1, z)) / 2, (H(x, z + 1) - H(x, z - 1)) / 2);
+  return { h, water, coast: dist(1), bank: dist(2), slope, H };
+}
+
+// ---- palette evaluation (the spec in the page footer) --------------------------
+const GROUP_SKIN = new Set(["grass", "floor", "moss"]);
+function prep(p) {
+  if (p._prep) return p._prep;
+  const mixes = new Map();
+  const mix = m => { let r = mixes.get(m); if (!r) { const names = Object.keys(m), w = names.map(n => m[n]); r = { names, w, tot: w.reduce((a, b) => a + b, 0) }; mixes.set(m, r); } return r; };
+  const seed = [...p.id].reduce((a, c) => Math.imul(a, 31) + c.charCodeAt(0) | 0, 17);
+  const sw = p.sub.map(s => s.weight);
+  p._prep = { mix, seed, sw, stot: sw.reduce((a, b) => a + b, 0) };
+  return p._prep;
+}
+function band(r, v) {
+  if (r.bands[0].from !== undefined) { let hit = -1; r.bands.forEach((b, i) => { if (v >= b.from) hit = i; }); return hit; }
+  for (let i = 0; i < r.bands.length; i++) if (v < r.bands[i].to) return i;
+  return -1;
+}
+function evaluate(p) {
+  const P = prep(p), N = TW * TH, out = new Array(N);
+  for (let z = 0; z < TH; z++) for (let x = 0; x < TW; x++) {
+    const i = z * TW + x, h = T.h[i], s = T.slope[i];
+    const vars = { slope: s, coast: T.coast[i], bank: T.bank[i], alt: state.alt + (h - WL) * 0.9, depth: WL - h };
+    let mixObj, why = "sub", sub = cellPick(x, z, p.patch, P.seed + state.seed * 101, P.sw, P.stot), bandIx = -1;
+    if (T.water[i]) {
+      const f = (vnoise(x / 3.1, z / 3.1, P.seed + 77) * 2 - 1) * p.bed.feather;
+      bandIx = band(p.bed, vars.depth + f); if (bandIx < 0) bandIx = p.bed.bands.length - 1;
+      mixObj = p.bed.bands[bandIx].mix; why = "depth";
+    } else {
+      mixObj = p.sub[sub].mix;
+      p.ramps.forEach((r, ri) => {
+        const f = (vnoise(x / 3.1, z / 3.1, P.seed + 40 + ri) * 2 - 1) * r.feather;
+        const b = band(r, vars[r.var] + f);
+        if (b >= 0) { mixObj = r.bands[b].mix; why = r.var; bandIx = b; }
+      });
+    }
+    const m = P.mix(mixObj);
+    let k = cellPick(x, z, p.clump, P.seed + state.seed * 131 + 9, m.w, m.tot);
+    if (u01(x, z, P.seed + 5) < 0.15) k = weighted(u01(x, z, P.seed + 6), m.w, m.tot);
+    const mat = m.names[k], H8 = Math.max(1, Math.round(h * 8)), yTop = Math.floor((H8 - 1) / 8);
+    out[i] = { mat, sub, why, band: bandIx, yTop, layers: H8 - 8 * yTop, H8, vars };
+  }
+  return out;
+}
+function fillBelow(p, cell, s) {
+  const M = D.materials[cell.mat], skin = GROUP_SKIN.has(M.group);
+  const depth = Math.round(p.soilDepth * Math.max(0, Math.min(1, 1 - s / 1.5)));
+  const stone = D.materials[p.stone].full;
+  return (y) => {                          // y = blocks below the layer (1..)
+    if (y <= (skin ? depth : Math.max(1, depth))) return skin ? p.soil : M.full;
+    return stone;
+  };
+}
+
+// ---- rendering ---------------------------------------------------------------
+function tintsOf(p) { return p.tints; }
+function renderMap(p, canvas, cells) {
+  const g = canvas.getContext("2d"), s = CELL, tints = tintsOf(p);
+  canvas.width = TW * s; canvas.height = TH * s; g.imageSmoothingEnabled = true;
+  for (let z = 0; z < TH; z++) for (let x = 0; x < TW; x++) {
+    const i = z * TW + x, c = cells[i];
+    drawTop(g, D.materials[c.mat].layer, x, z, x * s, z * s, s, tints);
+    const H = T.H, dx = H(x + 1, z) - H(x - 1, z), dz = H(x, z + 1) - H(x, z - 1);
+    const shade = Math.max(-0.4, Math.min(0.3, -(dx + dz) * 0.16));
+    if (T.water[i]) {
+      const [r, gg, b] = rgb(p.tints.water), a = Math.min(0.82, 0.5 + (WL - T.h[i]) * 0.07);
+      g.fillStyle = `rgba(${r},${gg},${b},${a})`; g.fillRect(x * s, z * s, s, s);
+    } else if (shade < 0) { g.fillStyle = `rgba(0,0,0,${-shade})`; g.fillRect(x * s, z * s, s, s); }
+    else if (shade > 0) { g.fillStyle = `rgba(255,255,240,${shade * 0.45})`; g.fillRect(x * s, z * s, s, s); }
+    // layer steps: a darker edge where the neighbour sits lower
+    if (!T.water[i]) for (const [ox, oz] of [[1, 0], [0, 1]]) {
+      const nx = x + ox, nz = z + oz; if (nx >= TW || nz >= TH) continue;
+      const diff = c.H8 - cells[nz * TW + nx].H8; if (Math.abs(diff) < 6) continue;
+      g.fillStyle = `rgba(0,0,0,${Math.min(0.3, 0.04 + Math.abs(diff) * 0.018)})`;
+      if (ox) g.fillRect((x + 1) * s - 1, z * s, 1, s); else g.fillRect(x * s, (z + 1) * s - 1, s, 1);
+    }
+  }
+  if (state.overlay !== "none") {
+    for (let z = 0; z < TH; z++) for (let x = 0; x < TW; x++) {
+      const c = cells[z * TW + x];
+      const col = state.overlay === "sub" ? (c.why === "sub" || !T.water[z * TW + x] ? SUBCOL[c.sub % SUBCOL.length] : null) : RAMPCOL[c.why];
+      if (!col) continue;
+      g.globalAlpha = state.overlay === "sub" ? 0.38 : (c.why === "sub" ? 0 : 0.5);
+      g.fillStyle = col; g.fillRect(x * s, z * s, s, s); g.globalAlpha = 1;
+    }
+  }
+  g.strokeStyle = "rgba(255,255,255,.85)"; g.setLineDash([4, 3]);
+  g.strokeRect(0.5, p._row * s + 0.5, TW * s - 1, s - 1); g.setLineDash([]);
+}
+function renderSection(p, canvas, cells) {
+  const g = canvas.getContext("2d"), s = SEC, tints = tintsOf(p), z = p._row;
+  let lo = 1e9, hi = -1e9;
+  for (let x = 0; x < TW; x++) { const c = cells[z * TW + x]; lo = Math.min(lo, c.yTop); hi = Math.max(hi, c.yTop); }
+  lo -= 5; hi = Math.max(hi, WL) + 2;
+  const rows = hi - lo + 1;
+  canvas.width = TW * s; canvas.height = rows * s; g.imageSmoothingEnabled = false;
+  const css = getComputedStyle(document.documentElement);
+  g.fillStyle = css.getPropertyValue("--sunk"); g.fillRect(0, 0, canvas.width, canvas.height);
+  for (let x = 0; x < TW; x++) {
+    const i = z * TW + x, c = cells[i], below = fillBelow(p, c, T.slope[i]);
+    const py = y => (hi - y) * s;
+    for (let y = lo; y < c.yTop; y++) drawSide(g, below(c.yTop - y), 8, x * s, py(y), s, tints);
+    drawSide(g, D.materials[c.mat].layer, c.layers, x * s, py(c.yTop), s, tints);
+    if (T.water[i]) {
+      const [r, gg, b] = rgb(p.tints.water), top = (hi - WL + 1) * s - s * 0.1, bot = py(c.yTop) + s * (1 - c.layers / 8);
+      g.fillStyle = `rgba(${r},${gg},${b},.55)`; g.fillRect(x * s, top, s, Math.max(0, bot - top));
+    }
+  }
+  g.fillStyle = "rgba(255,255,255,.6)"; g.fillRect(0, (hi - WL + 1) * s - s * 0.1, canvas.width, 1);
+}
+
+// ---- page -------------------------------------------------------------------
+const $ = (sel, root = document) => root.querySelector(sel);
+function el(tag, attrs = {}, ...kids) {
+  const e = document.createElement(tag);
+  for (const [k, v] of Object.entries(attrs)) { if (k === "class") e.className = v; else if (k === "html") e.innerHTML = v; else e.setAttribute(k, v); }
+  for (const k of kids) if (k != null) e.append(k);
+  return e;
+}
+const pretty = m => m.replace(/_/g, " ");
+function matChip(mat, weight, total, tints) {
+  const c = thumb(mat, tints, 2, 16);
+  const pct = total ? Math.round(weight / total * 100) + "%" : "";
+  return el("div", { class: "mat", title: D.materials[mat].layer }, c, el("span", { class: "n" }, pretty(mat)), el("span", { class: "w" }, pct));
+}
+function mixRow(mix, tints) {
+  const tot = Object.values(mix).reduce((a, b) => a + b, 0);
+  return el("div", { class: "mix" }, ...Object.entries(mix).map(([m, w]) => matChip(m, w, tot, tints)));
+}
+const VARNAME = { slope: "Slope", coast: "Coast (sea)", bank: "Bank (river / lake)", alt: "Altitude", depth: "Water depth" };
+const UNIT = { slope: "", coast: " bl", bank: " bl", alt: "", depth: " bl" };
+function rampBlock(r, tints) {
+  const up = r.bands[0].from !== undefined;
+  return el("div", { class: "ramp" },
+    el("div", { class: "rh", html: `<b>${VARNAME[r.var]}</b> · feather ±${r.feather}${UNIT[r.var]}` }),
+    ...r.bands.map(b => el("div", { class: "band" },
+      el("span", { class: "edge" }, up ? "≥ " + b.from + UNIT[r.var] : (b.to >= 99 ? "deeper" : "< " + b.to + UNIT[r.var])),
+      mixRow(b.mix, tints))));
+}
+function buildBiome(p) {
+  const tints = tintsOf(p);
+  const sec = el("section", { class: "biome", id: p.id });
+  const chips = el("div", { class: "chips" }, ...p.azgaar.map(a => el("span", { class: "chip" }, a)),
+    p.status !== "ready" ? el("span", { class: "chip warn" }, "trees still to write") : null);
+  const sw = (label, hex) => el("span", { class: "sw" }, el("i", { style: `background:${hex}` }), label + " ", el("code", {}, hex));
+  sec.append(el("div", { class: "bhead" },
+    el("div", { class: "left" }, el("div", { class: "eyebrow" }, p.id), el("h2", {}, p.name), chips),
+    el("div", { class: "tints" }, sw("grass", p.tints.grass), sw("foliage", p.tints.foliage), sw("water", p.tints.water))));
+  if (p.notes) sec.append(el("p", { class: "bnotes" }, p.notes));
+  const map = el("canvas", { class: "map", "aria-label": `Top-down preview of ${p.name}` });
+  const cut = el("canvas", { "aria-label": `Cross-section of ${p.name}` });
+  const legend = el("div", { class: "legend" });
+  const views = el("div", { class: "views" },
+    el("div", { class: "canvas-box" }, map),
+    el("div", { class: "caption" }, el("span", {}, "Top-down, 64 × 40 blocks. Click a row to cut the section there."), legend),
+    el("div", { class: "canvas-box" }, cut),
+    el("div", { class: "caption" }, el("span", {}, "Cross-section along the dashed row: layers over soil over stone.")));
+  const recipe = el("div", { class: "recipe" });
+  recipe.append(el("div", { class: "block-h" }, "Sub-biomes"));
+  const stot = p.sub.reduce((a, s) => a + s.weight, 0);
+  p.sub.forEach((s, i) => recipe.append(el("div", { class: "sub" },
+    el("div", { class: "subhead" }, el("i", { style: `width:10px;height:10px;border-radius:2px;background:${SUBCOL[i % SUBCOL.length]};display:inline-block` }),
+      el("b", {}, s.name), el("span", { class: "pct" }, Math.round(s.weight / stot * 100) + "% of area")),
+    mixRow(s.mix, tints))));
+  recipe.append(el("div", { class: "block-h" }, "Ramps (in order; later ones win)"));
+  p.ramps.forEach(r => recipe.append(rampBlock(r, tints)));
+  recipe.append(el("div", { class: "block-h" }, "Bed and column"));
+  recipe.append(rampBlock(p.bed, tints));
+  recipe.append(el("div", { class: "column" },
+    el("span", {}, "Soil"), matColumnChip(p.soil, tints),
+    el("span", {}, `× ${p.soilDepth}, then stone`), matChip(p.stone, 1, 0, tints),
+    el("span", { class: "muted" }, `clump ${p.clump} bl · patch ${p.patch} bl`)));
+  sec.append(el("div", { class: "bgrid" }, views, recipe));
+  p._row = 13; p._map = map; p._cut = cut; p._legend = legend; p._recipe = recipe;
+  map.addEventListener("click", ev => { const r = map.getBoundingClientRect(); p._row = Math.max(0, Math.min(TH - 1, Math.floor((ev.clientY - r.top) / r.height * TH))); draw(p); });
+  map.addEventListener("mousemove", ev => hover(p, ev));
+  map.addEventListener("mouseleave", () => { $("#tip").hidden = true; });
+  return sec;
+}
+function matColumnChip(blockId, tints) {
+  const c = document.createElement("canvas"); c.width = c.height = 32;
+  const g = c.getContext("2d"); g.imageSmoothingEnabled = false;
+  drawTop(g, blockId, 0, 0, 0, 0, 16, tints); drawTop(g, blockId, 1, 0, 16, 0, 16, tints);
+  drawTop(g, blockId, 0, 1, 0, 16, 16, tints); drawTop(g, blockId, 1, 1, 16, 16, 16, tints);
+  return el("div", { class: "mat", title: blockId }, c, el("span", { class: "n" }, pretty(blockId.split(":")[1])), el("span", { class: "w" }, "full block"));
+}
+function draw(p) {
+  p._cells = evaluate(p);
+  renderMap(p, p._map, p._cells);
+  renderSection(p, p._cut, p._cells);
+  const L = p._legend; L.textContent = "";
+  if (state.overlay === "sub") p.sub.forEach((s, i) => L.append(el("span", {}, el("i", { style: `background:${SUBCOL[i % SUBCOL.length]}` }), s.name)));
+  if (state.overlay === "ramp") new Set(p._cells.map(c => c.why)).forEach(w => { if (w !== "sub") L.append(el("span", {}, el("i", { style: `background:${RAMPCOL[w]}` }), VARNAME[w])); });
+}
+function hover(p, ev) {
+  const r = p._map.getBoundingClientRect();
+  const x = Math.floor((ev.clientX - r.left) / r.width * TW), z = Math.floor((ev.clientY - r.top) / r.height * TH);
+  if (x < 0 || z < 0 || x >= TW || z >= TH || !p._cells) return;
+  const c = p._cells[z * TW + x], M = D.materials[c.mat], v = c.vars;
+  const why = c.why === "sub" ? `sub-biome <b>${p.sub[c.sub].name}</b>` : `${VARNAME[c.why]} band ${c.band + 1}`;
+  const tip = $("#tip");
+  tip.innerHTML = `<b>${pretty(c.mat)}</b><br><code>${M.layer}[layers=${c.layers}${M.layer.endsWith("_slab") ? ",type=bottom" : ""}]</code><br>` +
+    `over <code>${GROUP_SKIN.has(M.group) ? p.soil : M.full}</code><br>chosen by ${why}<br>` +
+    `<span style="opacity:.75">slope ${v.slope.toFixed(2)} · alt ${v.alt.toFixed(0)} · coast ${v.coast > 99 ? "–" : v.coast.toFixed(1)} · bank ${v.bank > 99 ? "–" : v.bank.toFixed(1)}</span>`;
+  tip.hidden = false;
+  const tx = Math.min(window.innerWidth - 350, ev.clientX + 14), ty = Math.min(window.innerHeight - 130, ev.clientY + 14);
+  tip.style.left = tx + "px"; tip.style.top = ty + "px";
+}
+function refreshChips(p) {
+  // thumbnails depend on pack and tint mode; rebuild the recipe column
+  const fresh = buildBiome(p); const old = document.getElementById(p.id);
+  p._row = p._rowKeep ?? 13; old.replaceWith(fresh);
+}
+function buildCatalog() {
+  const box = $("#catgroups"); box.textContent = "";
+  const groups = {};
+  for (const [m, M] of Object.entries(D.materials)) (groups[M.group] = groups[M.group] || []).push(m);
+  const order = ["grass", "floor", "moss", "soil", "wet", "sand", "gravel", "rock", "ice"];
+  const neutral = { grass: "#7fa34a", foliage: "#6a9a3a", water: "#3f6ea8" };
+  for (const gname of order) {
+    if (!groups[gname]) continue;
+    const grid = el("div", { class: "catgrid" });
+    for (const m of groups[gname]) {
+      const M = D.materials[m];
+      grid.append(el("div", { class: "cat-item", id: "mat-" + m }, thumb(m, neutral, 4, 16),
+        el("div", { class: "ids" }, el("span", { class: "nm" }, pretty(m)), el("span", {}, M.layer), el("span", {}, "over " + M.full),
+          M.note ? el("span", { style: "font-family:var(--body);font-size:12px" }, M.note) : null,
+          el("span", { class: "used" }, `in ${M.usedBy.length} biome${M.usedBy.length === 1 ? "" : "s"}`))));
+    }
+    box.append(el("div", { style: "display:grid;gap:8px" }, el("h3", {}, gname[0].toUpperCase() + gname.slice(1)), grid));
+  }
+}
+function drawAll() { for (const p of D.biomes) draw(p); }
+function rebuildAll() {
+  for (const p of D.biomes) { p._rowKeep = p._row; refreshChips(p); }
+  drawAll(); buildCatalog();
+}
+function seg(id, key, after) {
+  const box = document.getElementById(id);
+  box.addEventListener("click", ev => {
+    const b = ev.target.closest("button"); if (!b) return;
+    state[key] = b.dataset.v;
+    box.querySelectorAll("button").forEach(x => x.setAttribute("aria-pressed", String(x === b)));
+    after();
+  });
+}
+async function main() {
+  const mats = Object.keys(D.materials).length;
+  $("#stats").append(...[[D.biomes.length, "biome palettes"], [D.biomes.reduce((a, p) => a + p.sub.length, 0), "sub-biomes"], [mats, "layer materials"], [Object.keys(D.atlas).length, "texture strips"]]
+    .map(([n, l]) => el("span", {}, el("b", {}, String(n)), " " + l)));
+  const cats = {};
+  for (const p of D.biomes) (cats[p.azgaar[0]] = cats[p.azgaar[0]] || []).push(p);
+  for (const [c, ps] of Object.entries(cats)) $("#jump").append(el("div", {}, el("span", { class: "cat" }, c), ...ps.map(p => el("a", { href: "#" + p.id }, p.name))));
+  await loadAtlases();
+  $("#loading").hidden = true;
+  T = makeTerrain(state.seed); $("#seedv").textContent = "seed " + state.seed;
+  const box = $("#biomes");
+  for (const p of D.biomes) box.append(buildBiome(p));
+  drawAll(); buildCatalog();
+  seg("pack", "pack", rebuildAll);
+  seg("tintmode", "tint", rebuildAll);
+  seg("overlay", "overlay", drawAll);
+  const alt = $("#alt"); let tm = 0;
+  alt.addEventListener("input", () => { state.alt = +alt.value; $("#altv").textContent = alt.value; clearTimeout(tm); tm = setTimeout(drawAll, 60); });
+  $("#reseed").addEventListener("click", () => { state.seed = (state.seed * 7 + 13) % 997; T = makeTerrain(state.seed); $("#seedv").textContent = "seed " + state.seed; drawAll(); });
+}
+main();
+</script>

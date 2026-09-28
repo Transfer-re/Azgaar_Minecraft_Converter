@@ -7,8 +7,9 @@
   "status": "ready",
   "notes": "Same species, biased hard to xl, with moss and hanging moss on everything. Use sparingly -- it reads best as a small region inside ordinary spruce taiga.",
   "surface": {
-    "top": "conquest:taiga_grass",
-    "under": "conquest:unfertile_loamy_dirt"
+    "top": "conquest:mossy_fir_forest_floor",
+    "under": "conquest:dark_fertile_soil",
+    "stone": "conquest:weathered_granite"
   },
   "trees": {
     "density": 0.75,
@@ -44,5 +45,256 @@
     "conquest:hanging_moss": 8,
     "conquest:moss_vines": 5,
     "conquest:mossy_light_limestone_boulders": 3
+  },
+  "palette": {
+    "tints": {
+      "grass": "#648a44",
+      "foliage": "#47703a",
+      "water": "#3a5c86"
+    },
+    "soil": "conquest:dark_fertile_soil",
+    "stone": "weathered_granite",
+    "soilDepth": 3,
+    "clump": 4.0,
+    "patch": 28.0,
+    "sub": [
+      {
+        "id": "deep_moss",
+        "name": "Deep moss",
+        "weight": 45,
+        "mix": {
+          "mossy_fir_forest_floor": 45,
+          "overgrown_fir_forest_floor": 30,
+          "cushion_moss_covered_loamy_dirt": 25
+        }
+      },
+      {
+        "id": "needle_duff",
+        "name": "Needle duff",
+        "weight": 35,
+        "mix": {
+          "taiga_forest_floor": 50,
+          "fir_forest_floor": 30,
+          "mossy_forest_floor_with_roots": 20
+        }
+      },
+      {
+        "id": "windthrow_gap",
+        "name": "Windthrow gap",
+        "weight": 20,
+        "mix": {
+          "taiga_grass": 45,
+          "overgrown_fir_forest_floor": 30,
+          "grassy_dirt": 25
+        }
+      }
+    ],
+    "ramps": [
+      {
+        "var": "coast",
+        "feather": 1.2,
+        "bands": [
+          {
+            "to": 1.5,
+            "mix": {
+              "wet_gray_sand": 50,
+              "smooth_pebbles": 50
+            }
+          },
+          {
+            "to": 4,
+            "mix": {
+              "gray_sand": 45,
+              "smooth_pebbles": 30,
+              "gray_gravel": 25
+            }
+          },
+          {
+            "to": 6,
+            "mix": {
+              "light_gray_sand": 40,
+              "mossy_small_stones": 60
+            }
+          }
+        ]
+      },
+      {
+        "var": "bank",
+        "feather": 0.9,
+        "bands": [
+          {
+            "to": 1,
+            "mix": {
+              "smooth_pebbles": 60,
+              "wet_gray_sand": 40
+            }
+          },
+          {
+            "to": 2.5,
+            "mix": {
+              "gray_gravel": 40,
+              "mossy_small_stones": 60
+            }
+          }
+        ]
+      },
+      {
+        "var": "slope",
+        "feather": 0.15,
+        "bands": [
+          {
+            "from": 0.65,
+            "mix": {
+              "mossy_fir_forest_floor": 50,
+              "rocky_soil": 50
+            }
+          },
+          {
+            "from": 1.0,
+            "mix": {
+              "mossy_small_stones": 60,
+              "gray_gravel": 40
+            }
+          },
+          {
+            "from": 1.45,
+            "mix": {
+              "mossy_blue_schist": 40,
+              "weathered_granite": 60
+            }
+          },
+          {
+            "from": 2.1,
+            "mix": {
+              "weathered_granite": 70,
+              "dark_gray_granite": 30
+            }
+          }
+        ]
+      }
+    ],
+    "bed": {
+      "var": "depth",
+      "feather": 0.8,
+      "bands": [
+        {
+          "to": 2,
+          "mix": {
+            "smooth_pebbles": 60,
+            "wet_gray_sand": 40
+          }
+        },
+        {
+          "to": 99,
+          "mix": {
+            "gray_gravel": 50,
+            "dark_silt": 50
+          }
+        }
+      ]
+    },
+    "materials": {
+      "mossy_fir_forest_floor": {
+        "layer": "conquest:mossy_fir_forest_floor_layer",
+        "full": "conquest:mossy_fir_forest_floor",
+        "group": "floor",
+        "note": "needles with tinted moss"
+      },
+      "overgrown_fir_forest_floor": {
+        "layer": "conquest:overgrown_fir_forest_floor_layer",
+        "full": "conquest:overgrown_fir_forest_floor",
+        "group": "floor",
+        "note": "needles mostly mossed over"
+      },
+      "cushion_moss_covered_loamy_dirt": {
+        "layer": "conquest:cushion_moss_covered_loamy_dirt_slab",
+        "full": "conquest:cushion_moss_covered_loamy_dirt",
+        "group": "moss"
+      },
+      "taiga_forest_floor": {
+        "layer": "conquest:taiga_forest_floor_layer",
+        "full": "conquest:taiga_forest_floor",
+        "group": "floor",
+        "note": "dark needle duff"
+      },
+      "fir_forest_floor": {
+        "layer": "conquest:fir_forest_floor_layer",
+        "full": "conquest:fir_forest_floor",
+        "group": "floor",
+        "note": "brown needles, 3x3 repeat"
+      },
+      "mossy_forest_floor_with_roots": {
+        "layer": "conquest:mossy_forest_floor_with_roots_layer",
+        "full": "conquest:mossy_forest_floor_with_roots",
+        "group": "floor"
+      },
+      "taiga_grass": {
+        "layer": "conquest:taiga_grass_layer",
+        "full": "conquest:taiga_grass",
+        "group": "grass",
+        "note": "coarser, darker tussock turf"
+      },
+      "grassy_dirt": {
+        "layer": "conquest:grassy_dirt_layer",
+        "full": "minecraft:dirt",
+        "group": "grass",
+        "note": "worn turf, dirt showing through; layer-only, vanilla dirt underneath"
+      },
+      "wet_gray_sand": {
+        "layer": "conquest:wet_gray_sand_layer",
+        "full": "conquest:wet_gray_sand",
+        "group": "sand"
+      },
+      "smooth_pebbles": {
+        "layer": "conquest:smooth_pebbles_layer",
+        "full": "conquest:smooth_pebbles",
+        "group": "gravel"
+      },
+      "gray_sand": {
+        "layer": "conquest:gray_sand_layer",
+        "full": "conquest:gray_sand",
+        "group": "sand"
+      },
+      "gray_gravel": {
+        "layer": "conquest:gray_gravel_layer",
+        "full": "conquest:gray_gravel",
+        "group": "gravel"
+      },
+      "light_gray_sand": {
+        "layer": "conquest:light_gray_sand_layer",
+        "full": "conquest:light_gray_sand",
+        "group": "sand"
+      },
+      "mossy_small_stones": {
+        "layer": "conquest:mossy_small_stones_layer",
+        "full": "conquest:mossy_small_stones",
+        "group": "gravel"
+      },
+      "rocky_soil": {
+        "layer": "conquest:rocky_soil_slab",
+        "full": "conquest:rocky_soil",
+        "group": "soil"
+      },
+      "mossy_blue_schist": {
+        "layer": "conquest:mossy_blue_schist_slab",
+        "full": "conquest:mossy_blue_schist",
+        "group": "rock"
+      },
+      "weathered_granite": {
+        "layer": "conquest:weathered_granite_slab",
+        "full": "conquest:weathered_granite",
+        "group": "rock"
+      },
+      "dark_gray_granite": {
+        "layer": "conquest:dark_gray_granite_slab",
+        "full": "conquest:dark_gray_granite",
+        "group": "rock"
+      },
+      "dark_silt": {
+        "layer": "conquest:dark_silt_slab",
+        "full": "conquest:dark_silt",
+        "group": "wet"
+      }
+    }
   }
 }

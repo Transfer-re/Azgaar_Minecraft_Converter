@@ -7,8 +7,9 @@
   "status": "ready",
   "notes": "Fully covered with no trees needed. Dirty ice at the margins does most of the visual work.",
   "surface": {
-    "top": "conquest:glacier_ice",
-    "under": "conquest:dirty_glacier_ice"
+    "top": "minecraft:snow_block",
+    "under": "conquest:glacier_ice",
+    "stone": "conquest:snowy_granite"
   },
   "trees": {
     "density": 0.0,
@@ -29,5 +30,135 @@
   "props": {
     "conquest:dirty_glacier_ice": 20,
     "conquest:snow_covered_icy_limestone": 10
+  },
+  "palette": {
+    "tints": {
+      "grass": "#90a07a",
+      "foliage": "#70866a",
+      "water": "#6f9ec4"
+    },
+    "soil": "conquest:glacier_ice",
+    "stone": "snowy_granite",
+    "soilDepth": 6,
+    "clump": 4.0,
+    "patch": 28.0,
+    "sub": [
+      {
+        "id": "firn",
+        "name": "Firn",
+        "weight": 50,
+        "mix": {
+          "snow": 85,
+          "glacier_ice": 15
+        }
+      },
+      {
+        "id": "blue_ice",
+        "name": "Blue ice",
+        "weight": 25,
+        "mix": {
+          "glacier_ice": 75,
+          "snow": 15,
+          "dirty_glacier_ice": 10
+        }
+      },
+      {
+        "id": "moraine_ice",
+        "name": "Moraine ice",
+        "weight": 15,
+        "mix": {
+          "dirty_glacier_ice": 60,
+          "gray_gravel": 20,
+          "glacier_ice": 20
+        }
+      },
+      {
+        "id": "crevasse_field",
+        "name": "Crevasse field",
+        "weight": 10,
+        "mix": {
+          "glacier_ice": 50,
+          "snow": 30,
+          "dirty_glacier_ice": 20
+        }
+      }
+    ],
+    "ramps": [
+      {
+        "var": "slope",
+        "feather": 0.15,
+        "bands": [
+          {
+            "from": 0.65,
+            "mix": {
+              "glacier_ice": 60,
+              "snow": 40
+            }
+          },
+          {
+            "from": 1.0,
+            "mix": {
+              "glacier_ice": 80,
+              "dirty_glacier_ice": 20
+            }
+          },
+          {
+            "from": 1.45,
+            "mix": {
+              "snowy_granite": 60,
+              "glacier_ice": 40
+            }
+          },
+          {
+            "from": 2.1,
+            "mix": {
+              "snowy_granite": 100
+            }
+          }
+        ]
+      }
+    ],
+    "bed": {
+      "var": "depth",
+      "feather": 0.8,
+      "bands": [
+        {
+          "to": 99,
+          "mix": {
+            "glacier_ice": 60,
+            "gray_gravel": 40
+          }
+        }
+      ]
+    },
+    "notes": "Soil is ice, six deep, so a glacier edge cut by a slope shows a real ice wall before the granite.",
+    "materials": {
+      "snow": {
+        "layer": "minecraft:snow",
+        "full": "minecraft:snow_block",
+        "group": "ice",
+        "note": "vanilla snow layers"
+      },
+      "glacier_ice": {
+        "layer": "conquest:glacier_ice_slab",
+        "full": "conquest:glacier_ice",
+        "group": "ice"
+      },
+      "dirty_glacier_ice": {
+        "layer": "conquest:dirty_glacier_ice_slab",
+        "full": "conquest:dirty_glacier_ice",
+        "group": "ice"
+      },
+      "gray_gravel": {
+        "layer": "conquest:gray_gravel_layer",
+        "full": "conquest:gray_gravel",
+        "group": "gravel"
+      },
+      "snowy_granite": {
+        "layer": "conquest:snowy_granite_slab",
+        "full": "conquest:snowy_granite",
+        "group": "ice"
+      }
+    }
   }
 }

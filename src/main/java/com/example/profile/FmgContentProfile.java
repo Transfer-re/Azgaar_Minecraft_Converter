@@ -52,8 +52,27 @@ public final class FmgContentProfile {
 
     public String id = VANILLA_ID;
     public String displayName = "Vanilla";
+    /**
+     * Revision of a built-in profile. When the file on disk is older than the
+     * built-in one, {@link FmgProfiles} replaces it (keeping a backup), so an
+     * updated mod's defaults reach existing installs.
+     */
+    public int version = 0;
     /** Mod id that must be loaded for this profile to be offered, or null/blank for always. */
     public String requiresMod;
+
+    /**
+     * Ground palette set ({@code fantasymapgenerator/surface/<id>.json}) that
+     * builds a layered surface over the terrain, or null for the vanilla
+     * surface rules alone.
+     */
+    public String surfacePalettes;
+    /**
+     * Blocks by which biome lookups are displaced with noise, so region borders
+     * wander instead of following the map's straight cell edges. 0 = off, which
+     * keeps existing worlds identical.
+     */
+    public double biomeEdgeWarp = 0.0;
 
     /** Chunk generator settings (and therefore surface rules) this profile generates with. */
     public String noiseSettings = "fantasymapgenerator:fmg_overworld_base";
@@ -431,19 +450,74 @@ public final class FmgContentProfile {
         return p;
     }
 
+    /** Revision of {@link #conquest()}; bump when its defaults change. */
+    public static final int CONQUEST_VERSION = 2;
+
+    private static final String CQ = "fantasymapgenerator:conquest/";
+
     /**
-     * Starting point for a Conquest Reforged profile. Deliberately still points
-     * at vanilla biomes and blocks -- swap the ids for Conquest ones (and point
-     * {@code noiseSettings} at a Conquest {@code noise_settings} file with your
-     * own surface rules) as that datapack gets authored.
+     * The Conquest Reforged profile: the 29 Conquest biomes
+     * ({@code data/fantasymapgenerator/worldgen/biome/conquest/}) over the Azgaar
+     * categories, and a layered ground built from Conquest layer blocks
+     * ({@code surface/conquest.json}). Oceans, beaches and rivers keep their
+     * vanilla biomes; their ground comes from the sea palettes.
      */
-    public static FmgContentProfile conquestStub() {
+    public static FmgContentProfile conquest() {
         FmgContentProfile p = vanilla();
         p.id = "conquest";
         p.displayName = "Conquest Reforged";
+        p.version = CONQUEST_VERSION;
         p.requiresMod = "conquest";
         p.noiseSettings = "fantasymapgenerator:fmg_overworld_conquest";
         p.townStructureRoot = "towns_conquest/";
+        p.surfacePalettes = "conquest";
+        p.biomeEdgeWarp = 18.0;
+
+        Map<String, List<Weighted>> pools = p.biomes.pools;
+        pools.clear();
+        pools.put("grassland", pool(
+                w(CQ + "meadow", 0.45), w(CQ + "moorland", 0.30), w(CQ + "downland", 0.25)));
+        pools.put("temperatedeciduousforest", pool(
+                w(CQ + "oak_woodland", 0.26), w(CQ + "mixed_broadleaf_forest", 0.20),
+                w(CQ + "beech_forest", 0.14), w(CQ + "autumn_broadleaf_forest", 0.12),
+                w(CQ + "birch_wood", 0.10), w(CQ + "mixed_conifer_broadleaf", 0.10),
+                w(CQ + "aspen_grove", 0.08)));
+        pools.put("taiga", pool(
+                w(CQ + "spruce_taiga", 0.30), w(CQ + "pine_taiga", 0.20), w(CQ + "larch_taiga", 0.15),
+                w(CQ + "autumn_larch_taiga", 0.10), w(CQ + "old_growth_spruce", 0.10),
+                w(CQ + "mixed_conifer_broadleaf", 0.05), w(CQ + "birch_wood", 0.05),
+                w(CQ + "dead_taiga", 0.05)));
+        pools.put("temperaterainforest", pool(
+                w(CQ + "mossy_conifer_forest", 0.80), w(CQ + "old_growth_spruce", 0.20)));
+        pools.put("savanna", pool(w(CQ + "savanna", 1.0)));
+        pools.put("hotdesert", pool(w(CQ + "hot_desert", 1.0)));
+        pools.put("mesa", pool(w(CQ + "hot_desert", 1.0)));
+        pools.put("colddesert", pool(w(CQ + "cold_steppe", 1.0)));
+        pools.put("steppe", pool(w(CQ + "cold_steppe", 0.7), w(CQ + "savanna", 0.3)));
+        pools.put("tropicalseasonalforest", pool(
+                w(CQ + "tropical_seasonal_forest", 0.8), w(CQ + "savanna", 0.2)));
+        pools.put("tropicalrainforest", pool(w(CQ + "tropical_rainforest", 1.0)));
+        // "wetland" is a weighted pool here; the temperature rule below only
+        // catches the other spellings
+        pools.put("wetland", pool(
+                w(CQ + "sphagnum_bog", 0.40), w(CQ + "fen_reedbed", 0.35), w(CQ + "willow_carr", 0.25)));
+        p.biomes.wetlandNames = new ArrayList<>(List.of("swamp", "marsh"));
+        p.biomes.wetland.cool = CQ + "sphagnum_bog";
+        p.biomes.wetland.warm = CQ + "willow_carr";
+
+        p.biomes.guaranteedRares.clear();
+        Map<String, List<Rung>> ladders = p.biomes.elevationLadders;
+        ladders.clear();
+        ladders.put("tundra", new ArrayList<>(List.of(
+                new Rung(CQ + "shrub_tundra", 40), new Rung(CQ + "lichen_tundra", 60),
+                new Rung(CQ + "alpine_scree", Double.MAX_VALUE))));
+        ladders.put("glacier", new ArrayList<>(List.of(new Rung(CQ + "glacier", Double.MAX_VALUE))));
+        List<Rung> mountain = new ArrayList<>(List.of(
+                new Rung(CQ + "spruce_taiga", 35), new Rung(CQ + "larch_taiga", 50),
+                new Rung(CQ + "alpine_scree", 70), new Rung(CQ + "glacier", Double.MAX_VALUE)));
+        ladders.put("mountain", mountain);
+        ladders.put("highlands", new ArrayList<>(mountain));
+        p.biomes.fallback = CQ + "meadow";
         return p;
     }
 }

@@ -13,6 +13,11 @@ the hand-built Conquest pack (46 per group), `axiom/...` from the remapped Axiom
 pack (3-20 per group). Sizes are weighted separately from species: a forest is
 mostly m/l with a few xl and an xs/s understory, a moor is almost all xs/s.
 
+The ground itself -- which layer blocks make the surface, in which sub-biome
+patches, and how that changes with slope, shore and altitude -- lives in
+`palettes.py` and is written into each file as `palette`. `surface` is derived
+from it (dominant skin + soil + stone) so the two can never disagree.
+
 QF trees are the better-looking half, so they stay dominant wherever they cover
 the role. Axiom earns its place where QF has nothing: hemlock and douglas fir
 for temperate rainforest, birch at all, and a much deeper bench of dead conifers
@@ -25,6 +30,8 @@ import argparse
 import json
 import os
 import sys
+
+from .palettes import MATERIALS, PALETTES, materials_used
 
 NS = "conquest:"
 
@@ -513,6 +520,48 @@ BIOMES = [
 ]
 
 
+def with_palette(b):
+    """Attach the biome's ground palette and derive `surface` from it."""
+    p = PALETTES.get(b["id"])
+    if p is None:
+        return b
+    used = materials_used(p)
+    b["palette"] = dict(p, materials={m: MATERIALS[m] for m in used
+                                      if m in MATERIALS})
+    main_sub = max(p["sub"], key=lambda sb: sb["weight"])
+    skin = max(main_sub["mix"], key=main_sub["mix"].get)
+    if skin in MATERIALS:
+        b["surface"] = {"top": MATERIALS[skin]["full"], "under": p["soil"],
+                        "stone": MATERIALS.get(p["stone"], {}).get("full")}
+    return b
+
+
+def check_palette(b, known):
+    """Problems with one biome's palette, as strings."""
+    p = b.get("palette")
+    if p is None:
+        return ["no palette"]
+    out = []
+    for m in materials_used(PALETTES[b["id"]]):
+        if m not in MATERIALS:
+            out.append("unknown material %s" % m)
+    ids = [p["soil"]] + [v for m in p["materials"].values()
+                         for v in (m["layer"], m["full"])]
+    for i in ids:
+        if known is not None and i.startswith(NS) and i not in known:
+            out.append("unknown block %s" % i)
+    mixes = [sb["mix"] for sb in p["sub"]]
+    mixes += [band["mix"] for r in p["ramps"] + [p["bed"]] for band in r["bands"]]
+    for mix in mixes:
+        if not mix or any(w <= 0 for w in mix.values()):
+            out.append("empty or non-positive mix %s" % mix)
+    for r in p["ramps"] + [p["bed"]]:
+        edges = [band.get("from", band.get("to")) for band in r["bands"]]
+        if edges != sorted(edges):
+            out.append("%s bands out of order" % r["var"])
+    return out
+
+
 def main(argv=None):
     ap = argparse.ArgumentParser(prog="fmgtrees.make_biomes")
     ap.add_argument("--registry", help="file of known Conquest block ids")
@@ -534,9 +583,12 @@ def main(argv=None):
 
     os.makedirs(args.out, exist_ok=True)
 
-    bad_blocks, bad_groups = [], []
+    bad_blocks, bad_groups, bad_palettes = [], [], []
     for b in BIOMES:
-        ids = list(b["surface"].values()) + list(b["groundCover"]) + list(b["props"])
+        with_palette(b)
+        bad_palettes += [(b["id"], e) for e in check_palette(b, known)]
+        ids = ([v for v in b["surface"].values() if v] + list(b["groundCover"])
+               + list(b["props"]))
         for i in ids:
             if known is not None and i.startswith(NS) and i not in known:
                 bad_blocks.append((b["id"], i))
@@ -573,7 +625,11 @@ def main(argv=None):
         print("\nunknown tree groups:")
         for bid, g in bad_groups:
             print("  %-28s %s" % (bid, g))
-    return 1 if (bad_blocks or bad_groups) else 0
+    if bad_palettes:
+        print("\npalette problems:")
+        for bid, e in bad_palettes:
+            print("  %-28s %s" % (bid, e))
+    return 1 if (bad_blocks or bad_groups or bad_palettes) else 0
 
 
 if __name__ == "__main__":

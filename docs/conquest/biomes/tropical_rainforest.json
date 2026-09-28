@@ -7,8 +7,9 @@
   "status": "blocked",
   "notes": "BLOCKED: no warm-climate tree schematics at all. banana_tree_leaves and the palm set exist as blocks only.",
   "surface": {
-    "top": "conquest:lush_grass",
-    "under": "conquest:red_clay"
+    "top": "conquest:mossy_forest_floor_with_roots",
+    "under": "conquest:clay_rich_mud",
+    "stone": "conquest:mossy_limestone"
   },
   "trees": {
     "density": 0.0,
@@ -29,5 +30,291 @@
     "conquest:lush_grass": 60,
     "conquest:large_fern": 40
   },
-  "props": {}
+  "props": {},
+  "palette": {
+    "tints": {
+      "grass": "#4f9a34",
+      "foliage": "#3f8a2c",
+      "water": "#3a8fa6"
+    },
+    "soil": "conquest:clay_rich_mud",
+    "stone": "mossy_limestone",
+    "soilDepth": 3,
+    "clump": 4.0,
+    "patch": 28.0,
+    "sub": [
+      {
+        "id": "leaf_litter",
+        "name": "Leaf litter",
+        "weight": 40,
+        "mix": {
+          "mossy_forest_floor_with_roots": 35,
+          "shredded_leaves": 30,
+          "mossy_soil": 20,
+          "muddy_autumnal_forest_floor": 15
+        }
+      },
+      {
+        "id": "moss_floor",
+        "name": "Moss floor",
+        "weight": 25,
+        "mix": {
+          "mossy_soil": 40,
+          "mossy_forest_floor_with_roots": 30,
+          "cushion_moss_covered_loamy_dirt": 30
+        }
+      },
+      {
+        "id": "red_clay_floor",
+        "name": "Red clay floor",
+        "weight": 20,
+        "mix": {
+          "red_earth": 30,
+          "clay_rich_mud": 30,
+          "mossy_soil": 20,
+          "sandy_soil": 20
+        }
+      },
+      {
+        "id": "swampy_floor",
+        "name": "Swampy floor",
+        "weight": 15,
+        "mix": {
+          "mud": 35,
+          "mossy_light_silt": 35,
+          "thick_mud": 30
+        }
+      }
+    ],
+    "ramps": [
+      {
+        "var": "coast",
+        "feather": 1.2,
+        "bands": [
+          {
+            "to": 1.5,
+            "mix": {
+              "wet_tan_sand": 100
+            }
+          },
+          {
+            "to": 5,
+            "mix": {
+              "tan_sand": 85,
+              "sand": 15
+            }
+          },
+          {
+            "to": 7.5,
+            "mix": {
+              "overgrown_tan_sand": 55,
+              "sand_and_vegetation": 45
+            }
+          }
+        ]
+      },
+      {
+        "var": "bank",
+        "feather": 0.9,
+        "bands": [
+          {
+            "to": 1.5,
+            "mix": {
+              "mud": 45,
+              "thick_mud": 25,
+              "dark_silt": 30
+            }
+          },
+          {
+            "to": 3.5,
+            "mix": {
+              "mossy_light_silt": 50,
+              "overgrown_light_silt": 50
+            }
+          }
+        ]
+      },
+      {
+        "var": "slope",
+        "feather": 0.15,
+        "bands": [
+          {
+            "from": 0.65,
+            "mix": {
+              "mossy_soil": 50,
+              "red_earth": 50
+            }
+          },
+          {
+            "from": 1.0,
+            "mix": {
+              "mossy_brown_gravel": 60,
+              "mossy_small_stones": 40
+            }
+          },
+          {
+            "from": 1.45,
+            "mix": {
+              "mossy_limestone": 50,
+              "moss_covered_limestone": 50
+            }
+          },
+          {
+            "from": 2.1,
+            "mix": {
+              "moss_covered_limestone": 60,
+              "mossy_limestone": 40
+            }
+          }
+        ]
+      }
+    ],
+    "bed": {
+      "var": "depth",
+      "feather": 0.8,
+      "bands": [
+        {
+          "to": 2,
+          "mix": {
+            "wet_tan_sand": 70,
+            "wet_river_sand": 30
+          }
+        },
+        {
+          "to": 99,
+          "mix": {
+            "wet_sand": 50,
+            "dark_silt": 50
+          }
+        }
+      ]
+    },
+    "notes": "Karst under rainforest: every rock band is moss-covered limestone, so the ground never goes grey.",
+    "materials": {
+      "mossy_forest_floor_with_roots": {
+        "layer": "conquest:mossy_forest_floor_with_roots_layer",
+        "full": "conquest:mossy_forest_floor_with_roots",
+        "group": "floor"
+      },
+      "shredded_leaves": {
+        "layer": "conquest:shredded_leaves_layer",
+        "full": "conquest:shredded_leaves",
+        "group": "floor",
+        "note": "brown broadleaf litter"
+      },
+      "mossy_soil": {
+        "layer": "conquest:mossy_soil_slab",
+        "full": "conquest:mossy_soil",
+        "group": "moss"
+      },
+      "muddy_autumnal_forest_floor": {
+        "layer": "conquest:muddy_autumnal_forest_floor_layer",
+        "full": "conquest:muddy_autumnal_forest_floor",
+        "group": "floor",
+        "note": "wet trodden leaves"
+      },
+      "cushion_moss_covered_loamy_dirt": {
+        "layer": "conquest:cushion_moss_covered_loamy_dirt_slab",
+        "full": "conquest:cushion_moss_covered_loamy_dirt",
+        "group": "moss"
+      },
+      "red_earth": {
+        "layer": "conquest:red_earth_slab",
+        "full": "conquest:red_earth",
+        "group": "soil",
+        "note": "orange laterite"
+      },
+      "clay_rich_mud": {
+        "layer": "conquest:clay_rich_mud_slab",
+        "full": "conquest:clay_rich_mud",
+        "group": "wet"
+      },
+      "sandy_soil": {
+        "layer": "conquest:sandy_soil_slab",
+        "full": "conquest:sandy_soil",
+        "group": "soil"
+      },
+      "mud": {
+        "layer": "conquest:mud_slab",
+        "full": "conquest:mud",
+        "group": "wet"
+      },
+      "mossy_light_silt": {
+        "layer": "conquest:mossy_light_silt_slab",
+        "full": "conquest:mossy_light_silt",
+        "group": "wet"
+      },
+      "thick_mud": {
+        "layer": "conquest:thick_mud_slab",
+        "full": "conquest:thick_mud",
+        "group": "wet"
+      },
+      "wet_tan_sand": {
+        "layer": "conquest:wet_tan_sand_layer",
+        "full": "conquest:wet_tan_sand",
+        "group": "sand"
+      },
+      "tan_sand": {
+        "layer": "conquest:tan_sand_layer",
+        "full": "conquest:tan_sand",
+        "group": "sand",
+        "note": "8x8 repeat"
+      },
+      "sand": {
+        "layer": "conquest:sand_layer",
+        "full": "minecraft:sand",
+        "group": "sand"
+      },
+      "overgrown_tan_sand": {
+        "layer": "conquest:overgrown_tan_sand_layer",
+        "full": "conquest:overgrown_tan_sand",
+        "group": "sand"
+      },
+      "sand_and_vegetation": {
+        "layer": "conquest:sand_and_vegetation_layer",
+        "full": "conquest:sand_and_vegetation",
+        "group": "sand"
+      },
+      "dark_silt": {
+        "layer": "conquest:dark_silt_slab",
+        "full": "conquest:dark_silt",
+        "group": "wet"
+      },
+      "overgrown_light_silt": {
+        "layer": "conquest:overgrown_light_silt_slab",
+        "full": "conquest:overgrown_light_silt",
+        "group": "wet"
+      },
+      "mossy_brown_gravel": {
+        "layer": "conquest:mossy_brown_gravel_layer",
+        "full": "conquest:mossy_brown_gravel",
+        "group": "gravel"
+      },
+      "mossy_small_stones": {
+        "layer": "conquest:mossy_small_stones_layer",
+        "full": "conquest:mossy_small_stones",
+        "group": "gravel"
+      },
+      "mossy_limestone": {
+        "layer": "conquest:mossy_limestone_slab",
+        "full": "conquest:mossy_limestone",
+        "group": "rock"
+      },
+      "moss_covered_limestone": {
+        "layer": "conquest:moss_covered_limestone_slab",
+        "full": "conquest:moss_covered_limestone",
+        "group": "rock"
+      },
+      "wet_river_sand": {
+        "layer": "conquest:wet_river_sand_layer",
+        "full": "conquest:wet_river_sand",
+        "group": "sand"
+      },
+      "wet_sand": {
+        "layer": "conquest:wet_sand_layer",
+        "full": "conquest:wet_sand",
+        "group": "sand"
+      }
+    }
+  }
 }

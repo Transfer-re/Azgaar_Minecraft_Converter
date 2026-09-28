@@ -7,8 +7,9 @@
   "status": "blocked",
   "notes": "BLOCKED: no warm-climate tree schematics at all.",
   "surface": {
-    "top": "conquest:lush_grass",
-    "under": "conquest:red_clay"
+    "top": "conquest:shredded_leaves",
+    "under": "conquest:red_earth",
+    "stone": "conquest:light_brown_granite"
   },
   "trees": {
     "density": 0.0,
@@ -28,5 +29,279 @@
   "groundCover": {
     "conquest:lush_grass": 100
   },
-  "props": {}
+  "props": {},
+  "palette": {
+    "tints": {
+      "grass": "#8fa747",
+      "foliage": "#6f9a38",
+      "water": "#3a8fa6"
+    },
+    "soil": "conquest:red_earth",
+    "stone": "light_brown_granite",
+    "soilDepth": 3,
+    "clump": 4.0,
+    "patch": 28.0,
+    "sub": [
+      {
+        "id": "dry_leaf_floor",
+        "name": "Dry-season leaf fall",
+        "weight": 40,
+        "mix": {
+          "shredded_leaves": 30,
+          "autumnal_forest_floor": 25,
+          "grass_block": 25,
+          "red_earth": 20
+        }
+      },
+      {
+        "id": "grass_understory",
+        "name": "Grass understory",
+        "weight": 30,
+        "mix": {
+          "grass_block": 55,
+          "grassy_dirt": 25,
+          "red_earth": 20
+        }
+      },
+      {
+        "id": "laterite",
+        "name": "Laterite",
+        "weight": 15,
+        "mix": {
+          "red_earth": 45,
+          "ochre_soil": 30,
+          "coarse_red_dirt": 25
+        }
+      },
+      {
+        "id": "rocky_gully",
+        "name": "Rocky gully",
+        "weight": 15,
+        "mix": {
+          "sandy_soil": 40,
+          "brown_gravel": 30,
+          "mossy_brown_gravel": 30
+        }
+      }
+    ],
+    "ramps": [
+      {
+        "var": "coast",
+        "feather": 1.2,
+        "bands": [
+          {
+            "to": 1.5,
+            "mix": {
+              "wet_tan_sand": 100
+            }
+          },
+          {
+            "to": 5,
+            "mix": {
+              "tan_sand": 85,
+              "sand": 15
+            }
+          },
+          {
+            "to": 7.5,
+            "mix": {
+              "overgrown_tan_sand": 55,
+              "sand_and_vegetation": 45
+            }
+          }
+        ]
+      },
+      {
+        "var": "bank",
+        "feather": 0.9,
+        "bands": [
+          {
+            "to": 1,
+            "mix": {
+              "wet_river_sand": 70,
+              "smooth_pebbles": 30
+            }
+          },
+          {
+            "to": 3,
+            "mix": {
+              "dry_river_sand": 60,
+              "sand_and_vegetation": 40
+            }
+          }
+        ]
+      },
+      {
+        "var": "slope",
+        "feather": 0.15,
+        "bands": [
+          {
+            "from": 0.65,
+            "mix": {
+              "red_earth": 50,
+              "sandy_soil": 50
+            }
+          },
+          {
+            "from": 1.0,
+            "mix": {
+              "brown_gravel": 50,
+              "mossy_brown_gravel": 50
+            }
+          },
+          {
+            "from": 1.45,
+            "mix": {
+              "light_brown_granite": 60,
+              "brown_granite": 40
+            }
+          },
+          {
+            "from": 2.1,
+            "mix": {
+              "light_brown_granite": 100
+            }
+          }
+        ]
+      }
+    ],
+    "bed": {
+      "var": "depth",
+      "feather": 0.8,
+      "bands": [
+        {
+          "to": 2,
+          "mix": {
+            "wet_tan_sand": 70,
+            "wet_river_sand": 30
+          }
+        },
+        {
+          "to": 99,
+          "mix": {
+            "wet_sand": 50,
+            "dark_silt": 50
+          }
+        }
+      ]
+    },
+    "materials": {
+      "shredded_leaves": {
+        "layer": "conquest:shredded_leaves_layer",
+        "full": "conquest:shredded_leaves",
+        "group": "floor",
+        "note": "brown broadleaf litter"
+      },
+      "autumnal_forest_floor": {
+        "layer": "conquest:autumnal_forest_floor_layer",
+        "full": "conquest:autumnal_forest_floor",
+        "group": "floor",
+        "note": "yellow-orange leaf fall"
+      },
+      "grass_block": {
+        "layer": "conquest:grass_block_layer",
+        "full": "minecraft:grass_block",
+        "group": "grass",
+        "note": "plain turf; the default green"
+      },
+      "red_earth": {
+        "layer": "conquest:red_earth_slab",
+        "full": "conquest:red_earth",
+        "group": "soil",
+        "note": "orange laterite"
+      },
+      "grassy_dirt": {
+        "layer": "conquest:grassy_dirt_layer",
+        "full": "minecraft:dirt",
+        "group": "grass",
+        "note": "worn turf, dirt showing through; layer-only, vanilla dirt underneath"
+      },
+      "ochre_soil": {
+        "layer": "conquest:ochre_soil_slab",
+        "full": "conquest:ochre_soil",
+        "group": "soil"
+      },
+      "coarse_red_dirt": {
+        "layer": "conquest:coarse_red_dirt_slab",
+        "full": "conquest:coarse_red_dirt",
+        "group": "soil"
+      },
+      "sandy_soil": {
+        "layer": "conquest:sandy_soil_slab",
+        "full": "conquest:sandy_soil",
+        "group": "soil"
+      },
+      "brown_gravel": {
+        "layer": "conquest:brown_gravel_layer",
+        "full": "conquest:brown_gravel",
+        "group": "gravel"
+      },
+      "mossy_brown_gravel": {
+        "layer": "conquest:mossy_brown_gravel_layer",
+        "full": "conquest:mossy_brown_gravel",
+        "group": "gravel"
+      },
+      "wet_tan_sand": {
+        "layer": "conquest:wet_tan_sand_layer",
+        "full": "conquest:wet_tan_sand",
+        "group": "sand"
+      },
+      "tan_sand": {
+        "layer": "conquest:tan_sand_layer",
+        "full": "conquest:tan_sand",
+        "group": "sand",
+        "note": "8x8 repeat"
+      },
+      "sand": {
+        "layer": "conquest:sand_layer",
+        "full": "minecraft:sand",
+        "group": "sand"
+      },
+      "overgrown_tan_sand": {
+        "layer": "conquest:overgrown_tan_sand_layer",
+        "full": "conquest:overgrown_tan_sand",
+        "group": "sand"
+      },
+      "sand_and_vegetation": {
+        "layer": "conquest:sand_and_vegetation_layer",
+        "full": "conquest:sand_and_vegetation",
+        "group": "sand"
+      },
+      "wet_river_sand": {
+        "layer": "conquest:wet_river_sand_layer",
+        "full": "conquest:wet_river_sand",
+        "group": "sand"
+      },
+      "smooth_pebbles": {
+        "layer": "conquest:smooth_pebbles_layer",
+        "full": "conquest:smooth_pebbles",
+        "group": "gravel"
+      },
+      "dry_river_sand": {
+        "layer": "conquest:dry_river_sand_layer",
+        "full": "conquest:dry_river_sand",
+        "group": "sand"
+      },
+      "light_brown_granite": {
+        "layer": "conquest:light_brown_granite_slab",
+        "full": "conquest:light_brown_granite",
+        "group": "rock"
+      },
+      "brown_granite": {
+        "layer": "conquest:brown_granite_slab",
+        "full": "conquest:brown_granite",
+        "group": "rock"
+      },
+      "wet_sand": {
+        "layer": "conquest:wet_sand_layer",
+        "full": "conquest:wet_sand",
+        "group": "sand"
+      },
+      "dark_silt": {
+        "layer": "conquest:dark_silt_slab",
+        "full": "conquest:dark_silt",
+        "group": "wet"
+      }
+    }
+  }
 }

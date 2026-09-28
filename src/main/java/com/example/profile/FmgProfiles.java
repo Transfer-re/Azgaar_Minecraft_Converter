@@ -25,9 +25,12 @@ import net.fabricmc.loader.api.FabricLoader;
  *
  * <p>The built-in {@code vanilla} and {@code conquest} profiles are written out
  * on first run so they can be edited in place; any other {@code *.json} dropped
- * in that folder is picked up as an extra profile. A profile whose
- * {@code requiresMod} is not installed is loaded but not offered, so the same
- * jar runs with or without the mod it targets.
+ * in that folder is picked up as an extra profile. A built-in file whose
+ * {@code version} is older than the mod's is replaced (the old one is kept as
+ * {@code <id>.json.v<N>.bak}). A profile whose {@code requiresMod} is not
+ * installed is loaded but not offered, so the same jar runs with or without the
+ * mod it targets; {@code -Dfmg.allProfiles=true} offers them anyway, for testing
+ * (missing blocks then fall back to vanilla stand-ins).
  */
 public final class FmgProfiles {
 
@@ -55,8 +58,9 @@ public final class FmgProfiles {
     /** Profiles whose required mod (if any) is installed, in file order with vanilla first. */
     public static List<FmgContentProfile> available() {
         List<FmgContentProfile> out = new ArrayList<>();
+        boolean all = Boolean.getBoolean("fmg.allProfiles");
         for (FmgContentProfile p : all().values()) {
-            if (p.requiresMod != null && !p.requiresMod.isBlank()
+            if (!all && p.requiresMod != null && !p.requiresMod.isBlank()
                     && !FabricLoader.getInstance().isModLoaded(p.requiresMod)) {
                 continue;
             }
@@ -98,9 +102,8 @@ public final class FmgProfiles {
 
         try {
             Files.createDirectories(dir);
-            writeIfAbsent(dir.resolve(vanilla.id + ".json"), vanilla);
-            FmgContentProfile conquest = FmgContentProfile.conquestStub();
-            writeIfAbsent(dir.resolve(conquest.id + ".json"), conquest);
+            writeIfOutdated(dir.resolve(vanilla.id + ".json"), vanilla);
+            writeIfOutdated(dir.resolve("conquest.json"), FmgContentProfile.conquest());
         } catch (IOException ex) {
             LOGGER.warn("could not write default FMG profiles to {}", dir, ex);
         }
@@ -138,9 +141,18 @@ public final class FmgProfiles {
         }
     }
 
-    private static void writeIfAbsent(Path file, FmgContentProfile profile) throws IOException {
+    /** Writes a built-in profile if it is missing, or older than the built-in revision. */
+    private static void writeIfOutdated(Path file, FmgContentProfile profile) throws IOException {
         if (Files.exists(file)) {
-            return;
+            FmgContentProfile existing = read(file);
+            int onDisk = existing == null ? -1 : existing.version;
+            if (onDisk >= profile.version) {
+                return;
+            }
+            Path backup = file.resolveSibling(file.getFileName() + ".v" + Math.max(0, onDisk) + ".bak");
+            Files.copy(file, backup, java.nio.file.StandardCopyOption.REPLACE_EXISTING);
+            LOGGER.info("FMG profile {} is revision {}, the mod ships {}: replacing it (old copy at {})",
+                    file.getFileName(), onDisk, profile.version, backup.getFileName());
         }
         try (Writer writer = Files.newBufferedWriter(file, StandardCharsets.UTF_8)) {
             GSON.toJson(profile, writer);

@@ -49,6 +49,18 @@ public final class MapImageData {
         return Math.max(min, Math.min(maxInclusive, sampled));
     }
 
+    /**
+     * {@link #sampleHeightY} before rounding, clamped to the same range. Rounding
+     * this gives exactly {@code sampleHeightY}.
+     */
+    public double sampleHeightExactY(int worldX, int worldZ) {
+        int min = definition.minY();
+        int maxInclusive = Math.max(min, definition.maxY() - 1);
+        double y = FMGHeightSampler.sampleHeightExact(fmgData, worldX, worldZ, min, definition.maxY(),
+                definition.seaLevel());
+        return Math.max(min, Math.min(maxInclusive, y));
+    }
+
     /** The content profile this world generates with (biome mapping + block palettes). */
     public com.example.profile.FmgContentProfile profile() {
         return com.example.profile.FmgProfiles.get(definition.profile());

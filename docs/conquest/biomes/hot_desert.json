@@ -7,8 +7,9 @@
   "status": "blocked",
   "notes": "BLOCKED: blocks exist (date_palm_leaves, joshua_tree_leaves, cactus, brown_sand) but there are no palm or joshua schematics in either pack.",
   "surface": {
-    "top": "conquest:brown_sand",
-    "under": "conquest:brown_sandstone"
+    "top": "conquest:tan_sand",
+    "under": "conquest:tan_sand",
+    "stone": "conquest:faded_tan_sandstone"
   },
   "trees": {
     "density": 0.0,
@@ -30,5 +31,289 @@
     "conquest:dead_shrubs": 30,
     "conquest:tumbleweed": 30
   },
-  "props": {}
+  "props": {},
+  "palette": {
+    "tints": {
+      "grass": "#c4b064",
+      "foliage": "#a2a150",
+      "water": "#3a8fa6"
+    },
+    "soil": "conquest:tan_sand",
+    "stone": "faded_tan_sandstone",
+    "soilDepth": 4,
+    "clump": 7.0,
+    "patch": 40.0,
+    "sub": [
+      {
+        "id": "erg",
+        "name": "Dune sea",
+        "weight": 40,
+        "mix": {
+          "tan_sand": 55,
+          "sand": 30,
+          "orange_sand": 15
+        }
+      },
+      {
+        "id": "reg",
+        "name": "Gravel plain",
+        "weight": 25,
+        "mix": {
+          "sand_and_gravel": 30,
+          "red_sand_and_gravel": 30,
+          "brown_sandstone_debris": 20,
+          "dusty_yellow_dirt": 20
+        }
+      },
+      {
+        "id": "hamada",
+        "name": "Rock plateau",
+        "weight": 15,
+        "mix": {
+          "faded_tan_sandstone": 40,
+          "sandstone_debris": 30,
+          "brown_sandstone_debris": 30
+        }
+      },
+      {
+        "id": "playa",
+        "name": "Playa",
+        "weight": 10,
+        "mix": {
+          "light_cracked_dirt": 50,
+          "cracked_dirt": 25,
+          "fine_white_dirt": 25
+        }
+      },
+      {
+        "id": "wadi",
+        "name": "Wadi",
+        "weight": 10,
+        "mix": {
+          "dry_river_sand": 50,
+          "sand_and_vegetation": 30,
+          "smooth_pebbles": 20
+        }
+      }
+    ],
+    "ramps": [
+      {
+        "var": "coast",
+        "feather": 1.2,
+        "bands": [
+          {
+            "to": 1.5,
+            "mix": {
+              "wet_tan_sand": 100
+            }
+          },
+          {
+            "to": 5,
+            "mix": {
+              "tan_sand": 85,
+              "sand": 15
+            }
+          },
+          {
+            "to": 7.5,
+            "mix": {
+              "overgrown_tan_sand": 55,
+              "sand_and_vegetation": 45
+            }
+          }
+        ]
+      },
+      {
+        "var": "bank",
+        "feather": 0.9,
+        "bands": [
+          {
+            "to": 1,
+            "mix": {
+              "wet_river_sand": 70,
+              "smooth_pebbles": 30
+            }
+          },
+          {
+            "to": 3,
+            "mix": {
+              "dry_river_sand": 60,
+              "sand_and_vegetation": 40
+            }
+          }
+        ]
+      },
+      {
+        "var": "slope",
+        "feather": 0.15,
+        "bands": [
+          {
+            "from": 0.65,
+            "mix": {
+              "sandstone_debris": 50,
+              "tan_sand": 50
+            }
+          },
+          {
+            "from": 1.0,
+            "mix": {
+              "sandstone_debris": 50,
+              "brown_sandstone_debris": 50
+            }
+          },
+          {
+            "from": 1.45,
+            "mix": {
+              "faded_tan_sandstone": 55,
+              "tan_sandstone": 25,
+              "brown_sandstone": 20
+            }
+          },
+          {
+            "from": 2.1,
+            "mix": {
+              "faded_tan_sandstone": 60,
+              "tan_sandstone": 40
+            }
+          }
+        ]
+      }
+    ],
+    "bed": {
+      "var": "depth",
+      "feather": 0.8,
+      "bands": [
+        {
+          "to": 2,
+          "mix": {
+            "wet_tan_sand": 70,
+            "wet_river_sand": 30
+          }
+        },
+        {
+          "to": 99,
+          "mix": {
+            "wet_sand": 50,
+            "dark_silt": 50
+          }
+        }
+      ]
+    },
+    "notes": "Five sub-biomes because a desert of one sand reads as a texture test. Sand is the soil, four deep, so dunes stay sand all the way through a cut.",
+    "materials": {
+      "tan_sand": {
+        "layer": "conquest:tan_sand_layer",
+        "full": "conquest:tan_sand",
+        "group": "sand",
+        "note": "8x8 repeat"
+      },
+      "sand": {
+        "layer": "conquest:sand_layer",
+        "full": "minecraft:sand",
+        "group": "sand"
+      },
+      "orange_sand": {
+        "layer": "conquest:orange_sand_layer",
+        "full": "conquest:orange_sand",
+        "group": "sand"
+      },
+      "sand_and_gravel": {
+        "layer": "conquest:sand_and_gravel_layer",
+        "full": "conquest:sand_and_gravel",
+        "group": "sand"
+      },
+      "red_sand_and_gravel": {
+        "layer": "conquest:red_sand_and_gravel_layer",
+        "full": "conquest:red_sand_and_gravel",
+        "group": "sand"
+      },
+      "brown_sandstone_debris": {
+        "layer": "conquest:brown_sandstone_debris_layer",
+        "full": "conquest:brown_sandstone_debris",
+        "group": "gravel"
+      },
+      "dusty_yellow_dirt": {
+        "layer": "conquest:dusty_yellow_dirt_slab",
+        "full": "conquest:dusty_yellow_dirt",
+        "group": "soil"
+      },
+      "faded_tan_sandstone": {
+        "layer": "conquest:faded_tan_sandstone_slab",
+        "full": "conquest:faded_tan_sandstone",
+        "group": "rock"
+      },
+      "sandstone_debris": {
+        "layer": "conquest:sandstone_debris_layer",
+        "full": "conquest:sandstone_debris",
+        "group": "gravel"
+      },
+      "light_cracked_dirt": {
+        "layer": "conquest:light_cracked_dirt_slab",
+        "full": "conquest:light_cracked_dirt",
+        "group": "soil",
+        "note": "dry pan"
+      },
+      "cracked_dirt": {
+        "layer": "conquest:cracked_dirt_slab",
+        "full": "conquest:cracked_dirt",
+        "group": "soil",
+        "note": "red cracked clay"
+      },
+      "fine_white_dirt": {
+        "layer": "conquest:fine_white_dirt_slab",
+        "full": "conquest:fine_white_dirt",
+        "group": "soil"
+      },
+      "dry_river_sand": {
+        "layer": "conquest:dry_river_sand_layer",
+        "full": "conquest:dry_river_sand",
+        "group": "sand"
+      },
+      "sand_and_vegetation": {
+        "layer": "conquest:sand_and_vegetation_layer",
+        "full": "conquest:sand_and_vegetation",
+        "group": "sand"
+      },
+      "smooth_pebbles": {
+        "layer": "conquest:smooth_pebbles_layer",
+        "full": "conquest:smooth_pebbles",
+        "group": "gravel"
+      },
+      "wet_tan_sand": {
+        "layer": "conquest:wet_tan_sand_layer",
+        "full": "conquest:wet_tan_sand",
+        "group": "sand"
+      },
+      "overgrown_tan_sand": {
+        "layer": "conquest:overgrown_tan_sand_layer",
+        "full": "conquest:overgrown_tan_sand",
+        "group": "sand"
+      },
+      "wet_river_sand": {
+        "layer": "conquest:wet_river_sand_layer",
+        "full": "conquest:wet_river_sand",
+        "group": "sand"
+      },
+      "tan_sandstone": {
+        "layer": "conquest:tan_sandstone_slab",
+        "full": "conquest:tan_sandstone",
+        "group": "rock"
+      },
+      "brown_sandstone": {
+        "layer": "conquest:brown_sandstone_slab",
+        "full": "conquest:brown_sandstone",
+        "group": "rock"
+      },
+      "wet_sand": {
+        "layer": "conquest:wet_sand_layer",
+        "full": "conquest:wet_sand",
+        "group": "sand"
+      },
+      "dark_silt": {
+        "layer": "conquest:dark_silt_slab",
+        "full": "conquest:dark_silt",
+        "group": "wet"
+      }
+    }
+  }
 }

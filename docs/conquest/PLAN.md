@@ -22,6 +22,7 @@ content: which biomes exist, what grows in them, and what they are made of.
 | Regional packs (ena/asn/ind/sam/fl) | **done, not yet reviewed in game** — 1107 trees, 174 genera, see §5 |
 | Combined tree index | **2574 trees / 355 groups** across 8 packs |
 | Bush/shrub pack extraction | not started — it is a world save, see §5 |
+| Ground palettes (layer blocks) | **designed, not wired** — 29 biomes, 115 sub-biomes, slope/shore/altitude ramps; see `palettes.md` |
 | Placement feature (Java) | not started — see §6 |
 | Biome/feature datapack JSON | not started — generated from §4 files |
 

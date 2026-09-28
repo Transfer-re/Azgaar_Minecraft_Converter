@@ -7,8 +7,9 @@
   "status": "ready",
   "notes": "Wet, dark and mossy, and now built on the species it should be: western hemlock and douglas fir carry the canopy, with red spruce and balsam fir under them. This was the biome most obviously standing in for missing assets, and it no longer is.",
   "surface": {
-    "top": "conquest:lush_grass",
-    "under": "conquest:unfertile_loamy_dirt"
+    "top": "conquest:mossy_fir_forest_floor",
+    "under": "conquest:dark_fertile_soil",
+    "stone": "conquest:mossy_blue_schist"
   },
   "trees": {
     "density": 0.8,
@@ -52,5 +53,328 @@
     "conquest:hanging_moss": 12,
     "conquest:moss_vines": 8,
     "conquest:mossy_light_limestone_boulders": 5
+  },
+  "palette": {
+    "tints": {
+      "grass": "#5f9340",
+      "foliage": "#4a7f36",
+      "water": "#3f6ea8"
+    },
+    "soil": "conquest:dark_fertile_soil",
+    "stone": "mossy_blue_schist",
+    "soilDepth": 3,
+    "clump": 4.0,
+    "patch": 28.0,
+    "sub": [
+      {
+        "id": "moss_carpet",
+        "name": "Moss carpet",
+        "weight": 45,
+        "mix": {
+          "mossy_fir_forest_floor": 40,
+          "overgrown_fir_forest_floor": 30,
+          "cushion_moss_covered_loamy_dirt": 15,
+          "mossy_forest_floor_with_roots": 15
+        }
+      },
+      {
+        "id": "fern_floor",
+        "name": "Fern floor",
+        "weight": 25,
+        "mix": {
+          "mossy_forest_floor_with_roots": 40,
+          "mossy_soil": 30,
+          "taiga_forest_floor": 30
+        }
+      },
+      {
+        "id": "nurse_log_duff",
+        "name": "Nurse-log duff",
+        "weight": 20,
+        "mix": {
+          "fir_forest_floor": 35,
+          "mossy_fir_forest_floor": 35,
+          "shredded_leaves": 30
+        }
+      },
+      {
+        "id": "seep",
+        "name": "Seep",
+        "weight": 10,
+        "mix": {
+          "green_sphagnum_moss_block": 30,
+          "mossy_soil": 40,
+          "clay_rich_mud": 30
+        }
+      }
+    ],
+    "ramps": [
+      {
+        "var": "coast",
+        "feather": 1.2,
+        "bands": [
+          {
+            "to": 1.5,
+            "mix": {
+              "wet_gray_sand": 50,
+              "smooth_pebbles": 50
+            }
+          },
+          {
+            "to": 4,
+            "mix": {
+              "gray_sand": 45,
+              "smooth_pebbles": 30,
+              "gray_gravel": 25
+            }
+          },
+          {
+            "to": 6,
+            "mix": {
+              "light_gray_sand": 40,
+              "mossy_small_stones": 60
+            }
+          }
+        ]
+      },
+      {
+        "var": "bank",
+        "feather": 0.9,
+        "bands": [
+          {
+            "to": 1,
+            "mix": {
+              "wet_river_sand": 55,
+              "smooth_pebbles": 45
+            }
+          },
+          {
+            "to": 2.5,
+            "mix": {
+              "dark_silt": 45,
+              "dry_river_sand": 35,
+              "mossy_light_silt": 20
+            }
+          },
+          {
+            "to": 4,
+            "mix": {
+              "overgrown_light_silt": 60,
+              "grassy_dirt": 40
+            }
+          }
+        ]
+      },
+      {
+        "var": "slope",
+        "feather": 0.15,
+        "bands": [
+          {
+            "from": 0.65,
+            "mix": {
+              "mossy_soil": 50,
+              "mossy_forest_floor_with_roots": 50
+            }
+          },
+          {
+            "from": 1.0,
+            "mix": {
+              "mossy_schist_debris": 60,
+              "mossy_small_stones": 40
+            }
+          },
+          {
+            "from": 1.45,
+            "mix": {
+              "mossy_blue_schist": 60,
+              "lichen_blue_schist": 40
+            }
+          },
+          {
+            "from": 2.1,
+            "mix": {
+              "mossy_blue_schist": 70,
+              "weathered_blue_schist": 30
+            }
+          }
+        ]
+      }
+    ],
+    "bed": {
+      "var": "depth",
+      "feather": 0.8,
+      "bands": [
+        {
+          "to": 1.5,
+          "mix": {
+            "wet_river_sand": 50,
+            "smooth_pebbles": 50
+          }
+        },
+        {
+          "to": 4,
+          "mix": {
+            "dark_silt": 55,
+            "wet_sand_and_gravel": 45
+          }
+        },
+        {
+          "to": 99,
+          "mix": {
+            "mud": 60,
+            "dark_silt": 40
+          }
+        }
+      ]
+    },
+    "notes": "Everything green, including the rock: mossy schist on every slope band so cliffs do not break the mood.",
+    "materials": {
+      "mossy_fir_forest_floor": {
+        "layer": "conquest:mossy_fir_forest_floor_layer",
+        "full": "conquest:mossy_fir_forest_floor",
+        "group": "floor",
+        "note": "needles with tinted moss"
+      },
+      "overgrown_fir_forest_floor": {
+        "layer": "conquest:overgrown_fir_forest_floor_layer",
+        "full": "conquest:overgrown_fir_forest_floor",
+        "group": "floor",
+        "note": "needles mostly mossed over"
+      },
+      "cushion_moss_covered_loamy_dirt": {
+        "layer": "conquest:cushion_moss_covered_loamy_dirt_slab",
+        "full": "conquest:cushion_moss_covered_loamy_dirt",
+        "group": "moss"
+      },
+      "mossy_forest_floor_with_roots": {
+        "layer": "conquest:mossy_forest_floor_with_roots_layer",
+        "full": "conquest:mossy_forest_floor_with_roots",
+        "group": "floor"
+      },
+      "mossy_soil": {
+        "layer": "conquest:mossy_soil_slab",
+        "full": "conquest:mossy_soil",
+        "group": "moss"
+      },
+      "taiga_forest_floor": {
+        "layer": "conquest:taiga_forest_floor_layer",
+        "full": "conquest:taiga_forest_floor",
+        "group": "floor",
+        "note": "dark needle duff"
+      },
+      "fir_forest_floor": {
+        "layer": "conquest:fir_forest_floor_layer",
+        "full": "conquest:fir_forest_floor",
+        "group": "floor",
+        "note": "brown needles, 3x3 repeat"
+      },
+      "shredded_leaves": {
+        "layer": "conquest:shredded_leaves_layer",
+        "full": "conquest:shredded_leaves",
+        "group": "floor",
+        "note": "brown broadleaf litter"
+      },
+      "green_sphagnum_moss_block": {
+        "layer": "conquest:green_sphagnum_moss_block_layer",
+        "full": "conquest:green_sphagnum_moss_block",
+        "group": "moss"
+      },
+      "clay_rich_mud": {
+        "layer": "conquest:clay_rich_mud_slab",
+        "full": "conquest:clay_rich_mud",
+        "group": "wet"
+      },
+      "wet_gray_sand": {
+        "layer": "conquest:wet_gray_sand_layer",
+        "full": "conquest:wet_gray_sand",
+        "group": "sand"
+      },
+      "smooth_pebbles": {
+        "layer": "conquest:smooth_pebbles_layer",
+        "full": "conquest:smooth_pebbles",
+        "group": "gravel"
+      },
+      "gray_sand": {
+        "layer": "conquest:gray_sand_layer",
+        "full": "conquest:gray_sand",
+        "group": "sand"
+      },
+      "gray_gravel": {
+        "layer": "conquest:gray_gravel_layer",
+        "full": "conquest:gray_gravel",
+        "group": "gravel"
+      },
+      "light_gray_sand": {
+        "layer": "conquest:light_gray_sand_layer",
+        "full": "conquest:light_gray_sand",
+        "group": "sand"
+      },
+      "mossy_small_stones": {
+        "layer": "conquest:mossy_small_stones_layer",
+        "full": "conquest:mossy_small_stones",
+        "group": "gravel"
+      },
+      "wet_river_sand": {
+        "layer": "conquest:wet_river_sand_layer",
+        "full": "conquest:wet_river_sand",
+        "group": "sand"
+      },
+      "dark_silt": {
+        "layer": "conquest:dark_silt_slab",
+        "full": "conquest:dark_silt",
+        "group": "wet"
+      },
+      "dry_river_sand": {
+        "layer": "conquest:dry_river_sand_layer",
+        "full": "conquest:dry_river_sand",
+        "group": "sand"
+      },
+      "mossy_light_silt": {
+        "layer": "conquest:mossy_light_silt_slab",
+        "full": "conquest:mossy_light_silt",
+        "group": "wet"
+      },
+      "overgrown_light_silt": {
+        "layer": "conquest:overgrown_light_silt_slab",
+        "full": "conquest:overgrown_light_silt",
+        "group": "wet"
+      },
+      "grassy_dirt": {
+        "layer": "conquest:grassy_dirt_layer",
+        "full": "minecraft:dirt",
+        "group": "grass",
+        "note": "worn turf, dirt showing through; layer-only, vanilla dirt underneath"
+      },
+      "mossy_schist_debris": {
+        "layer": "conquest:mossy_schist_debris_layer",
+        "full": "conquest:mossy_schist_debris",
+        "group": "gravel"
+      },
+      "mossy_blue_schist": {
+        "layer": "conquest:mossy_blue_schist_slab",
+        "full": "conquest:mossy_blue_schist",
+        "group": "rock"
+      },
+      "lichen_blue_schist": {
+        "layer": "conquest:lichen_blue_schist_slab",
+        "full": "conquest:lichen_blue_schist",
+        "group": "rock"
+      },
+      "weathered_blue_schist": {
+        "layer": "conquest:weathered_blue_schist_slab",
+        "full": "conquest:weathered_blue_schist",
+        "group": "rock"
+      },
+      "wet_sand_and_gravel": {
+        "layer": "conquest:wet_sand_and_gravel_layer",
+        "full": "conquest:wet_sand_and_gravel",
+        "group": "sand"
+      },
+      "mud": {
+        "layer": "conquest:mud_slab",
+        "full": "conquest:mud",
+        "group": "wet"
+      }
+    }
   }
 }

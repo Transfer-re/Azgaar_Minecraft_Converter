@@ -7,8 +7,9 @@
   "status": "ready",
   "notes": "The same species in autumn colour. Worth keeping as its own biome rather than a variant: the four beech colours plus autumnal oak and maple mix into a genuinely varied canopy.",
   "surface": {
-    "top": "conquest:grass",
-    "under": "conquest:unfertile_loamy_dirt"
+    "top": "conquest:autumnal_forest_floor",
+    "under": "conquest:unfertile_loamy_dirt",
+    "stone": "conquest:gray_limestone"
   },
   "trees": {
     "density": 0.58,
@@ -52,5 +53,329 @@
     "conquest:brittlegill_mushrooms": 5,
     "conquest:morel_mushrooms": 3
   },
-  "props": {}
+  "props": {},
+  "palette": {
+    "tints": {
+      "grass": "#a29d4f",
+      "foliage": "#b8923a",
+      "water": "#3f6ea8"
+    },
+    "soil": "conquest:unfertile_loamy_dirt",
+    "stone": "gray_limestone",
+    "soilDepth": 3,
+    "clump": 4.0,
+    "patch": 28.0,
+    "sub": [
+      {
+        "id": "leaf_fall",
+        "name": "Leaf fall",
+        "weight": 45,
+        "mix": {
+          "autumnal_forest_floor": 40,
+          "vibrant_autumnal_forest_floor": 25,
+          "shredded_leaves": 20,
+          "grass_block": 15
+        }
+      },
+      {
+        "id": "rooted_floor",
+        "name": "Rooted floor",
+        "weight": 25,
+        "mix": {
+          "autumnal_forest_floor_with_roots": 45,
+          "muddy_autumnal_forest_floor": 25,
+          "shredded_leaves": 30
+        }
+      },
+      {
+        "id": "golden_glade",
+        "name": "Golden glade",
+        "weight": 15,
+        "mix": {
+          "lorien_forest_floor": 40,
+          "grass_block": 40,
+          "grassy_dirt": 20
+        }
+      },
+      {
+        "id": "wet_hollow",
+        "name": "Wet hollow",
+        "weight": 15,
+        "mix": {
+          "muddy_autumnal_forest_floor": 50,
+          "mossy_soil": 30,
+          "clay_rich_mud": 20
+        }
+      }
+    ],
+    "ramps": [
+      {
+        "var": "coast",
+        "feather": 1.2,
+        "bands": [
+          {
+            "to": 1.5,
+            "mix": {
+              "wet_sand": 70,
+              "wet_sand_and_gravel": 30
+            }
+          },
+          {
+            "to": 4,
+            "mix": {
+              "sand": 75,
+              "sand_and_gravel": 25
+            }
+          },
+          {
+            "to": 6.5,
+            "mix": {
+              "sand_and_vegetation": 60,
+              "overgrown_sand": 40
+            }
+          }
+        ]
+      },
+      {
+        "var": "bank",
+        "feather": 0.9,
+        "bands": [
+          {
+            "to": 1,
+            "mix": {
+              "wet_river_sand": 55,
+              "smooth_pebbles": 45
+            }
+          },
+          {
+            "to": 2.5,
+            "mix": {
+              "dark_silt": 45,
+              "dry_river_sand": 35,
+              "mossy_light_silt": 20
+            }
+          },
+          {
+            "to": 4,
+            "mix": {
+              "overgrown_light_silt": 60,
+              "grassy_dirt": 40
+            }
+          }
+        ]
+      },
+      {
+        "var": "slope",
+        "feather": 0.15,
+        "bands": [
+          {
+            "from": 0.65,
+            "mix": {
+              "autumnal_forest_floor_with_roots": 50,
+              "rocky_soil": 50
+            }
+          },
+          {
+            "from": 1.0,
+            "mix": {
+              "overgrown_small_stones": 50,
+              "rocky_soil": 50
+            }
+          },
+          {
+            "from": 1.45,
+            "mix": {
+              "mossy_limestone": 45,
+              "gray_limestone": 35,
+              "mossy_gray_limestone_gravel": 20
+            }
+          },
+          {
+            "from": 2.1,
+            "mix": {
+              "gray_limestone": 80,
+              "mossy_limestone": 20
+            }
+          }
+        ]
+      }
+    ],
+    "bed": {
+      "var": "depth",
+      "feather": 0.8,
+      "bands": [
+        {
+          "to": 1.5,
+          "mix": {
+            "wet_river_sand": 50,
+            "smooth_pebbles": 50
+          }
+        },
+        {
+          "to": 4,
+          "mix": {
+            "dark_silt": 55,
+            "wet_sand_and_gravel": 45
+          }
+        },
+        {
+          "to": 99,
+          "mix": {
+            "mud": 60,
+            "dark_silt": 40
+          }
+        }
+      ]
+    },
+    "notes": "Leaf fall does the colour work, so turf is kept to ~15% and tinted dry. The golden glade is the brightest patch in any temperate biome -- keep it rare.",
+    "materials": {
+      "autumnal_forest_floor": {
+        "layer": "conquest:autumnal_forest_floor_layer",
+        "full": "conquest:autumnal_forest_floor",
+        "group": "floor",
+        "note": "yellow-orange leaf fall"
+      },
+      "vibrant_autumnal_forest_floor": {
+        "layer": "conquest:vibrant_autumnal_forest_floor_layer",
+        "full": "conquest:autumnal_forest_floor",
+        "group": "floor",
+        "note": "layer-only; brighter leaf fall over the plain autumnal floor"
+      },
+      "shredded_leaves": {
+        "layer": "conquest:shredded_leaves_layer",
+        "full": "conquest:shredded_leaves",
+        "group": "floor",
+        "note": "brown broadleaf litter"
+      },
+      "grass_block": {
+        "layer": "conquest:grass_block_layer",
+        "full": "minecraft:grass_block",
+        "group": "grass",
+        "note": "plain turf; the default green"
+      },
+      "autumnal_forest_floor_with_roots": {
+        "layer": "conquest:autumnal_forest_floor_with_roots_layer",
+        "full": "conquest:autumnal_forest_floor_with_roots",
+        "group": "floor"
+      },
+      "muddy_autumnal_forest_floor": {
+        "layer": "conquest:muddy_autumnal_forest_floor_layer",
+        "full": "conquest:muddy_autumnal_forest_floor",
+        "group": "floor",
+        "note": "wet trodden leaves"
+      },
+      "lorien_forest_floor": {
+        "layer": "conquest:lorien_forest_floor_layer",
+        "full": "conquest:lorien_forest_floor",
+        "group": "floor",
+        "note": "golden leaves -- CR's elven floor"
+      },
+      "grassy_dirt": {
+        "layer": "conquest:grassy_dirt_layer",
+        "full": "minecraft:dirt",
+        "group": "grass",
+        "note": "worn turf, dirt showing through; layer-only, vanilla dirt underneath"
+      },
+      "mossy_soil": {
+        "layer": "conquest:mossy_soil_slab",
+        "full": "conquest:mossy_soil",
+        "group": "moss"
+      },
+      "clay_rich_mud": {
+        "layer": "conquest:clay_rich_mud_slab",
+        "full": "conquest:clay_rich_mud",
+        "group": "wet"
+      },
+      "wet_sand": {
+        "layer": "conquest:wet_sand_layer",
+        "full": "conquest:wet_sand",
+        "group": "sand"
+      },
+      "wet_sand_and_gravel": {
+        "layer": "conquest:wet_sand_and_gravel_layer",
+        "full": "conquest:wet_sand_and_gravel",
+        "group": "sand"
+      },
+      "sand": {
+        "layer": "conquest:sand_layer",
+        "full": "minecraft:sand",
+        "group": "sand"
+      },
+      "sand_and_gravel": {
+        "layer": "conquest:sand_and_gravel_layer",
+        "full": "conquest:sand_and_gravel",
+        "group": "sand"
+      },
+      "sand_and_vegetation": {
+        "layer": "conquest:sand_and_vegetation_layer",
+        "full": "conquest:sand_and_vegetation",
+        "group": "sand"
+      },
+      "overgrown_sand": {
+        "layer": "conquest:overgrown_sand_layer",
+        "full": "conquest:overgrown_sand",
+        "group": "sand"
+      },
+      "wet_river_sand": {
+        "layer": "conquest:wet_river_sand_layer",
+        "full": "conquest:wet_river_sand",
+        "group": "sand"
+      },
+      "smooth_pebbles": {
+        "layer": "conquest:smooth_pebbles_layer",
+        "full": "conquest:smooth_pebbles",
+        "group": "gravel"
+      },
+      "dark_silt": {
+        "layer": "conquest:dark_silt_slab",
+        "full": "conquest:dark_silt",
+        "group": "wet"
+      },
+      "dry_river_sand": {
+        "layer": "conquest:dry_river_sand_layer",
+        "full": "conquest:dry_river_sand",
+        "group": "sand"
+      },
+      "mossy_light_silt": {
+        "layer": "conquest:mossy_light_silt_slab",
+        "full": "conquest:mossy_light_silt",
+        "group": "wet"
+      },
+      "overgrown_light_silt": {
+        "layer": "conquest:overgrown_light_silt_slab",
+        "full": "conquest:overgrown_light_silt",
+        "group": "wet"
+      },
+      "rocky_soil": {
+        "layer": "conquest:rocky_soil_slab",
+        "full": "conquest:rocky_soil",
+        "group": "soil"
+      },
+      "overgrown_small_stones": {
+        "layer": "conquest:overgrown_small_stones_layer",
+        "full": "conquest:overgrown_small_stones",
+        "group": "gravel"
+      },
+      "mossy_limestone": {
+        "layer": "conquest:mossy_limestone_slab",
+        "full": "conquest:mossy_limestone",
+        "group": "rock"
+      },
+      "gray_limestone": {
+        "layer": "conquest:gray_limestone_slab",
+        "full": "conquest:gray_limestone",
+        "group": "rock"
+      },
+      "mossy_gray_limestone_gravel": {
+        "layer": "conquest:mossy_gray_limestone_gravel_layer",
+        "full": "conquest:mossy_gray_limestone_gravel",
+        "group": "gravel"
+      },
+      "mud": {
+        "layer": "conquest:mud_slab",
+        "full": "conquest:mud",
+        "group": "wet"
+      }
+    }
+  }
 }

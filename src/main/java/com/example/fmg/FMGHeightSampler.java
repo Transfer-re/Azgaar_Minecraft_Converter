@@ -104,6 +104,23 @@ public class FMGHeightSampler {
             int maxWorldYExclusive,
             int seaLevel
     ) {
+        double y = sampleHeightExact(map, worldX, worldZ, minWorldY, maxWorldYExclusive, seaLevel);
+        return MathHelper.clamp((int) Math.round(y), minWorldY, Math.max(minWorldY, maxWorldYExclusive - 1));
+    }
+
+    /**
+     * The same height before it is rounded to a whole block, unclamped. The
+     * layered surface places its top block from the fraction; everything else
+     * uses {@link #sampleHeight}, which is exactly this rounded and clamped.
+     */
+    public static double sampleHeightExact(
+            FMGMapData map,
+            int worldX,
+            int worldZ,
+            int minWorldY,
+            int maxWorldYExclusive,
+            int seaLevel
+    ) {
         if (map == null || map.getInfo() == null) {
             return seaLevel;
         }
@@ -141,8 +158,7 @@ public class FMGHeightSampler {
         // replaces the IDW heightfield below entirely.
         com.example.terrain.TerrainRaster terrain = map.getTerrain();
         if (terrain != null) {
-            int y = (int) Math.round(terrain.heightAt(worldX, worldZ));
-            return MathHelper.clamp(y, minWorldY, maxWorldYInclusive);
+            return terrain.heightAt(worldX, worldZ);
         }
 
         // Lazily build the FMG-space heightmap once per FMG map and
@@ -188,7 +204,7 @@ public class FMGHeightSampler {
         double noiseOffset = sampleTerrainNoise(worldX, worldZ, worldY);
         worldY += noiseOffset;
 
-        return MathHelper.clamp((int) Math.round(worldY), minWorldY, maxWorldYInclusive);
+        return worldY;
     }
 
     /**
