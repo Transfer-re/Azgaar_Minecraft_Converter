@@ -156,7 +156,38 @@ public final class FMGRiverNetwork {
                 : (fmgExport == null ? 1L : fmgExport.hashCode() * 0x9E3779B97F4A7C15L);
 
         int rivers = 0, samples = 0;
-        for (FMGRiver river : map.getRivers()) {
+
+        // Blended terrain: the bake already routed, meandered and levelled every
+        // river and dug its valley, so take its path and water profile as-is and
+        // only derive width, depth, pools and crossings here.
+        com.example.terrain.TerrainRaster baked = map.getTerrain();
+        if (baked != null) {
+            for (com.example.terrain.TerrainRaster.River br : baked.rivers) {
+                FMGRiver river = map.getRiver(br.id);
+                if (river == null || br.x.length < 2) continue;
+                double[][] rs = resampleMouthFirst(br, SAMPLE_STEP);
+                double[] px = rs[0], pz = rs[1], surf = rs[2];
+                int n = px.length;
+                if (n < 4) continue;
+                long riverSeed = noiseSeed ^ (river.getI() * 0x9E3779B97F4A7C15L);
+                double[] slope = slopeProfile(surf);
+                double dNorm = river.getDischarge() / maxDischarge;
+                double[] halfW = widthProfile(river, dNorm, slope, cfg);
+                double[] depth = depthProfile(dNorm, halfW, slope, cfg);
+                boolean[] frozen = roadCrossingWindows(routeIndex, px, pz, halfW, cfg);
+                int[] water = waterProfile(surf, frozen, seaLevel, maxY, cfg, riverSeed);
+                sinkBelowBanks(map, px, pz, halfW, water, frozen, cfg, minY, maxY, seaLevel);
+                for (int i = 0; i < n; i++) {
+                    int centerDepth = Math.max(1, (int) Math.round(depth[i]));
+                    double bankSlope = bankSlopeAt(map, px, pz, i, halfW[i], water[i], cfg, minY, maxY, seaLevel);
+                    net.add(new RiverSample(px[i], pz[i], halfW[i], water[i], centerDepth, bankSlope));
+                    samples++;
+                }
+                rivers++;
+            }
+        }
+
+        for (FMGRiver river : baked != null ? java.util.List.<FMGRiver>of() : map.getRivers()) {
             List<CatmullRomSpline.Vec2> control = new ArrayList<>();
             if (river.getCells() != null) {
                 for (int cellId : river.getCells()) {
@@ -205,6 +236,7 @@ public final class FMGRiverNetwork {
             // ---- 4. flat pools with rapids / waterfalls between them ----
             boolean[] frozen = roadCrossingWindows(routeIndex, px, pz, halfW, cfg);
             int[] water = waterProfile(surf, frozen, seaLevel, maxY, cfg, riverSeed);
+            sinkBelowBanks(map, px, pz, halfW, water, frozen, cfg, minY, maxY, seaLevel);
 
             // ---- 5. emit ----
             for (int i = 0; i < n; i++) {
@@ -230,6 +262,37 @@ public final class FMGRiverNetwork {
     }
 
     // ---- build helpers -----------------------------------------
+
+    /**
+     * A baked river (source -> mouth) resampled every {@code step} blocks along
+     * its length and reversed so index 0 is the mouth, as the rest of this class
+     * expects. Returns {x, z, waterSurface}.
+     */
+    private static double[][] resampleMouthFirst(com.example.terrain.TerrainRaster.River br, double step) {
+        int m = br.x.length;
+        List<double[]> pts = new ArrayList<>();
+        double carry = 0;
+        pts.add(new double[]{br.x[m - 1], br.z[m - 1], br.waterY[m - 1]});
+        for (int i = m - 1; i > 0; i--) {
+            double ax = br.x[i], az = br.z[i], aw = br.waterY[i];
+            double bx = br.x[i - 1], bz = br.z[i - 1], bw = br.waterY[i - 1];
+            double seg = Math.hypot(bx - ax, bz - az);
+            double pos = step - carry;
+            while (pos <= seg) {
+                double t = seg <= 0 ? 0 : pos / seg;
+                pts.add(new double[]{ax + (bx - ax) * t, az + (bz - az) * t, aw + (bw - aw) * t});
+                pos += step;
+            }
+            carry = seg - (pos - step);
+        }
+        double[][] out = new double[3][pts.size()];
+        for (int i = 0; i < pts.size(); i++) {
+            out[0][i] = pts.get(i)[0];
+            out[1][i] = pts.get(i)[1];
+            out[2][i] = pts.get(i)[2];
+        }
+        return out;
+    }
 
     private static int terrainAt(FMGMapData map, double x, double z, int minY, int maxY, int seaLevel) {
         return FMGHeightSampler.sampleHeight(map, (int) Math.round(x), (int) Math.round(z), minY, maxY, seaLevel);
@@ -485,6 +548,64 @@ public final class FMGRiverNetwork {
             water[i] = clamp(level, Math.min(seaLevel, (int) Math.floor(want[0])), maxY - 2);
         }
         return water;
+    }
+
+    /**
+     * Keeps every pool at least {@code bankFreeboard} blocks below the top of the
+     * ground just outside its banks, so water never spills where the land
+     * alongside only rises gently. The bank height is median-filtered along the
+     * river (a tributary mouth or a single low column does not drag the whole
+     * river down), the profile stays non-rising downstream, and pools under a
+     * road crossing stay flat. Samples whose banks are water (lakes, the sea)
+     * are left alone.
+     */
+    private static void sinkBelowBanks(FMGMapData map, double[] px, double[] pz, double[] halfW, int[] water,
+                                       boolean[] frozen, HeightmapPostConfig.Rivers cfg,
+                                       int minY, int maxY, int seaLevel) {
+        int n = water.length;
+        if (cfg.bankFreeboard <= 0 || n < 3) return;
+        double[] cap = new double[n];
+        for (int i = 0; i < n; i++) {
+            cap[i] = Double.POSITIVE_INFINITY;
+            int a = Math.max(0, i - 1), b = Math.min(n - 1, i + 1);
+            double dirX = px[b] - px[a], dirZ = pz[b] - pz[a];
+            double dl = Math.hypot(dirX, dirZ);
+            if (dl < 1e-6) continue;
+            double perpX = -dirZ / dl, perpZ = dirX / dl;
+            double off = halfW[i] + cfg.bankWidth + 1.5;
+            int hl = terrainAt(map, px[i] + perpX * off, pz[i] + perpZ * off, minY, maxY, seaLevel);
+            int hr = terrainAt(map, px[i] - perpX * off, pz[i] - perpZ * off, minY, maxY, seaLevel);
+            int bank = Math.min(hl, hr);                 // height = top solid block + 1
+            if (bank > seaLevel + 1) cap[i] = bank - 1 - cfg.bankFreeboard;
+        }
+        // median over +-5 samples (~10 blocks each way)
+        double[] med = new double[n];
+        double[] win = new double[11];
+        for (int i = 0; i < n; i++) {
+            int m = 0;
+            for (int j = Math.max(0, i - 5); j <= Math.min(n - 1, i + 5); j++) win[m++] = cap[j];
+            java.util.Arrays.sort(win, 0, m);
+            med[i] = win[m / 2];
+        }
+        int[] orig = water.clone();
+        for (int i = 0; i < n; i++) {
+            if (Double.isFinite(med[i])) water[i] = Math.min(water[i], (int) Math.floor(med[i]));
+        }
+        // index 0 is the mouth: water may not rise going downstream
+        for (int i = n - 2; i >= 0; i--) water[i] = Math.min(water[i], water[i + 1]);
+        // a pool under a road crossing stays flat (at its most downstream level)
+        for (int i = 0; i < n; ) {
+            if (!frozen[i]) {
+                i++;
+                continue;
+            }
+            int j = i;
+            while (j < n && frozen[j]) j++;
+            for (int k = i; k < j; k++) water[k] = water[i];
+            i = j;
+        }
+        // never below the sea surface where the river was at or above it
+        for (int i = 0; i < n; i++) water[i] = Math.max(water[i], Math.min(orig[i], seaLevel - 1));
     }
 
     /**

@@ -10,6 +10,7 @@ import org.lwjgl.util.tinyfd.TinyFileDialogs;
 import com.example.FantasyMapGenerator;
 import com.example.heightmap.HeightmapPostConfig;
 import com.example.worldgen.ColorMapBiomeSource;
+import com.example.worldgen.FmgHeightTiers;
 import com.example.worldgen.ImageMapChunkGenerator;
 import com.example.worldmap.MapInfo;
 
@@ -25,6 +26,7 @@ import net.minecraft.screen.ScreenTexts;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
+import net.minecraft.world.dimension.DimensionOptionsRegistryHolder;
 
 /**
  * "Customize" screen for the Fantasy Map world type: choose the FMG JSON export,
@@ -38,9 +40,10 @@ public final class FmgWorldCreateScreen extends Screen {
             RegistryKey.of(RegistryKeys.WORLD_PRESET,
                     Identifier.of(FantasyMapGenerator.MOD_ID, "fmg_test"));
 
-    // Fixed for now -- matches the bundled fmg_overworld_tall dimension type.
+    // Legacy terrain keeps the bundled fmg_overworld_tall range; blended terrain
+    // picks a taller dimension type from FmgHeightTiers.
     private static final int MIN_Y = -64;
-    private static final int MAX_Y = 400;
+    private static final int LEGACY_MAX_Y = 400;
     private static final int SEA_LEVEL = 63;
 
     private static final List<Double> SCALES = List.of(4.0, 6.0, 8.0, 10.0, 12.0, 16.0, 20.0, 24.0, 32.0, 48.0);
@@ -53,6 +56,7 @@ public final class FmgWorldCreateScreen extends Screen {
     private static Double sAmplitude;
     private static Boolean sRichBiomes;
     private static String sProfile;
+    private static Boolean sBlend;
 
     private final CreateWorldScreen parent;
 
@@ -62,6 +66,7 @@ public final class FmgWorldCreateScreen extends Screen {
     private double amplitude = sAmplitude != null ? sAmplitude
             : nearest(AMPLITUDES, HeightmapPostConfig.get().detail.amplitude);
     private boolean richBiomes = sRichBiomes != null ? sRichBiomes : true;
+    private boolean blend = sBlend != null ? sBlend : true;
 
     private final List<com.example.profile.FmgContentProfile> profiles =
             com.example.profile.FmgProfiles.available();
@@ -81,10 +86,16 @@ public final class FmgWorldCreateScreen extends Screen {
         int w = 310;
         int x = cx - w / 2;
         int y = Math.max(40, this.height / 6);
-        int gap = 24;
+        int gap = 22;
 
         this.mapButton = addDrawableChild(ButtonWidget.builder(mapButtonText(), b -> chooseFile())
                 .dimensions(x, y, w, 20).build());
+        y += gap;
+
+        addDrawableChild(CyclingButtonWidget.<Boolean>builder(
+                        v -> Text.literal(v ? "Blended (eroded mountains, biome lowlands)" : "Legacy"))
+                .values(true, false).initially(blend)
+                .build(x, y, w, 20, Text.literal("Terrain"), (btn, v) -> blend = v));
         y += gap;
 
         addDrawableChild(CyclingButtonWidget.<Double>builder(v -> Text.literal(trim(v) + " blocks/px"))
@@ -127,6 +138,11 @@ public final class FmgWorldCreateScreen extends Screen {
             context.drawCenteredTextWithShadow(this.textRenderer,
                     Text.literal("Choose an FMG JSON export to continue").formatted(Formatting.RED),
                     this.width / 2, this.height - 44, 0xFFFFFF);
+        } else if (blend) {
+            context.drawCenteredTextWithShadow(this.textRenderer,
+                    Text.literal("Build limit: Y " + (maxY() - 1) + "  (mountain height: terrain.peak in heightmap.json)")
+                            .formatted(Formatting.GRAY),
+                    this.width / 2, this.height - 44, 0xFFFFFF);
         }
     }
 
@@ -163,16 +179,24 @@ public final class FmgWorldCreateScreen extends Screen {
         sAmplitude = amplitude;
         sRichBiomes = richBiomes;
         sProfile = profile.id;
+        sBlend = blend;
 
-        MapInfo mapInfo = new MapInfo(jsonPath, MIN_Y, MAX_Y, SEA_LEVEL, scale, detail, amplitude,
-                richBiomes, profile.id);
+        int maxY = maxY();
+        MapInfo mapInfo = new MapInfo(jsonPath, MIN_Y, maxY, SEA_LEVEL, scale, detail, amplitude,
+                richBiomes, profile.id, blend ? MapInfo.TERRAIN_BLEND : MapInfo.TERRAIN_LEGACY);
         RegistryKey<net.minecraft.world.gen.chunk.ChunkGeneratorSettings> settingsKey =
                 RegistryKey.of(RegistryKeys.CHUNK_GENERATOR_SETTINGS, settingsIdentifier());
         parent.getWorldCreator().applyModifier((registries, dimensions) -> {
             var biomes = registries.getOrThrow(RegistryKeys.BIOME);
             var settings = registries.getOrThrow(RegistryKeys.CHUNK_GENERATOR_SETTINGS).getOrThrow(settingsKey);
             var generator = new ImageMapChunkGenerator(new ColorMapBiomeSource(biomes, mapInfo), settings, mapInfo);
-            return dimensions.with(registries, generator);
+            if (!mapInfo.blendTerrain()) {
+                return dimensions.with(registries, generator);
+            }
+            var dimensionType = registries.getOrThrow(RegistryKeys.DIMENSION_TYPE)
+                    .getOrThrow(FmgHeightTiers.dimensionType(maxY));
+            return new DimensionOptionsRegistryHolder(DimensionOptionsRegistryHolder.createRegistry(
+                    dimensions.dimensions(), dimensionType, generator));
         });
         FmgCreateState.markApplied(parent.getWorldCreator(), mapInfo);
         close();
@@ -184,6 +208,11 @@ public final class FmgWorldCreateScreen extends Screen {
     }
 
     // ---- helpers ----
+
+    /** Build top for the current choice: a height tier for blended terrain, the old 400 otherwise. */
+    private int maxY() {
+        return blend ? FmgHeightTiers.topFor(SEA_LEVEL, HeightmapPostConfig.get().terrain) : LEGACY_MAX_Y;
+    }
 
     private com.example.profile.FmgContentProfile pickProfile(String id) {
         for (com.example.profile.FmgContentProfile p : profiles) {

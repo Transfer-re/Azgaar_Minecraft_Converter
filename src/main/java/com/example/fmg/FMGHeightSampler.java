@@ -137,6 +137,14 @@ public class FMGHeightSampler {
             return seaLevel;
         }
 
+        // Blended-terrain worlds: the baked raster (with its own per-block detail)
+        // replaces the IDW heightfield below entirely.
+        com.example.terrain.TerrainRaster terrain = map.getTerrain();
+        if (terrain != null) {
+            int y = (int) Math.round(terrain.heightAt(worldX, worldZ));
+            return MathHelper.clamp(y, minWorldY, maxWorldYInclusive);
+        }
+
         // Lazily build the FMG-space heightmap once per FMG map and
         // cache it on the FMGMapData object. The heightfield is stored
         // in world Y units, indexed by FMG pixel coordinates.

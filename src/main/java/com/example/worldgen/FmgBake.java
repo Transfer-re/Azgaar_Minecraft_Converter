@@ -41,7 +41,7 @@ public final class FmgBake {
 
     private static final Logger LOGGER = LoggerFactory.getLogger("FmgBake");
     private static final Gson GSON = new Gson();
-    private static final int FORMAT_VERSION = 5;
+    private static final int FORMAT_VERSION = 6;
 
     private FmgBake() {
     }
@@ -65,9 +65,11 @@ public final class FmgBake {
     }
 
     private static void progress(String p, float f) {
+        if (!p.equals(phase)) {
+            LOGGER.info("[bake] {}  {}%", p, Math.round(f * 100));
+        }
         phase = p;
         fraction = f;
-        LOGGER.info("[bake] {}  {}%", p, Math.round(f * 100));
     }
 
     // ---- read() hook: use the baked heightfield instead of rebuilding ----
@@ -97,6 +99,36 @@ public final class FmgBake {
         }
     }
 
+    /**
+     * Called from {@link FMGMapDataCache} after the JSON parse: installs the
+     * baked blended terrain when a fresh bake is being loaded.
+     */
+    public static boolean applyBakedTerrain(FMGMapData data) {
+        Path dir = loadingBakeDir;
+        if (dir == null) {
+            return false;
+        }
+        com.example.terrain.TerrainRaster t = readTerrain(dir.resolve("terrain.bin"));
+        if (t == null) {
+            return false;
+        }
+        data.setTerrain(t);
+        return true;
+    }
+
+    private static com.example.terrain.TerrainRaster readTerrain(Path file) {
+        if (!Files.isRegularFile(file)) {
+            return null;
+        }
+        try (DataInputStream in = new DataInputStream(new BufferedInputStream(
+                new java.util.zip.GZIPInputStream(Files.newInputStream(file))))) {
+            return com.example.terrain.TerrainRaster.readFrom(in);
+        } catch (IOException e) {
+            LOGGER.warn("Baked terrain unreadable; rebuilding", e);
+            return null;
+        }
+    }
+
     // ---- entry point ----
 
     public static void ensureBaked(MinecraftServer server, MapInfo mapInfo) {
@@ -120,12 +152,20 @@ public final class FmgBake {
             }
 
             progress("Preparing Fantasy Map", 0.05f);
-            FMGMapData map = FMGMapDataCache.load(export);   // parse + route sampler + heightfield
+            FMGMapData map = FMGMapDataCache.load(export);   // parse + route sampler (+ legacy heightfield)
 
-            progress("Building heightfield", 0.15f);
-            FMGHeightSampler.sampleHeight(map, 0, 0);
+            if (mapInfo.blendTerrain()) {
+                long t0 = System.currentTimeMillis();
+                map.setTerrain(FmgTerrain.build(map, mapInfo, (p, f) -> progress(p, 0.08f + 0.47f * f)));
+                LOGGER.info("Blended terrain: {}x{} cells at {} blocks, max Y {}, {} ms",
+                        map.getTerrain().w, map.getTerrain().h, map.getTerrain().dx,
+                        Math.round(map.getTerrain().maxHeight()), System.currentTimeMillis() - t0);
+            } else {
+                progress("Building heightfield", 0.15f);
+                FMGHeightSampler.sampleHeight(map, 0, 0);
+            }
 
-            progress("Indexing roads", 0.45f);
+            progress("Indexing roads", 0.55f);
             FMGRouteIndex routes = FMGRouteIndex.get(export, map);
 
             progress("Carving rivers", 0.60f);
@@ -147,9 +187,16 @@ public final class FmgBake {
             try (DataOutputStream o = data(dir.resolve("biomes.bin"))) {
                 biomes.writeTo(o);
             }
-            double[][] hf = map.getCachedHeightField();
-            if (hf != null) {
-                writeHeightField(dir.resolve("height.bin"), hf);
+            if (map.getTerrain() != null) {
+                try (DataOutputStream o = new DataOutputStream(new BufferedOutputStream(
+                        new java.util.zip.GZIPOutputStream(Files.newOutputStream(dir.resolve("terrain.bin")))))) {
+                    map.getTerrain().writeTo(o);
+                }
+            } else {
+                double[][] hf = map.getCachedHeightField();
+                if (hf != null) {
+                    writeHeightField(dir.resolve("height.bin"), hf);
+                }
             }
             if (sig != null) {
                 Files.writeString(dir.resolve("signature.txt"), sig, StandardCharsets.UTF_8);
@@ -177,9 +224,18 @@ public final class FmgBake {
                 FMGBiomeVariantMap.seed(export, com.example.profile.FmgProfiles.get(mapInfo.profile()),
                         FMGBiomeVariantMap.readFrom(in));
             }
-            loadingBakeDir = dir;                 // read() will pick up height.bin
+            loadingBakeDir = dir;                 // read() will pick up terrain.bin / height.bin
             progress("Loading map", 0.5f);
-            FMGMapDataCache.load(export);         // parse + route sampler + baked heightfield
+            FMGMapData map = FMGMapDataCache.load(export);   // parse + route sampler + baked terrain
+            if (mapInfo.blendTerrain() && map.getTerrain() == null) {
+                // the map was already cached before this load, so read() didn't run
+                com.example.terrain.TerrainRaster t = readTerrain(dir.resolve("terrain.bin"));
+                if (t == null) {
+                    LOGGER.warn("Bake at {} has no usable terrain.bin; rebuilding", dir);
+                    return false;
+                }
+                map.setTerrain(t);
+            }
             LOGGER.info("Loaded FMG bake from {}", dir);
             return true;
         } catch (Exception e) {
@@ -201,6 +257,10 @@ public final class FmgBake {
             md.update(GSON.toJson(com.example.profile.FmgProfiles.get(mapInfo.profile()))
                     .getBytes(StandardCharsets.UTF_8));
             md.update(GSON.toJson(HeightmapPostConfig.get()).getBytes(StandardCharsets.UTF_8));
+            // the terrain bake also depends on the world's vertical range and detail settings
+            md.update((mapInfo.terrain() + "|" + mapInfo.minY() + "|" + mapInfo.maxY() + "|" + mapInfo.seaLevel()
+                    + "|" + mapInfo.surfaceDetail() + "|" + mapInfo.detailAmplitude())
+                    .getBytes(StandardCharsets.UTF_8));
             md.update(new byte[]{(byte) FORMAT_VERSION});
             StringBuilder sb = new StringBuilder();
             for (byte b : md.digest()) {

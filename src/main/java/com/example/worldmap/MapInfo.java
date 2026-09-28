@@ -13,8 +13,14 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
  * {@code level.dat}. The {@code fmg_export} + {@code min_y}/{@code max_y}/
  * {@code sea_level} fields come from the world preset / datapack; the trailing
  * fields ({@code scale}, {@code surface_detail}, {@code detail_amplitude},
- * {@code climate_biomes}) are per-world overrides written by the create-world
- * screen. All trailing fields are optional so existing saves keep loading.</p>
+ * {@code climate_biomes}, {@code profile}, {@code terrain}) are per-world
+ * overrides written by the create-world screen. All trailing fields are
+ * optional so existing saves keep loading.</p>
+ *
+ * <p>{@code terrain} is {@code "blend"} for the baked erosion/biome terrain
+ * ({@code com.example.terrain}) and {@code "legacy"} for the original IDW
+ * heightfield; saves from before it existed decode as legacy, so their
+ * already-generated chunks keep matching.</p>
  *
  * <p>{@code richBiomes} (JSON key kept as {@code climate_biomes} for save
  * compatibility) toggles {@code FMGBiomeVariantMap}'s name+variant biome
@@ -29,7 +35,8 @@ public record MapInfo(
         boolean surfaceDetail,
         double detailAmplitude,
         boolean richBiomes,
-        String profile
+        String profile,
+        String terrain
 ) {
 
     /** World blocks per Azgaar map pixel. */
@@ -38,6 +45,9 @@ public record MapInfo(
     public static final double DEFAULT_DETAIL_AMPLITUDE = 6.0;
     /** Content profile id -- see {@code com.example.profile.FmgContentProfile}. */
     public static final String DEFAULT_PROFILE = "vanilla";
+    /** Terrain types: the original IDW heightfield, or the baked erosion/biome blend. */
+    public static final String TERRAIN_LEGACY = "legacy";
+    public static final String TERRAIN_BLEND = "blend";
 
     public static final Codec<MapInfo> CODEC = RecordCodecBuilder.create(instance ->
             instance.group(
@@ -50,7 +60,9 @@ public record MapInfo(
                     Codec.DOUBLE.optionalFieldOf("detail_amplitude", DEFAULT_DETAIL_AMPLITUDE)
                             .forGetter(MapInfo::detailAmplitude),
                     Codec.BOOL.optionalFieldOf("climate_biomes", true).forGetter(MapInfo::richBiomes),
-                    Codec.STRING.optionalFieldOf("profile", DEFAULT_PROFILE).forGetter(MapInfo::profile)
+                    Codec.STRING.optionalFieldOf("profile", DEFAULT_PROFILE).forGetter(MapInfo::profile),
+                    // absent in worlds created before the blended terrain existed -> keep them legacy
+                    Codec.STRING.optionalFieldOf("terrain", TERRAIN_LEGACY).forGetter(MapInfo::terrain)
             ).apply(instance, MapInfo::new)
     );
 
@@ -72,10 +84,19 @@ public record MapInfo(
         if (profile == null || profile.isBlank()) {
             profile = DEFAULT_PROFILE;
         }
+        if (!TERRAIN_BLEND.equals(terrain)) {
+            terrain = TERRAIN_LEGACY;
+        }
+    }
+
+    /** True when this world uses the baked blended terrain rather than the legacy heightfield. */
+    public boolean blendTerrain() {
+        return TERRAIN_BLEND.equals(terrain);
     }
 
     /** Legacy 4-arg constructor -- keeps callers that don't care about the overrides working. */
     public MapInfo(String fmgExport, int minY, int maxY, int seaLevel) {
-        this(fmgExport, minY, maxY, seaLevel, DEFAULT_SCALE, true, DEFAULT_DETAIL_AMPLITUDE, true, DEFAULT_PROFILE);
+        this(fmgExport, minY, maxY, seaLevel, DEFAULT_SCALE, true, DEFAULT_DETAIL_AMPLITUDE, true, DEFAULT_PROFILE,
+                TERRAIN_LEGACY);
     }
 }

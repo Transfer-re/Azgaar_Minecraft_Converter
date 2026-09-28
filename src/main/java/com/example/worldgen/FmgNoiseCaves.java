@@ -78,6 +78,7 @@ public final class FmgNoiseCaves {
      *         anything goes wrong (caller keeps the cave-less step in that case).
      */
     public static NoiseRouter buildResolvedRouter(ChunkGeneratorSettings vanillaBase,
+            net.minecraft.world.gen.chunk.GenerationShapeConfig shape,
             DensityFunction fmgStep, int seaLevel, long seed) {
         if (!ready()) {
             return null;
@@ -103,7 +104,7 @@ public final class FmgNoiseCaves {
 
             @SuppressWarnings("deprecation")
             ChunkGeneratorSettings fmgSettings = new ChunkGeneratorSettings(
-                    vanillaBase.generationShapeConfig(),
+                    shape,
                     vanillaBase.defaultBlock(),
                     vanillaBase.defaultFluid(),
                     fmgRaw,

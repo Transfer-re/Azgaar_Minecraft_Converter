@@ -36,6 +36,11 @@ public class FMGMapData {
     // A pack cell reaches these through cell.getG().
     private int[] gridPrec;
     private int[] gridCoastT;
+    /** Grid cell points, interleaved x, y (FMG pixels); grid cells also cover the open ocean. */
+    private double[] gridPoints;
+    private float[] gridHeights;
+    /** Lake feature id -> lake surface height (FMG units). */
+    private Map<Integer, Double> lakeHeights = new HashMap<>();
 
     // Accelerate nearest-cell queries (used by Debug HUD + height sampling).
     // This is transient runtime state derived from cells.
@@ -44,6 +49,7 @@ public class FMGMapData {
     // as [x][y] for 0 <= x < info.width, 0 <= y < info.height.
     // This is not serialized; it's derived from the FMG cells at runtime.
     private transient double[][] cachedHeightField;
+    private transient volatile com.example.terrain.TerrainRaster terrain;
     
     public FMGMapData() {
         this.cellMap = new HashMap<>();
@@ -59,6 +65,17 @@ public class FMGMapData {
     // Getters and setters
     public FMGMapInfo getInfo() { return info; }
     public void setInfo(FMGMapInfo info) { this.info = info; }
+
+    public double[] getGridPoints() { return gridPoints; }
+    public void setGridPoints(double[] gridPoints) { this.gridPoints = gridPoints; }
+    public float[] getGridHeights() { return gridHeights; }
+    public void setGridHeights(float[] gridHeights) { this.gridHeights = gridHeights; }
+    public Map<Integer, Double> getLakeHeights() { return lakeHeights; }
+    public void setLakeHeights(Map<Integer, Double> lakeHeights) { this.lakeHeights = lakeHeights; }
+
+    /** The baked blended terrain, or {@code null} for the legacy heightfield. */
+    public com.example.terrain.TerrainRaster getTerrain() { return terrain; }
+    public void setTerrain(com.example.terrain.TerrainRaster terrain) { this.terrain = terrain; }
 
     public int[] getGridPrec() { return gridPrec; }
     public void setGridPrec(int[] gridPrec) { this.gridPrec = gridPrec; }

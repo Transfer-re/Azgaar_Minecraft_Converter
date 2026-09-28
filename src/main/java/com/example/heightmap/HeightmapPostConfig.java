@@ -42,6 +42,8 @@ public final class HeightmapPostConfig {
 
     public Detail detail = new Detail();
     public Rivers rivers = new Rivers();
+    /** The blended terrain bake (worlds created with the blended terrain type only). */
+    public com.example.terrain.TerrainParams terrain = new com.example.terrain.TerrainParams();
 
     // ---- detail noise ------------------------------------------------
 
@@ -159,10 +161,21 @@ public final class HeightmapPostConfig {
         public int maxWaterfallDrop = 4;
         /** Sub-block jitter on the pool boundaries so step spacing is not perfectly regular. */
         public double stepJitter = 0.45;
+        /**
+         * Blocks the water surface is kept below the top of the ground beside the
+         * river, so a pool never spills over a gentle bank. 0 = off.
+         */
+        public int bankFreeboard = 1;
 
         /** Stone-brick arch where a road crosses: rise of the arch and headroom kept under it. */
         public int bridgeArchRise = 4;
         public int bridgeClearance = 2;
+        /**
+         * Grade (rise per block) of the ramps that lift a road to its bridge deck.
+         * The road climbs to deck height before the river instead of dipping into
+         * the river's dent and stepping up onto the bridge.
+         */
+        public double bridgeApproachGrade = 0.33;
     }
 
     // ---- loading -------------------------------------------------
@@ -202,6 +215,7 @@ public final class HeightmapPostConfig {
             if (loaded == null) return defaults;
             if (loaded.detail == null) loaded.detail = new Detail();
             if (loaded.rivers == null) loaded.rivers = new Rivers();
+            if (loaded.terrain == null) loaded.terrain = new com.example.terrain.TerrainParams();
             write(path, loaded); // rewrite so newly-added fields appear in the file
             return loaded;
         } catch (Exception ex) {

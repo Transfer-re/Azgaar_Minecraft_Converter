@@ -12,7 +12,7 @@
   },
   "dimensions": {
     "minecraft:overworld": {
-      "type": "fantasymapgenerator:fmg_overworld_tall",
+      "type": "fantasymapgenerator:fmg_overworld_h640",
       "generator": {
         "type": "fantasymapgenerator:image_map",
         "biome_source": {
@@ -20,16 +20,18 @@
           "map": {
             "fmg_export": "Boisia Full 2025-12-26-21-37.json",
             "min_y": -64,
-            "max_y": 400,
-            "sea_level": 63
+            "max_y": 640,
+            "sea_level": 63,
+            "terrain": "blend"
           }
         },
         "settings": "fantasymapgenerator:fmg_overworld_base",
         "map": {
           "fmg_export": "Boisia Full 2025-12-26-21-37.json",
           "min_y": -64,
-          "max_y": 400,
-          "sea_level": 63
+          "max_y": 640,
+          "sea_level": 63,
+          "terrain": "blend"
         }
       }
     },

@@ -135,6 +135,15 @@ public final class FMGMapDataCache {
             FMGMapData data = FMGMapLoader.loadMap(path);
 
             FMGRouteSampler.build(data);
+            // Blended-terrain worlds: the baked raster, or nothing yet -- FmgBake
+            // builds it right after this load (the legacy field would be wasted work).
+            if (com.example.worldgen.FmgBake.applyBakedTerrain(data)) {
+                return data;
+            }
+            com.example.worldmap.MapInfo current = com.example.worldgen.FmgWorldSettings.current();
+            if (current != null && current.blendTerrain()) {
+                return data;
+            }
             // Prefer a persisted bake for the (slow) heightfield; otherwise build
             // it now on the world-load thread rather than on a gen worker.
             if (!com.example.worldgen.FmgBake.applyBakedHeightField(data)) {

@@ -77,6 +77,8 @@ public final class ImageMapChunkGenerator extends ChunkGenerator {
     private final ThreadLocal<ChunkColumnCache> columnCache;
 
     private final DensityFunction heightCap;
+    /** Vertical generation range: the settings' own, or the world's build range for blended terrain. */
+    private final net.minecraft.world.gen.chunk.GenerationShapeConfig shape;
     private final AtomicBoolean noiseRouterPatched = new AtomicBoolean(false);
     private volatile boolean cavesApplied = false;
     private volatile boolean worldSeedKnown = false;
@@ -131,9 +133,11 @@ public final class ImageMapChunkGenerator extends ChunkGenerator {
             baseRouter.veinGap()
         );
 
+        this.shape = shapeFor(mapInfo, base.generationShapeConfig());
+
         @SuppressWarnings("deprecation")
         ChunkGeneratorSettings fixedSettings = new ChunkGeneratorSettings(
-            base.generationShapeConfig(),
+            this.shape,
             base.defaultBlock(),
             base.defaultFluid(),
             fixedRouter,
@@ -164,6 +168,22 @@ public final class ImageMapChunkGenerator extends ChunkGenerator {
         return mapInfo;
     }
 
+    /**
+     * Blended-terrain worlds pick a dimension type tall enough for their
+     * mountains, so noise has to be generated over that whole range too --
+     * the bundled settings stop at y 400.
+     */
+    private static net.minecraft.world.gen.chunk.GenerationShapeConfig shapeFor(
+            MapInfo mapInfo, net.minecraft.world.gen.chunk.GenerationShapeConfig base) {
+        if (!mapInfo.blendTerrain()) {
+            return base;
+        }
+        int minY = Math.floorDiv(mapInfo.minY(), 16) * 16;
+        int height = Math.max(16, ((mapInfo.maxY() - minY + 15) / 16) * 16);
+        return net.minecraft.world.gen.chunk.GenerationShapeConfig.create(
+                minY, height, base.horizontalSize(), base.verticalSize());
+    }
+
     // ---- fractal detail noise (analytic, per column) ----
 
     private static com.example.heightmap.HeightPostProcess.FractalDetail detailPass(MapInfo mapInfo) {
@@ -179,6 +199,20 @@ public final class ImageMapChunkGenerator extends ChunkGenerator {
         com.example.heightmap.HeightPostProcess.FractalDetail d = cfg.detail.toPass();
         d.amplitude = mapInfo.detailAmplitude();
         return d;
+    }
+
+    /**
+     * Terrain height before route/river shaping: FMG height plus detail noise.
+     * Both the terrain grid and the road centre-line chain must sample this --
+     * a chain that skips the detail noise sits below every detail bump and cuts
+     * a trench the length of the noise wavelength through it.
+     */
+    static double terrainY(MapInfo mapInfo, MapImageData data, int worldX, int worldZ) {
+        double h = data.sampleHeightY(worldX, worldZ);
+        if (data.fmgData() != null && data.fmgData().getTerrain() != null) {
+            return h;   // the baked terrain carries its own per-block detail
+        }
+        return h + detailOffset(mapInfo, worldX, worldZ, h);
     }
 
     /** Per-column height offset from the configured detail-noise pass, or 0 if disabled. */
@@ -290,7 +324,7 @@ public final class ImageMapChunkGenerator extends ChunkGenerator {
         // game does.
         if (worldSeedKnown && FmgNoiseCaves.ready()) {
             NoiseRouter resolved = FmgNoiseCaves.buildResolvedRouter(
-                    this.delegateSettings.value(), this.heightCap, mapInfo.seaLevel(), this.worldSeed);
+                    this.delegateSettings.value(), this.shape, this.heightCap, mapInfo.seaLevel(), this.worldSeed);
             if (resolved != null) {
                 accessor.fantasymapgenerator$setNoiseRouter(resolved);
                 noiseRouterPatched.set(true);
@@ -486,6 +520,9 @@ public final class ImageMapChunkGenerator extends ChunkGenerator {
                         }
                     } else {
                         int ground = Math.max(minY + 1, cache.getHeight(wx, wz) - 1);
+                        if (cache.getBridgeSpan(wx, wz) == 1) {
+                            ground = Math.max(ground, archY);                   // open span: beam only
+                        }
                         for (int y = ground; y < deckY && y < maxY - 1; y++) {
                             m.set(wx, y, wz);
                             chunk.setBlockState(m, brick, false);
@@ -653,6 +690,10 @@ public final class ImageMapChunkGenerator extends ChunkGenerator {
             return getGrid(worldX, worldZ).bridgeArchY[idx(worldX, worldZ)];
         }
 
+        int getBridgeSpan(int worldX, int worldZ) {
+            return getGrid(worldX, worldZ).bridgeSpan[idx(worldX, worldZ)];
+        }
+
         int getBridgeSide(int worldX, int worldZ) {
             return getGrid(worldX, worldZ).bridgeSide[idx(worldX, worldZ)];
         }
@@ -706,10 +747,7 @@ public final class ImageMapChunkGenerator extends ChunkGenerator {
                     int z = startZ + lz;
                     int index = (lx * size) + lz;
 
-                    double target = data.sampleHeightY(x, z);
-                    target += detailOffset(mapInfo, x, z, target);
-
-                    baseHeights[index] = (int) Math.round(target);
+                    baseHeights[index] = (int) Math.round(terrainY(mapInfo, data, x, z));
                 }
             }
 
@@ -812,6 +850,11 @@ public final class ImageMapChunkGenerator extends ChunkGenerator {
                 }
             }
 
+            com.example.fmg.FMGRiverNetwork rivers = com.example.fmg.FMGRiverNetwork.get(
+                    mapInfo.fmgExport(), map, mapInfo.minY(), mapInfo.maxY(), seaLevel);
+            com.example.heightmap.HeightmapPostConfig.Rivers rcfg =
+                    com.example.heightmap.HeightmapPostConfig.get().rivers;
+
             final java.util.HashMap<Integer, RelaxedRoute> relaxedByRoute = new java.util.HashMap<>();
             if (!sampleRangeByRoute.isEmpty() && map != null && map.getInfo() != null) {
                 final double mapW = map.getInfo().getWidth();
@@ -839,13 +882,22 @@ public final class ImageMapChunkGenerator extends ChunkGenerator {
 
                     RelaxedRoute cached = relaxedRouteCache.get(routeId);
                     if (cached == null || cached.heights.length != samples.size()) {
-                        cached = computeRelaxedRouteFull(data, seaLevel, offsetX, offsetZ, scale, profile, samples);
+                        cached = computeRelaxedRouteFull(mapInfo, data, seaLevel, offsetX, offsetZ, scale, profile,
+                                samples, rivers, rcfg);
                         relaxedRouteCache.put(routeId, cached);
                     }
 
                     relaxedByRoute.put(routeId, cached);
                 }
             }
+
+            // Road cells within reach of their route's river crossing: the only place
+            // a road may stand above (or span) the river's carved dent -- see step 6.
+            // Taken from the route's own chain, so every chunk agrees on it.
+            boolean[] approach = new boolean[size * size];
+            double dentReach = rivers == null ? 0.0
+                    : maxBridgeLift(rcfg) / Math.max(0.05, rcfg.bridgeApproachGrade) + 2.0
+                            + rivers.maxValleyRadius() + rivers.valleySmoothK() + 24.0;
 
             // 4) Apply a gaussian cross-section around the spline, using the
             // relaxed 1D chain height as the center height.
@@ -891,6 +943,11 @@ public final class ImageMapChunkGenerator extends ChunkGenerator {
 
                     double t = nearestSampleT[index];
                     double center = lerp(chain.heights[localSi], chain.heights[localSi + 1], t);
+                    double lift = lerp(chain.lift[localSi], chain.lift[localSi + 1], t);
+                    if (dist <= profile.routeBlockRadius
+                            && Math.min(chain.crossDist[localSi], chain.crossDist[localSi + 1]) <= dentReach) {
+                        approach[index] = true;
+                    }
                     double target;
 
                     if (dist <= profile.flatHalfWidth) {
@@ -903,12 +960,88 @@ public final class ImageMapChunkGenerator extends ChunkGenerator {
                         target = lerp(original, center, w);
                     }
 
-                    // Prefer cut. Allow limited fill to avoid big embankments.
+                    // Prefer cut. Allow limited fill to avoid big embankments --
+                    // except where the chain was lifted to meet a bridge deck.
                     if (target > original) {
-                        target = Math.min(target, original + profile.maxFill);
+                        target = Math.min(target, original + profile.maxFill + lift);
                     }
 
                     shapedHeights[index] = (int) Math.round(target);
+                }
+            }
+
+            // 4b) Bridge approaches: every road cell near a bridge is lifted to at
+            // least the deck height minus bridgeApproachGrade per block of distance,
+            // so whichever road meets a bridge -- the crossing route itself or a
+            // village street joining it at the bank -- climbs onto the deck rather
+            // than stepping up to it. (The crossing route's own chain is already
+            // lifted in computeRelaxedRouteFull; this also covers the others.)
+            List<com.example.fmg.FMGRiverNetwork.RiverSample> riverCand =
+                    rivers == null ? List.of() : rivers.collectNear(chunkX, chunkZ);
+            if (!riverCand.isEmpty() && !relaxedByRoute.isEmpty()) {
+                int clearance = Math.max(1, rcfg.bridgeClearance);
+                double grade = Math.max(0.05, rcfg.bridgeApproachGrade);
+                double maxLift = maxBridgeLift(rcfg);
+                double rampReach = maxLift / grade + 2.0;
+                java.util.ArrayList<int[]> deckCells = new java.util.ArrayList<>();   // lx, lz, deck height
+                for (int lx = 0; lx < size; lx++) {
+                    for (int lz = 0; lz < size; lz++) {
+                        int index = (lx * size) + lz;
+                        RouteProfile profile = profileById.get(nearestRouteId[index]);
+                        if (profile == null || nearestDistSq[index] > profile.routeBlockRadius * profile.routeBlockRadius) {
+                            continue;
+                        }
+                        double px = startX + lx, pz = startZ + lz;
+                        com.example.fmg.FMGRiverNetwork.RiverSample best = null;
+                        double bestD2 = Double.MAX_VALUE;
+                        for (com.example.fmg.FMGRiverNetwork.RiverSample rs : riverCand) {
+                            double d2 = (px - rs.x) * (px - rs.x) + (pz - rs.z) * (pz - rs.z);
+                            if (d2 < bestD2) {
+                                bestD2 = d2;
+                                best = rs;
+                            }
+                        }
+                        double reach = best == null ? 0 : best.halfWidth + Math.max(1, rcfg.bankWidth) + 1.0;
+                        if (best != null && bestD2 <= reach * reach) {
+                            deckCells.add(new int[]{lx, lz, best.waterSurfaceY + clearance + 2});
+                        }
+                    }
+                }
+                if (!deckCells.isEmpty()) {
+                    for (int lx = 0; lx < size; lx++) {
+                        for (int lz = 0; lz < size; lz++) {
+                            int index = (lx * size) + lz;
+                            RouteProfile profile = profileById.get(nearestRouteId[index]);
+                            if (profile == null) {
+                                continue;
+                            }
+                            double dist = Math.sqrt(nearestDistSq[index]);
+                            if (dist > profile.maxRadius) {
+                                continue;
+                            }
+                            double req = Double.NEGATIVE_INFINITY;
+                            for (int[] b : deckCells) {
+                                double dd = Math.hypot(lx - b[0], lz - b[1]);
+                                if (dd <= rampReach) {
+                                    req = Math.max(req, b[2] - grade * dd);
+                                }
+                            }
+                            req = Math.min(req, shapedHeights[index] + maxLift);
+                            if (req <= shapedHeights[index]) {
+                                continue;
+                            }
+                            if (dist <= profile.routeBlockRadius) {
+                                approach[index] = true;          // e.g. a village street joining at the bridge
+                            }
+                            double w = dist <= profile.flatHalfWidth ? 1.0
+                                    : gaussian(dist - profile.flatHalfWidth, profile.shoulderSigmaBlocks)
+                                            * (1.0 - smoothstep(profile.maxRadius - 1.0, profile.maxRadius, dist));
+                            int raised = (int) Math.round(shapedHeights[index] + (req - shapedHeights[index]) * w);
+                            if (raised > shapedHeights[index]) {
+                                shapedHeights[index] = raised;
+                            }
+                        }
+                    }
                 }
             }
 
@@ -990,16 +1123,10 @@ public final class ImageMapChunkGenerator extends ChunkGenerator {
             java.util.Arrays.fill(out.bridgeDeckY, -1);
             java.util.Arrays.fill(out.bridgeArchY, -1);
             java.util.Arrays.fill(out.bridgeSide, -1);
-            com.example.fmg.FMGRiverNetwork rivers = com.example.fmg.FMGRiverNetwork.get(
-                    mapInfo.fmgExport(), map, mapInfo.minY(), mapInfo.maxY(), seaLevel);
-            com.example.heightmap.HeightmapPostConfig.Rivers rcfg =
-                    com.example.heightmap.HeightmapPostConfig.get().rivers;
-
-            // The valley reaches much further than the channel, so gather every
-            // sample that can touch this chunk once and scan that list per column.
-            List<com.example.fmg.FMGRiverNetwork.RiverSample> riverCand =
-                    rivers == null ? List.of() : rivers.collectNear(chunkX, chunkZ);
+            // The valley reaches much further than the channel, so every sample
+            // that can touch this chunk (riverCand, gathered in 4b) is scanned per column.
             double valleyK = rivers == null ? 0.0 : rivers.valleySmoothK();
+            com.example.terrain.TerrainRaster terrain = map == null ? null : map.getTerrain();
             double valleyReach = rivers == null ? 0.0 : rivers.maxValleyRadius();
 
             for (int localX = 0; localX < 16; localX++) {
@@ -1052,6 +1179,21 @@ public final class ImageMapChunkGenerator extends ChunkGenerator {
                         double floorTop = com.example.fmg.FMGRiverNetwork.valleyFloorY(near, d);
                         int carvedTop = (int) Math.floor(com.example.fmg.FMGRiverNetwork.smoothMin(
                                 terrainHeight - 1.0, floorTop, valleyK));
+                        boolean onRoad = routeKind != FMGRouteSampler.RouteKind.NONE;
+                        double bridgeHalf = near.halfWidth + Math.max(1, rcfg.bankWidth) + 1.0;
+                        boolean dentSpan = false;
+                        if (onRoad && d > bridgeHalf && approach[srcIndex]) {
+                            // On a bridge approach the road keeps its (lifted) height through
+                            // the river's dent instead of dipping into it before the deck.
+                            // A shallow dent is filled under the road; a deep one (a gorge)
+                            // is spanned by the bridge itself, so the road never stands on
+                            // a tall earth wall. Anywhere else the valley is carved as usual.
+                            if (carvedTop < terrainHeight - 1 - 2) {
+                                dentSpan = true;
+                            } else {
+                                carvedTop = Math.max(carvedTop, terrainHeight - 1);
+                            }
+                        }
                         if (carvedTop + 1 < out.heights[dstIndex]) {
                             out.heights[dstIndex] = carvedTop + 1;
                         }
@@ -1062,24 +1204,25 @@ public final class ImageMapChunkGenerator extends ChunkGenerator {
                         }
 
                         // a road that meets the river becomes a cobblestone bridge, not a ford.
-                        // The span reaches out to where the valley side has climbed back
-                        // up to deck height, so the deck lands on the carved ground
-                        // instead of stopping short of it above the valley floor.
+                        // The road chain was already lifted to deck height over the water
+                        // (computeRelaxedRouteFull), so the deck is simply the road's own
+                        // height: the path runs on continuously instead of dropping into
+                        // the river's dent, onto the bridge and back up. The bridge itself
+                        // only spans the channel and its banks.
                         int clearance = Math.max(1, rcfg.bridgeClearance);
-                        double bridgeReach = Math.max(rcfg.bankWidth,
-                                (clearance + 2) / Math.max(0.2, near.bankSlope));
-                        if (routeKind != FMGRouteSampler.RouteKind.NONE
-                                && d <= near.halfWidth + bridgeReach) {
-                            double span = near.halfWidth + bridgeReach + 3.0;
-                            double bu = Math.min(1.0, d / span);
-                            // Water is flat through a crossing (FMGRiverNetwork freezes
-                            // the pool there), so the deck is flat over the middle at
-                            // surface+clearance+1 and ramps up to meet the road (top
-                            // solid = height-1) toward the banks.
+                        if (dentSpan) {
+                            int deckY = terrainHeight - 1;
+                            out.bridgeDeckY[dstIndex] = deckY;
+                            out.bridgeArchY[dstIndex] = deckY - 1;               // beam under the deck
+                            // piers every 7 blocks out from the river, solid to the ground
+                            out.bridgeSpan[dstIndex] = (byte) (Math.floorMod((int) Math.floor(d), 7) == 0 ? 0 : 1);
+                            out.bridgeSide[dstIndex] = (routeDist >= routeRadius - 1.2) ? 1 : 0;
+                            out.routes[dstIndex] = FMGRouteSampler.RouteKind.NONE;
+                        }
+                        if (onRoad && d <= bridgeHalf) {
+                            double bu = Math.min(1.0, d / bridgeHalf);
                             int flatDeck = surface + clearance + 1;
-                            double rampT = smoothstep(0.35, 1.0, bu);
-                            int deckY = Math.max(flatDeck,
-                                    (int) Math.round(flatDeck + (out.heights[dstIndex] - 1 - flatDeck) * rampT));
+                            int deckY = Math.max(flatDeck, terrainHeight - 1);
                             int archY = deckY - 1
                                     - (int) Math.round(rcfg.bridgeArchRise * Math.sqrt(Math.max(0.0, 1.0 - bu * bu)));
                             archY = Math.max(archY, surface + clearance);   // never dam the river
@@ -1087,6 +1230,17 @@ public final class ImageMapChunkGenerator extends ChunkGenerator {
                             out.bridgeArchY[dstIndex] = Math.min(archY, deckY - 1);
                             // outer ~1.2 block ring of the road width -> the sides/parapets
                             out.bridgeSide[dstIndex] = (routeDist >= routeRadius - 1.2) ? 1 : 0;
+                            out.routes[dstIndex] = FMGRouteSampler.RouteKind.NONE;
+                        }
+                    }
+
+                    // lakes above sea level (blended terrain): fill to the baked lake surface
+                    if (terrain != null && out.riverWaterY[dstIndex] < 0 && out.bridgeDeckY[dstIndex] < 0) {
+                        int lakeY = terrain.lakeWaterAt(worldX, worldZ);
+                        if (lakeY != com.example.terrain.TerrainRaster.NO_WATER && lakeY > seaLevel - 1
+                                && out.heights[dstIndex] - 1 < lakeY) {
+                            out.riverWaterY[dstIndex] = lakeY;
+                            out.riverBedY[dstIndex] = out.heights[dstIndex] - 1;
                             out.routes[dstIndex] = FMGRouteSampler.RouteKind.NONE;
                         }
                     }
@@ -1178,7 +1332,7 @@ public final class ImageMapChunkGenerator extends ChunkGenerator {
             }
         }
 
-        private static double sampleHeightBilinear(MapImageData data, double worldX, double worldZ) {
+        private static double sampleHeightBilinear(MapInfo mapInfo, MapImageData data, double worldX, double worldZ) {
             int x0 = (int) Math.floor(worldX);
             int z0 = (int) Math.floor(worldZ);
             int x1 = x0 + 1;
@@ -1187,24 +1341,32 @@ public final class ImageMapChunkGenerator extends ChunkGenerator {
             double fx = worldX - x0;
             double fz = worldZ - z0;
 
-            double h00 = data.sampleHeightY(x0, z0);
-            double h10 = data.sampleHeightY(x1, z0);
-            double h01 = data.sampleHeightY(x0, z1);
-            double h11 = data.sampleHeightY(x1, z1);
+            double h00 = terrainY(mapInfo, data, x0, z0);
+            double h10 = terrainY(mapInfo, data, x1, z0);
+            double h01 = terrainY(mapInfo, data, x0, z1);
+            double h11 = terrainY(mapInfo, data, x1, z1);
 
             double hx0 = lerp(h00, h10, fx);
             double hx1 = lerp(h01, h11, fx);
             return lerp(hx0, hx1, fz);
         }
 
+        /** Most a road is ever raised to meet a bridge deck: the deck's own height above the bank. */
+        private static double maxBridgeLift(com.example.heightmap.HeightmapPostConfig.Rivers rcfg) {
+            return Math.max(1, rcfg.bridgeClearance) + 3.0;
+        }
+
         private static RelaxedRoute computeRelaxedRouteFull(
+                MapInfo mapInfo,
                 MapImageData data,
                 int seaLevel,
                 double offsetX,
                 double offsetZ,
                 double scale,
                 RouteProfile profile,
-                List<FMGRouteSampler.RouteSample> samples
+                List<FMGRouteSampler.RouteSample> samples,
+                com.example.fmg.FMGRiverNetwork rivers,
+                com.example.heightmap.HeightmapPostConfig.Rivers rcfg
         ) {
             int len = samples.size();
             double[] wx = new double[len];
@@ -1219,7 +1381,7 @@ public final class ImageMapChunkGenerator extends ChunkGenerator {
                 wx[si] = px;
                 wz[si] = pz;
 
-                double target = sampleHeightBilinear(data, px, pz);
+                double target = sampleHeightBilinear(mapInfo, data, px, pz);
 
                 // int ix = (int) Math.round(px);
                 // int iz = (int) Math.round(pz);
@@ -1315,16 +1477,74 @@ public final class ImageMapChunkGenerator extends ChunkGenerator {
                 }
             }
 
-            return new RelaxedRoute(0, h);
+            // Bridges: over a river's channel and banks the road must sit at deck
+            // height (top solid = surface + clearance + 1). Lift it there and ramp
+            // the approaches at bridgeApproachGrade, so the road climbs gently onto
+            // the bridge from its own level rather than dipping into the dent first.
+            double[] lift = new double[len];
+            double[] crossDist = new double[len];
+            java.util.Arrays.fill(crossDist, Double.POSITIVE_INFINITY);
+            if (rivers != null && !rivers.isEmpty()) {
+                int clearance = Math.max(1, rcfg.bridgeClearance);
+                double[] need = new double[len];
+                boolean any = false;
+                for (int j = 0; j < len; j++) {
+                    need[j] = Double.NEGATIVE_INFINITY;
+                    com.example.fmg.FMGRiverNetwork.Hit hit =
+                            rivers.query((int) Math.round(wx[j]), (int) Math.round(wz[j]));
+                    if (hit != null) {
+                        need[j] = hit.sample.waterSurfaceY + clearance + 2;
+                        any = true;
+                    }
+                }
+                if (any) {
+                    // The lift is a short approach ramp, never a causeway: at most
+                    // maxBridgeLift high and only within its own ramp length of the
+                    // crossing. (Unbounded, a ramp next to a mountain stream kept
+                    // going down the slope as an ever taller embankment.)
+                    double grade = Math.max(0.05, rcfg.bridgeApproachGrade);
+                    double maxLift = maxBridgeLift(rcfg);
+                    double reach = maxLift / grade + 2.0;
+                    double[] lifted = new double[len];
+                    double[] toCrossing = new double[len];
+                    for (int j = 0; j < len; j++) {
+                        lifted[j] = Math.max(h[j], need[j]);
+                        toCrossing[j] = need[j] > Double.NEGATIVE_INFINITY ? 0 : Double.POSITIVE_INFINITY;
+                    }
+                    for (int j = 1; j < len; j++) {
+                        double seg = Math.hypot(wx[j] - wx[j - 1], wz[j] - wz[j - 1]);
+                        lifted[j] = Math.max(lifted[j], lifted[j - 1] - seg * grade);
+                        toCrossing[j] = Math.min(toCrossing[j], toCrossing[j - 1] + seg);
+                    }
+                    for (int j = len - 2; j >= 0; j--) {
+                        double seg = Math.hypot(wx[j] - wx[j + 1], wz[j] - wz[j + 1]);
+                        lifted[j] = Math.max(lifted[j], lifted[j + 1] - seg * grade);
+                        toCrossing[j] = Math.min(toCrossing[j], toCrossing[j + 1] + seg);
+                    }
+                    for (int j = 0; j < len; j++) {
+                        lift[j] = toCrossing[j] <= reach ? Math.min(lifted[j] - h[j], maxLift) : 0.0;
+                        h[j] += lift[j];
+                    }
+                    crossDist = toCrossing;
+                }
+            }
+
+            return new RelaxedRoute(0, h, lift, crossDist);
         }
 
         private static final class RelaxedRoute {
             final int offset;
             final double[] heights;
+            /** How far each sample was raised to meet a bridge deck (extra fill allowed there). */
+            final double[] lift;
+            /** Distance along the route (blocks) to its nearest river crossing, +inf if none. */
+            final double[] crossDist;
 
-            RelaxedRoute(int offset, double[] heights) {
+            RelaxedRoute(int offset, double[] heights, double[] lift, double[] crossDist) {
                 this.offset = offset;
                 this.heights = heights;
+                this.lift = lift;
+                this.crossDist = crossDist;
             }
         }
 
@@ -1452,6 +1672,8 @@ public final class ImageMapChunkGenerator extends ChunkGenerator {
             final int[] bridgeArchY = new int[16 * 16];
             /** 1 = bridge side/parapet column, 0 = open walkway column, -1 = not a bridge. */
             final int[] bridgeSide = new int[16 * 16];
+            /** 1 = dry span over the river's dent (deck + beam only, open below); 0 = solid to the ground. */
+            final byte[] bridgeSpan = new byte[16 * 16];
         }
     }
 

@@ -71,6 +71,10 @@ public class FMGMapLoader {
                 if (pack.has("provinces")) {
                     mapData.setProvinces(parseProvinces(pack.getAsJsonArray("provinces")));
                 }
+
+                if (pack.has("features")) {
+                    mapData.setLakeHeights(parseLakeHeights(pack.getAsJsonArray("features")));
+                }
             }
 
             // Some exports may place provinces outside of "pack".
@@ -84,6 +88,9 @@ public class FMGMapLoader {
                 JsonObject grid = root.getAsJsonObject("grid");
                 if (grid.has("cells")) {
                     parseGridClimate(grid.getAsJsonArray("cells"), mapData);
+                }
+                if (grid.has("points") && grid.has("cells")) {
+                    parseGridHeights(grid.getAsJsonArray("points"), grid.getAsJsonArray("cells"), mapData);
                 }
             }
 
@@ -145,6 +152,35 @@ public class FMGMapLoader {
         mapData.setGridCoastT(coastT);
     }
 
+    /** Grid points + heights: the terrain bake reads heights from these (they cover the open ocean too). */
+    private static void parseGridHeights(JsonArray points, JsonArray cells, FMGMapData mapData) {
+        int n = Math.min(points.size(), cells.size());
+        double[] xy = new double[n * 2];
+        float[] h = new float[n];
+        for (int idx = 0; idx < n; idx++) {
+            JsonArray p = points.get(idx).getAsJsonArray();
+            xy[2 * idx] = p.get(0).getAsDouble();
+            xy[2 * idx + 1] = p.get(1).getAsDouble();
+            JsonObject c = cells.get(idx).getAsJsonObject();
+            h[idx] = c.has("h") ? c.get("h").getAsFloat() : 0f;
+        }
+        mapData.setGridPoints(xy);
+        mapData.setGridHeights(h);
+    }
+
+    /** Lake features (pack.features, type "lake") -> their water surface height. */
+    private static Map<Integer, Double> parseLakeHeights(JsonArray features) {
+        Map<Integer, Double> lakes = new HashMap<>();
+        for (JsonElement elem : features) {
+            if (!elem.isJsonObject()) continue;   // index 0 is a placeholder
+            JsonObject f = elem.getAsJsonObject();
+            if (f.has("type") && "lake".equals(f.get("type").getAsString()) && f.has("i") && f.has("height")) {
+                lakes.put(f.get("i").getAsInt(), f.get("height").getAsDouble());
+            }
+        }
+        return lakes;
+    }
+
     private static List<FMGCell> parseCells(JsonArray cellsArray) {
         List<FMGCell> cells = new ArrayList<>();
         
@@ -181,6 +217,7 @@ public class FMGMapLoader {
             }
             
             if (cellObj.has("g")) cell.setG(cellObj.get("g").getAsInt());
+            if (cellObj.has("f")) cell.setF(cellObj.get("f").getAsInt());
             if (cellObj.has("h")) cell.setH(cellObj.get("h").getAsInt());
             if (cellObj.has("biome")) cell.setBiome(cellObj.get("biome").getAsInt());
             if (cellObj.has("fl")) cell.setFl(cellObj.get("fl").getAsInt());
