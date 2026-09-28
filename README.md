@@ -117,6 +117,53 @@ Missing functionality:
 
 
 
+## Credits
+
+The Conquest Reforged content variant is built on other people's work. **None of
+it is redistributed in this repository** -- the converted trees are written to
+`run/config/fantasymapgenerator/trees/`, which is gitignored, and to the local
+Axiom blueprint folder. Nothing third-party ends up in the jar. If you want any
+of these assets, get them from the original author.
+
+### Tree models
+
+| Pack | Author | Where |
+|---|---|---|
+| Regional tree packs (Africa, eastern North America, temperate Asia, South and Southeast Asia, South America, Florida/Caribbean) -- 1272 schematics | **paleozoey** | [profile](https://www.planetminecraft.com/member/paleozoey/), bundled with [Arnis](https://github.com/louis-e/arnis) by louis-e (Apache-2.0) |
+| QF Tree Repository -- 874 WorldEdit schematics, already built from Conquest blocks | **quitefrank_ly** | [profile](https://www.planetminecraft.com/member/quitefrank_ly) / [project](https://www.planetminecraft.com/project/conquest-reforged-larch-tree-bundle/) |
+| Axiom blueprint tree pack -- 440 blueprints, 30 species | **squarishbinkie** | credited in the blueprint `Author` field |
+| Ultimate Bush and Shrubs Pack for Conquest Reforged | see project page | [project](https://www.planetminecraft.com/project/ultimate-bush-and-shrubs-pack-for-conquest-reforged/) |
+
+**The QF Tree Repository readme asks specifically**, and it is worth repeating
+in full:
+
+> Feel free to use this for any of your projects, but make sure to provide a
+> link back to this page or my profile. Do not redistribute, but instead provide
+> a link to this page or my profile. Do not use for commercial purposes.
+>
+> -- quitefrank_ly
+
+That is why the converted trees stay out of `src/main/resources` and out of git.
+The same courtesy is extended to the other three packs.
+
+### Blocks and textures
+
+- **[Conquest Reforged](https://www.conquestreforged.com/)** -- the block set
+  everything here is remapped onto. Mod id `conquest`.
+- **ACRP (ArdaCraft Resource Pack)** -- the vanilla-block textures the converted
+  trees assume, by the [ArdaCraft](https://ardacraft.me/) team.
+
+### The map generator itself
+
+- **[Azgaar's Fantasy Map Generator](https://azgaar.github.io/Fantasy-Map-Generator/)**
+  by Azgaar -- the map format this mod reads, and the reason it exists.
+
+The conversion tooling in `tools/fmgtrees/` is part of this repository; the
+artistry in the models is entirely the authors' above.
+
+
 ## License
 
-See `LICENSE`.
+See `LICENSE`. This covers the code in this repository only -- the tree packs,
+Conquest Reforged and ACRP are each under their own terms, listed under
+**Credits**.

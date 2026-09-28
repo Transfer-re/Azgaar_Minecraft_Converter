@@ -17,6 +17,10 @@ content: which biomes exist, what grows in them, and what they are made of.
 | Conquest block catalog | **done** — 18,249 ids from the real 1.20.1 jar |
 | Axiom pack remap | **done and reviewed in game** — 428 blueprints, see §5 |
 | Axiom → NBT | **done** — 428 trees, combined index with QF |
+| African pack remap | **done, not yet reviewed in game** — 165 trees, 42 species, see §5 |
+| African → NBT + `.bp` | **done** — 165 of each |
+| Regional packs (ena/asn/ind/sam/fl) | **done, not yet reviewed in game** — 1107 trees, 174 genera, see §5 |
+| Combined tree index | **2574 trees / 355 groups** across 8 packs |
 | Bush/shrub pack extraction | not started — it is a world save, see §5 |
 | Placement feature (Java) | not started — see §6 |
 | Biome/feature datapack JSON | not started — generated from §4 files |
@@ -211,10 +215,10 @@ Ranked by how much it costs the look of a typical Azgaar map.
    `weeping_willow_leaves`, `downy_willow_leaves`, `goat_sallow_log` and an
    alder sapling — the blocks are all there, no schematics are. Azgaar uses
    Wetland heavily and `fen_reedbed` currently has to cover for it alone.
-2. **Every warm-climate tree.** Four Azgaar categories with nothing: Hot desert,
-   Savanna, Tropical seasonal forest, Tropical rainforest. Blocks exist
-   (`date_palm_leaves`, `caribbean_royal_palm_leaves`, `joshua_tree_leaves`,
-   `acacia_log`, `banana_tree_leaves`, `cactus`, `papyrus`), schematics do not.
+2. ~~**Every warm-climate tree.**~~ **Solved by the African pack** — see below.
+   All four warm categories now have trees: 42 African species covering savanna
+   thorn trees, baobabs, palms, cycads, miombo woodland, arid scrub and closed
+   rainforest. The four blocked biomes can be written whenever you want them.
 3. **Birch in Conquest blocks.** The Axiom pack has three birches but
    vanilla-blocked. Conquest has `autumnal_birch_leaves` + `mossy_birch_log`.
 4. **Mediterranean.** `olive_log`/`olive_tree_leaves` and now `cypress_leaves`
@@ -329,6 +333,185 @@ and birch species) get `persistent=true, distance=1, waterlogged=false`. The QF
 pack already does exactly this — every vanilla leaf in all 874 converted trees
 carries `persistent=true`, and the lossless conversion preserved it.
 
+### The African pack — converted, needs your eyes
+
+`C:\Users\ferre\projects\arnis\assets\tree-packs\afr`, 165 `.schem` by
+paleozoey, bundled with Arnis. Unlike the Axiom pack this one **is literal**:
+the survey found 42 distinct blocks across the whole pack and every species is
+one leaf block over one or two wood families, with no stand-ins to decode. So
+the remap is a straight species × role table and there was nothing to resolve
+by eye first.
+
+Three measured facts shaped the block choices, and they are worth keeping:
+
+- **Conquest leaves are biome-tinted.** Every leaf used here except
+  `cypress_leaves` has a `tintindex`, so the texture is luminance and the biome
+  supplies the hue. `ash_tree_leaves` is near-greyscale (166,158,158), which is
+  why it carries the acacias: gold in a savanna, green in miombo, one block.
+- **No Conquest acacia, palm, oak, birch, dark oak or jungle *log*.** Same
+  pattern as oak and birch in the QF work — the vanilla full block is reused
+  and only the accessories are Conquest (`conquest:acacia_log_branch`,
+  `_slab`, `_stump`). Palm is the exception: `conquest:palm_tree_trunk` is a
+  real block, and it has **no `axis`**, so that property has to be dropped.
+- **No Conquest stripped logs at all** (6 ids, all nether stems). So
+  `stripped_jungle_log` and `jungle_log` collapse onto one family, and the
+  pale-trunk / dark-branch split the baobabs depend on has to be made by
+  picking two different Conquest families rather than by stripping.
+
+Result: **55,145 Conquest voxels against 1,308 vanilla**, and every one of
+those 1,308 is in `acacia`, `oak` or `dark_oak` — exactly the families where
+Conquest deliberately reuses the vanilla block. Nothing was left unmapped and
+nothing fell outside the registry.
+
+Per-species table, judgement calls and the shape hacks are in
+`docs/conquest/afr_pack.md`.
+
+#### Writing `.bp` from scratch
+
+`axiom.py` could only rewrite an existing blueprint. Making one out of a
+schematic needed a real writer, which is `bpwrite.py`. The parts that had to be
+measured against the pack's own files rather than guessed:
+
+- **X and Z are centred** on `-(size // 2)`; **Y is arbitrary**. Checked across
+  40 blueprints: X agrees in 38, Z in 39, Y is scattered over a 30-block range
+  (it is wherever the player was standing). So the writer centres X/Z and puts
+  the base of the model on y=0.
+- **Empty space is `structure_void`, not air**, and `ContainsAir` is 0 in every
+  blueprint in the folder. A tree pasted over terrain must not punch a box of
+  air around itself.
+- **`Version` is the blueprint format, not the game** — 1 and 2 both occur.
+
+Verified by round-tripping 13 existing blueprints through read → write → read:
+all 13 came back with identical voxel positions and blocks. The 165 new files
+were then re-read and checked against their source schematics — positions
+identical in every spot check.
+
+`DataVersion` is written as **3465 (1.20.1)**, matching the Conquest instance,
+not the 1.21.4 the mod targets.
+
+#### Thumbnails
+
+Axiom renders a thumbnail when *it* saves a blueprint; one written from outside
+has never been rendered, and 165 blank entries in the picker is unpleasant. So
+`thumbnail.py` draws a rough isometric silhouette, with colours taken from the
+Conquest jar's own textures and a nominal foliage tint applied to the greyscale
+(biome-tinted) leaves so they do not come out white. It is a silhouette, not a
+render — enough to tell a baobab from a palm in the picker.
+
+#### Where they are
+
+Written to **`.minecraft/config/axiom/blueprints/conquest_<pack>/<genus>/`** —
+`conquest_african`, `conquest_ena`, `conquest_asn`, `conquest_ind`,
+`conquest_sam`, `conquest_fl`. All siblings of your `conquest/` folder,
+deliberately: `conquest/african/` already holds your hand-shaped
+`adansonia_digitata1` (the one with the rounded trunk in
+`oak_log_vertical_corner` and `spruce_wood_beam_*`) and nothing here should
+overwrite that. Move them across as you touch them up.
+
+#### The empty cells, and why the NBT comes from the blueprints
+
+A blueprint has to fill **every** cell of every 16-cube section — the format
+gives no way to leave one out — and on a big tree that is ~97% of the bounding
+box. Filling it with `structure_void` (what Axiom itself writes) makes an editor
+walk all of it, which is what made detailing crawl. These are filled with plain
+**air** instead, the state every voxel editor special-cases as nothing.
+
+Placement never sees that either way, because **the NBT is built from the
+blueprints, not from the schematics**: `convert_bp` drops all four empty states
+(`air`, `cave_air`, `void_air`, `structure_void`) when it writes a structure
+file, and a position that is not listed is simply not written, so a tree cannot
+punch a hole in the terrain it lands on.
+
+That is also why the pipeline runs `.schem → .bp → .nbt` rather than writing
+both from the schematic. Re-run `convert_bp` after a detailing session and the
+hand edits come along; a parallel copy made from the schematics would go stale
+the moment anything was fixed.
+
+    python -m fmgtrees.convert_packs <tree-packs> --packs ena,asn,ind,sam,fl --bp-out <blueprints>
+    python -m fmgtrees.convert_bp <blueprints>/conquest_ena <trees>/conquest_ena --pack ena
+    python -m fmgtrees.merge_index <trees>
+
+`--fill void` on the converters puts `structure_void` back if a blueprint ever
+needs to paste over terrain without clearing around itself.
+
+### The five regional packs — converted, need your eyes
+
+`projects/arnis/assets/tree-packs/{ena,asn,ind,sam,fl}`, **1107 schematics,
+174 genera**, also paleozoey. Ranked by what they unblock rather than by size:
+`ena` clears willow and the cypress/royal-palm gaps, `ind` is the deepest source
+for tropical seasonal forest, `sam` and `asn` deepen rainforest and taiga, `fl`
+is palms and swamp. `aus` was skipped: 14 Eucalyptus species and Conquest has no
+eucalypt foliage at all, so every one would be a stand-in.
+
+#### Why this one is keyed on genus, not species
+
+The African pack got a hand-written species table because it is 42 species and
+**it used its blocks literally**. These five do not. The survey is blunt:
+
+- `Acer` is oak leaves on birch wood
+- `Salix` is birch leaves on spruce wood
+- `Taxodium` is oak leaves on oak wood
+
+Mapping the source block would produce nonsense. The filename is the only
+reliable signal, so `remap_packs.GENERA` is keyed on genus and gives
+`(foliage, trunk family, accent family, blossom)`. 174 entries, one line each.
+
+`SPECIES` overrides where the species genuinely changes the answer, which in
+practice is the willows: `Salix_babylonica` is a weeping willow and Conquest has
+`weeping_willow_leaves`; `Salix_discolor` is a pussy willow and Conquest has
+`goat_willow_leaves` over `goat_sallow_log`. Collapsing both onto one block would
+waste two of the best matches in the set.
+
+**Two-wood trees survive.** Wood families in a model are ranked by voxel count:
+the biggest becomes the trunk, anything else becomes the accent. That is what
+keeps a pale trunk with darker branches instead of flattening it to one block.
+
+#### What this filled in
+
+Conquest ships 63 leaf and needle blocks and before this only 32 had a tree.
+The ones that just gained one:
+
+- **`weeping_willow_leaves`, `goat_willow_leaves`** — 19 willows across asn,
+  ena and sam. This is what unblocks `willow_carr`, the last blocked biome.
+  There is still no alder anywhere, but Conquest only ever shipped an alder
+  *sapling*, so alder was never actually available.
+- **`cypress_leaves`, `light_cypress_leaves`** — 12 `Taxodium` (bald cypress)
+  plus `Cupressus_sempervirens`. Conquest also ships `dead_`, `half_dead_` and
+  `quarter_dead_` cypress, which are obviously meant for a swamp.
+- **`caribbean_royal_palm_leaves`** — 8 `Roystonea`. This block carries a
+  `facing`, so it cannot be dropped in blind; the facing is filled from the
+  frond's own position relative to the trunk. That is a direction-from-centre,
+  not the branch-skeleton detection that was ruled out. Verified: facings come
+  out an even 8/8/8/8 across the four compass directions.
+- **Six blossom blocks** — `pink`/`white`/`purple_cherry_blossoms` and
+  `wisteria_blossoms` had no tree at all. The packs mark a tree in flower with
+  `flowering_azalea_leaves` or `cherry_leaves`, so those route to the genus's
+  blossom: `Prunus` pink, `Cornus` and `Magnolia` white, `Jacaranda` and
+  `Duranta` purple, `Wisteria` its own. `Erythrina`'s red flowers come in as
+  `red_carpet` and become `red_cherry_blossoms`.
+- **`autumnal_birch_leaves`, `holly_leaves`, `gorse_leaves`, `rowan_leaves`** —
+  `Betula`, `Ilex`, `Berberis`, `Sorbus`.
+
+#### Judgement calls worth knowing
+
+- **Conquest has no green birch, oak or maple leaf.** Birch and oak reuse the
+  vanilla block, which means they need `persistent=true` or the canopy rots on
+  the first random tick — verified, 145 vanilla leaf palette entries, all
+  pinned, none missed. For maple the nearest is `horse_chestnut_leaves`, which
+  is at least palmate.
+- **`conquest:cactus` is not the block for a columnar cactus.** Its model is a
+  ground clump whose elements run to y=20.5, so stacking it into a 15-block
+  `Cereus` gives overlapping spikes. Those nine files use vanilla cactus, which
+  nothing retextures, so they will read as vanilla until Conquest ships a
+  columnar one.
+- **Mangrove prop roots become `*_log_small_branch`**, not `hanging_roots`.
+  They are structural on a `Rhizopora`, not a ground plant.
+- **Grouping is by genus**, so `Quercus_alba` and `Quercus_rubra` share
+  `ena/quercus/default`. 174 knobs is already a lot for a biome file, and the
+  genus is what reads as one kind of tree. The binomial is kept on each entry.
+
+Full genus table: `docs/conquest/regional_packs.md`.
+
 ### The bush/shrub pack
 
 `respriatory-copy.zip` is **not a schematic pack** — it is a 1.18.2 Minecraft
@@ -358,6 +541,13 @@ is a nice-to-have, not a dependency.
    `requiresMod: "conquest"` guess in that file is **confirmed correct** — the
    mod id really is `conquest`.
 5. **Species dominance noise** (§1), once 1 exists.
+6. **The five remaining biomes.** `hot_desert`, `savanna`,
+   `tropical_seasonal_forest`, `tropical_rainforest` and now `willow_carr` were
+   all blocked only for lack of trees. **Nothing is blocked any more.** Writing
+   them is the same `make_biomes.py` work as the other 24, and there is enough
+   material for several new ones besides (cypress swamp, mangrove coast,
+   monsoon forest, Mediterranean).
+7. **Review the 1272 new blueprints.** None have been looked at in game.
 
 
 ## 7. Review workflow
@@ -382,13 +572,33 @@ tools/fmgtrees/axiom.py          Axiom .bp reader/writer
 tools/fmgtrees/convert_qf.py     QF pack -> structure NBT            [CLI]
 tools/fmgtrees/survey_axiom.py   per-species block/role report       [CLI]
 tools/fmgtrees/remap_axiom.py    Axiom .bp -> Conquest blocks        [CLI]
+tools/fmgtrees/bpwrite.py        Axiom .bp writer (voxels -> blueprint)
+tools/fmgtrees/thumbnail.py      isometric thumbnail for the Axiom picker
+tools/fmgtrees/remap_afr.py      African pack species x role table
+tools/fmgtrees/convert_afr.py    African .schem -> .bp + NBT          [CLI]
+tools/fmgtrees/remap_packs.py    174-genus table for the 5 regional packs
+tools/fmgtrees/convert_packs.py  regional .schem -> .bp                [CLI]
+tools/fmgtrees/convert_bp.py     .bp -> structure NBT + index          [CLI]
+tools/fmgtrees/merge_index.py    rebuild the combined tree index      [CLI]
 tools/fmgtrees/make_biomes.py    emits docs/conquest/biomes/*.json   [CLI]
 
 docs/conquest/PLAN.md                     this file
-docs/conquest/conquest_blocks_1.18.2.txt  block catalog
+docs/conquest/conquest_blocks_1.20.1.txt  block catalog, 18,249 ids from the jar
+docs/conquest/conquest_blocks_1.18.2.txt  older catalog, scraped from a world save
+docs/conquest/afr_pack.md                 African pack species table + report
+docs/conquest/regional_packs.md           174-genus map for the 5 regional packs
 docs/conquest/biomes/*.json               28 biome design files
 docs/conquest/axiom_roles.{md,json}       Axiom per-species block roles
 
-run/config/fantasymapgenerator/trees/conquest/   874 converted QF trees + index.json
-.minecraft/config/axiom/blueprints/conquest/     428 remapped Axiom blueprints
+run/config/fantasymapgenerator/trees/conquest/       874 converted QF trees
+run/config/fantasymapgenerator/trees/conquest_axiom/ 428 converted Axiom trees
+run/config/fantasymapgenerator/trees/conquest_afr/   165 African trees
+run/config/fantasymapgenerator/trees/conquest_ena/   262 eastern North America
+run/config/fantasymapgenerator/trees/conquest_asn/   225 temperate and montane Asia
+run/config/fantasymapgenerator/trees/conquest_ind/   226 South and Southeast Asia
+run/config/fantasymapgenerator/trees/conquest_sam/   256 South America
+run/config/fantasymapgenerator/trees/conquest_fl/    138 Florida, Caribbean, wetland
+run/config/fantasymapgenerator/trees/index.json      combined, 2574 trees / 355 groups
+.minecraft/config/axiom/blueprints/conquest/         428 remapped Axiom blueprints
+.minecraft/config/axiom/blueprints/conquest_<pack>/  1272 remapped paleozoey blueprints
 ```

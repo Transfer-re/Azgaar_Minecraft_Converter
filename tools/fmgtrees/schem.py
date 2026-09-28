@@ -63,7 +63,13 @@ class Schematic:
 def read(path, drop=("minecraft:air", "minecraft:cave_air", "minecraft:void_air")):
     _, root = nbtio.load(path)
 
-    # v3 moves the block container into a `Blocks` compound.
+    # v3 wraps the whole thing in a root `Schematic` compound, where v2 put its
+    # fields at the top level. Both turn up inside a single pack: the paleozoey
+    # trees are mostly v2, but a few were resaved by a newer WorldEdit.
+    if "Schematic" in root and "Width" not in root:
+        root = root["Schematic"]
+
+    # v3 also moves the block container into a `Blocks` compound.
     container = root.get("Blocks") if "Blocks" in root else root
     palette = container.get("Palette") or root.get("Palette")
     block_data = container.get("Data") if "Data" in container else root.get("BlockData")
