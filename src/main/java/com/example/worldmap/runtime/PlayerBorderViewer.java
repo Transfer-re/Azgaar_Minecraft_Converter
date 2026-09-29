@@ -187,7 +187,7 @@ public final class PlayerBorderViewer {
     }
 
     private static void sendDisabled(ServerPlayerEntity player) {
-        if (!ServerPlayNetworking.canSend(player, BorderDataPayload.ID)) {
+        if (!ServerPlayNetworking.canSend(player, BorderDataPayload.TYPE)) {
             return;
         }
         ServerPlayNetworking.send(player, new BorderDataPayload(false, 0, 0, 0xFFFFFF, "", new float[0], new float[0]));
@@ -199,7 +199,7 @@ public final class PlayerBorderViewer {
             int regionId,
             FMGBorderPoints.Result result
     ) {
-        if (!ServerPlayNetworking.canSend(player, BorderDataPayload.ID)) {
+        if (!ServerPlayNetworking.canSend(player, BorderDataPayload.TYPE)) {
             return;
         }
 

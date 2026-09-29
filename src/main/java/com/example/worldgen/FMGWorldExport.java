@@ -15,7 +15,6 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtIo;
 import net.minecraft.nbt.NbtList;
-import net.minecraft.nbt.NbtSizeTracker;
 import net.minecraft.nbt.NbtString;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.server.MinecraftServer;
@@ -116,7 +115,7 @@ public final class FMGWorldExport {
 
         // ---- level.dat: strip the mod, void the generator ----
         Path srcLevel = server.getSavePath(WorldSavePath.LEVEL_DAT);
-        NbtCompound root = NbtIo.readCompressed(srcLevel, NbtSizeTracker.ofUnlimitedBytes());
+        NbtCompound root = NbtIo.readCompressed(srcLevel.toFile());
         NbtCompound data = root.getCompound("Data");
 
         boolean tall = false;
@@ -150,7 +149,7 @@ public final class FMGWorldExport {
         data.put("DataPacks", dataPacks);
 
         data.putString("LevelName", safe);
-        NbtIo.writeCompressed(root, dest.resolve("level.dat"));
+        NbtIo.writeCompressed(root, dest.resolve("level.dat").toFile());
 
         return new Result(dest, regionFiles, generated, tall, System.currentTimeMillis() - t0);
     }
@@ -190,7 +189,7 @@ public final class FMGWorldExport {
                         + "  \"infiniburn\": \"#minecraft:infiniburn_overworld\",\n"
                         + "  \"effects\": \"minecraft:overworld\",\n"
                         + "  \"monster_spawn_light_level\": { \"type\": \"minecraft:uniform\","
-                        + " \"min_inclusive\": 0, \"max_inclusive\": 7 },\n"
+                        + " \"value\": { \"min_inclusive\": 0, \"max_inclusive\": 7 } },\n"
                         + "  \"monster_spawn_block_light_limit\": 0\n"
                         + "}\n");
     }

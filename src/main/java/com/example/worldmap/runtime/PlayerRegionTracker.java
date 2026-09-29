@@ -113,7 +113,7 @@ public final class PlayerRegionTracker {
     }
 
     private static TextColor parseColor(String raw, Formatting fallback) {
-        TextColor parsed = raw != null ? TextColor.parse(raw).result().orElse(null) : null;
+        TextColor parsed = raw != null ? TextColor.parse(raw) : null;
         return parsed != null ? parsed : TextColor.fromFormatting(fallback);
     }
 }

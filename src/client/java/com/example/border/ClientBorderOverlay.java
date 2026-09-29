@@ -7,10 +7,10 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gl.ShaderProgramKeys;
 import net.minecraft.client.render.BufferBuilder;
 import net.minecraft.client.render.BufferRenderer;
 import net.minecraft.client.render.Camera;
+import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.render.Tessellator;
 import net.minecraft.client.render.VertexFormat;
 import net.minecraft.client.render.VertexFormats;
@@ -39,21 +39,20 @@ public final class ClientBorderOverlay {
     }
 
     public static void registerClient() {
-        ClientPlayNetworking.registerGlobalReceiver(BorderDataPayload.ID, (payload, context) -> {
-            context.client().execute(() -> {
-                if (!payload.enabled()) {
-                    clear();
-                    return;
-                }
+        // FabricPacket handlers already run on the client thread
+        ClientPlayNetworking.registerGlobalReceiver(BorderDataPayload.TYPE, (payload, player, responseSender) -> {
+            if (!payload.enabled()) {
+                clear();
+                return;
+            }
 
-                enabled = true;
-                mode = BorderMode.fromId(payload.modeId());
-                regionId = payload.regionId();
-                colorRgb = payload.colorRgb();
-                name = payload.name();
-                xs = payload.xs();
-                zs = payload.zs();
-            });
+            enabled = true;
+            mode = BorderMode.fromId(payload.modeId());
+            regionId = payload.regionId();
+            colorRgb = payload.colorRgb();
+            name = payload.name();
+            xs = payload.xs();
+            zs = payload.zs();
         });
 
         WorldRenderEvents.LAST.register(context -> {
@@ -79,7 +78,7 @@ public final class ClientBorderOverlay {
             RenderSystem.enableBlend();
             RenderSystem.defaultBlendFunc();
             RenderSystem.disableCull();
-            RenderSystem.setShader(ShaderProgramKeys.POSITION_COLOR);
+            RenderSystem.setShader(GameRenderer::getPositionColorProgram);
 
             Matrix4f positionMatrix = matrices.peek().getPositionMatrix();
             // Lazily begin building only if we actually emit at least one quad.
@@ -135,7 +134,8 @@ public final class ClientBorderOverlay {
 
                     BufferBuilder builder = builderRef[0];
                     if (builder == null) {
-                        builder = Tessellator.getInstance().begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_COLOR);
+                        builder = Tessellator.getInstance().getBuffer();
+                        builder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_COLOR);
                         builderRef[0] = builder;
                     }
 
@@ -342,9 +342,9 @@ public final class ClientBorderOverlay {
         float fy0 = (float) yBottom;
         float fy1 = (float) yTop;
 
-        builder.vertex(matrix, fx0, fy0, fz0).color(r, g, b, a);
-        builder.vertex(matrix, fx1, fy0, fz1).color(r, g, b, a);
-        builder.vertex(matrix, fx1, fy1, fz1).color(r, g, b, a);
-        builder.vertex(matrix, fx0, fy1, fz0).color(r, g, b, a);
+        builder.vertex(matrix, fx0, fy0, fz0).color(r, g, b, a).next();
+        builder.vertex(matrix, fx1, fy0, fz1).color(r, g, b, a).next();
+        builder.vertex(matrix, fx1, fy1, fz1).color(r, g, b, a).next();
+        builder.vertex(matrix, fx0, fy1, fz0).color(r, g, b, a).next();
     }
 }

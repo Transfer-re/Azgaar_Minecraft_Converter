@@ -19,8 +19,13 @@ and ACRP artwork. It holds `index.html` (open it in a browser),
 `textures/_catalog/`.
 
 **Status: 29 biome palettes plus 3 sea palettes, all ids validated against the
-1.20.1 registry. Implemented in the generator (section 8), but only testable with
-vanilla stand-ins until the mod runs on 1.20.1, where Conquest exists.**
+1.20.1 registry. Implemented in the generator (section 8) on the `1.20.1`
+branch and tested on a 1.20.1 dev server with Conquest Reforged 1.7.0 installed:
+529 generated chunks, 93.6% of surface columns topped by a Conquest block,
+layer counts spread evenly over 1-8.**
+
+To run it in development, put the Conquest Reforged Fabric jar in
+`run-1.20.1/mods/` (this branch's dev run folder); Loom remaps it at launch.
 
 
 ## 1. Layer forms in Conquest

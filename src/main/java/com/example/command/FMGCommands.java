@@ -259,7 +259,7 @@ public class FMGCommands {
 
         MapInfo info = fmg.mapInfo();
         MapImageData image = MapImageCache.get(info);
-        var biomeLookup = source.getRegistryManager().getOrThrow(RegistryKeys.BIOME);
+        var biomeLookup = source.getRegistryManager().getWrapperOrThrow(RegistryKeys.BIOME);
 
         FMGBiomeReport.Report r;
         try {

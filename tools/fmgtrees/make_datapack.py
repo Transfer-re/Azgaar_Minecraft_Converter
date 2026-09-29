@@ -36,8 +36,10 @@ NS = "fantasymapgenerator"
 BIOME_PREFIX = NS + ":conquest/"
 HERE = os.path.dirname(os.path.abspath(__file__))
 RES = os.path.normpath(os.path.join(HERE, "..", "..", "src", "main", "resources"))
+# This branch targets Minecraft 1.20.1 (Conquest Reforged's version): feature
+# lists come from its jar and the biome JSON uses its format.
 MC_JAR = os.path.join(os.path.expanduser("~"), ".gradle", "caches", "fabric-loom",
-                      "1.21.4", "minecraft-common.jar")
+                      "1.20.1", "minecraft-common.jar")
 
 # temperature, downfall, precipitation, spawn set. Temperatures stay >= 0.2
 # outside the glacier on purpose: below 0.15 snowfall settles only on columns
@@ -99,7 +101,7 @@ CREATURES = {
             mob("frog", 10, 2, 5)],
     "arid": [mob("rabbit", 4, 2, 3), mob("camel", 1, 1, 1)],
     "savanna": [mob("sheep", 12, 4, 4), mob("chicken", 10, 4, 4), mob("cow", 8, 4, 4),
-                mob("horse", 1, 2, 6), mob("donkey", 1, 1, 1), mob("armadillo", 10, 2, 3)],
+                mob("horse", 1, 2, 6), mob("donkey", 1, 1, 1)],
     "jungle": [mob("chicken", 10, 4, 4), mob("parrot", 40, 1, 2), mob("ocelot", 2, 1, 3),
                mob("pig", 10, 4, 4)],
     "none": [],
@@ -158,7 +160,6 @@ def biome_json(bid, features):
             "foliage_color": hexint(p["tints"]["foliage"]),
             "mood_sound": {"block_search_extent": 8, "offset": 2.0,
                            "sound": "minecraft:ambient.cave", "tick_delay": 6000},
-            "music_volume": 1.0,
         },
         "spawners": {
             "ambient": [mob("bat", 10, 8, 8)], "axolotls": [],
@@ -167,7 +168,7 @@ def biome_json(bid, features):
             "water_ambient": [], "water_creature": [],
         },
         "spawn_costs": {},
-        "carvers": ["minecraft:cave", "minecraft:cave_extra_underground", "minecraft:canyon"],
+        "carvers": {"air": ["minecraft:cave", "minecraft:cave_extra_underground", "minecraft:canyon"]},
         "features": features,
     }
 

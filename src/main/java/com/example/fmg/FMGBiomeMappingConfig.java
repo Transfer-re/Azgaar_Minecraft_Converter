@@ -182,7 +182,7 @@ final class FMGBiomeMappingConfig {
         }
 
         try {
-            Identifier id = Identifier.of(rawId.trim());
+            Identifier id = new Identifier(rawId.trim());
             return RegistryKey.of(RegistryKeys.BIOME, id);
         } catch (Exception ex) {
             LOGGER.warn("Invalid biome id '{}' in biome mapping config (skipping)", rawId, ex);

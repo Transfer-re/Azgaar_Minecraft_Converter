@@ -66,9 +66,7 @@ public final class BurgVillageSpawner {
 
     public static void register() {
         ServerChunkEvents.CHUNK_LOAD.register((world, chunk) -> {
-            if (!(world instanceof ServerWorld serverWorld)) {
-                return;
-            }
+            ServerWorld serverWorld = world;
 
             if (!(serverWorld.getChunkManager().getChunkGenerator() instanceof ImageMapChunkGenerator fmgGenerator)) {
                 return;
@@ -218,12 +216,12 @@ public final class BurgVillageSpawner {
 
     private static BurgVillageState getState(ServerWorld world) {
         PersistentStateManager mgr = world.getPersistentStateManager();
-        return mgr.getOrCreate(BurgVillageState.TYPE, STATE_KEY);
+        return mgr.getOrCreate(BurgVillageState::fromNbt, BurgVillageState::new, STATE_KEY);
     }
 
     private static String pickVillageStructureId(ServerWorld world, FMGMapData mapData, BlockPos pos, BurgVillageConfig.Config config, int burgId) {
         RegistryEntry<Biome> biomeEntry = world.getBiome(pos);
-        Identifier biomeId = world.getRegistryManager().getOrThrow(net.minecraft.registry.RegistryKeys.BIOME)
+        Identifier biomeId = world.getRegistryManager().get(net.minecraft.registry.RegistryKeys.BIOME)
                 .getId(biomeEntry.value());
 
         String biomeKey = biomeId != null ? biomeId.toString() : "";

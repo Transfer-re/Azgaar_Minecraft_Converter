@@ -38,7 +38,7 @@ public final class FmgWorldCreateScreen extends Screen {
 
     public static final RegistryKey<net.minecraft.world.gen.WorldPreset> FMG_PRESET_KEY =
             RegistryKey.of(RegistryKeys.WORLD_PRESET,
-                    Identifier.of(FantasyMapGenerator.MOD_ID, "fmg_test"));
+                    new Identifier(FantasyMapGenerator.MOD_ID, "fmg_test"));
 
     // Legacy terrain keeps the bundled fmg_overworld_tall range; blended terrain
     // picks a taller dimension type from FmgHeightTiers.
@@ -187,14 +187,14 @@ public final class FmgWorldCreateScreen extends Screen {
         RegistryKey<net.minecraft.world.gen.chunk.ChunkGeneratorSettings> settingsKey =
                 RegistryKey.of(RegistryKeys.CHUNK_GENERATOR_SETTINGS, settingsIdentifier());
         parent.getWorldCreator().applyModifier((registries, dimensions) -> {
-            var biomes = registries.getOrThrow(RegistryKeys.BIOME);
-            var settings = registries.getOrThrow(RegistryKeys.CHUNK_GENERATOR_SETTINGS).getOrThrow(settingsKey);
+            var biomes = registries.getWrapperOrThrow(RegistryKeys.BIOME);
+            var settings = registries.get(RegistryKeys.CHUNK_GENERATOR_SETTINGS).entryOf(settingsKey);
             var generator = new ImageMapChunkGenerator(new ColorMapBiomeSource(biomes, mapInfo), settings, mapInfo);
             if (!mapInfo.blendTerrain()) {
                 return dimensions.with(registries, generator);
             }
-            var dimensionType = registries.getOrThrow(RegistryKeys.DIMENSION_TYPE)
-                    .getOrThrow(FmgHeightTiers.dimensionType(maxY));
+            var dimensionType = registries.get(RegistryKeys.DIMENSION_TYPE)
+                    .entryOf(FmgHeightTiers.dimensionType(maxY));
             return new DimensionOptionsRegistryHolder(DimensionOptionsRegistryHolder.createRegistry(
                     dimensions.dimensions(), dimensionType, generator));
         });
@@ -230,7 +230,7 @@ public final class FmgWorldCreateScreen extends Screen {
         if (id == null) {
             FantasyMapGenerator.LOGGER.warn("Profile '{}' has an unparseable noiseSettings '{}'; using the default",
                     profile.id, profile.noiseSettings);
-            return Identifier.of(FantasyMapGenerator.MOD_ID, "fmg_overworld_base");
+            return new Identifier(FantasyMapGenerator.MOD_ID, "fmg_overworld_base");
         }
         return id;
     }

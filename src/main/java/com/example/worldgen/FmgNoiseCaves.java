@@ -45,7 +45,7 @@ public final class FmgNoiseCaves {
     }
 
     private static RegistryKey<DensityFunction> df(String path) {
-        return RegistryKey.of(RegistryKeys.DENSITY_FUNCTION, Identifier.ofVanilla(path));
+        return RegistryKey.of(RegistryKeys.DENSITY_FUNCTION, new Identifier(path));
     }
 
     private static final RegistryKey<DensityFunction> ENTRANCES = df("overworld/caves/entrances");
@@ -61,8 +61,8 @@ public final class FmgNoiseCaves {
 
     public static void capture(DynamicRegistryManager registries) {
         try {
-            densityFunctions = registries.getOrThrow(RegistryKeys.DENSITY_FUNCTION);
-            noiseParameters = registries.getOrThrow(RegistryKeys.NOISE_PARAMETERS);
+            densityFunctions = registries.getWrapperOrThrow(RegistryKeys.DENSITY_FUNCTION);
+            noiseParameters = registries.getWrapperOrThrow(RegistryKeys.NOISE_PARAMETERS);
         } catch (RuntimeException e) {
             LOGGER.warn("Could not capture worldgen registries; FMG noise caves stay disabled", e);
         }

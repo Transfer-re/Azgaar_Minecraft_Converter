@@ -31,8 +31,8 @@ public final class FilteringRegistryWrapper<T> implements RegistryWrapper<T> {
     }
 
     @Override
-    public Stream<RegistryEntryList.Named<T>> getTags() {
-        return delegate.getTags();
+    public Stream<RegistryEntryList.Named<T>> streamTags() {
+        return delegate.streamTags();
     }
 
     @Override

@@ -17,6 +17,7 @@ import com.example.mixin.NoiseConfigAccessor;
 import com.example.worldmap.MapInfo;
 import com.example.worldmap.runtime.MapImageCache;
 import com.example.worldmap.runtime.MapImageData;
+import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
@@ -54,7 +55,7 @@ import net.minecraft.world.gen.noise.NoiseRouter;
  */
 public final class ImageMapChunkGenerator extends ChunkGenerator {
 
-    public static final MapCodec<ImageMapChunkGenerator> CODEC = RecordCodecBuilder.mapCodec(instance ->
+    public static final Codec<ImageMapChunkGenerator> CODEC = RecordCodecBuilder.create(instance ->
             instance.group(
                     BiomeSource.CODEC.fieldOf("biome_source").forGetter(ChunkGenerator::getBiomeSource),
                         RegistryElementCodec.of(
@@ -227,18 +228,19 @@ public final class ImageMapChunkGenerator extends ChunkGenerator {
     }
 
     @Override
-    protected MapCodec<? extends ChunkGenerator> getCodec() {
+    protected Codec<? extends ChunkGenerator> getCodec() {
         return CODEC;
     }
 
     @Override
     public void carve(ChunkRegion chunkRegion, long seed, NoiseConfig noiseConfig, BiomeAccess biomeAccess,
-                      StructureAccessor structureAccessor, Chunk chunk) {
+                      StructureAccessor structureAccessor, Chunk chunk,
+                      net.minecraft.world.gen.GenerationStep.Carver carverStep) {
         patchNoiseRouterOnce(noiseConfig);
         // Delegate to vanilla carving to enable caves.
         // Our height cap density function keeps the surface locked to the FMG heightmap,
         // but carving can still cut into that solid volume to form caves.
-        delegate.carve(chunkRegion, seed, noiseConfig, biomeAccess, structureAccessor, chunk);
+        delegate.carve(chunkRegion, seed, noiseConfig, biomeAccess, structureAccessor, chunk, carverStep);
     }
 
     @Override
@@ -292,10 +294,10 @@ public final class ImageMapChunkGenerator extends ChunkGenerator {
     }
 
     @Override
-    public CompletableFuture<Chunk> populateNoise(Blender blender, NoiseConfig noiseConfig,
-            StructureAccessor structureAccessor, Chunk chunk) {
+    public CompletableFuture<Chunk> populateNoise(java.util.concurrent.Executor executor, Blender blender,
+            NoiseConfig noiseConfig, StructureAccessor structureAccessor, Chunk chunk) {
         patchNoiseRouterOnce(noiseConfig);
-        return delegate.populateNoise(blender, noiseConfig, structureAccessor, chunk);
+        return delegate.populateNoise(executor, blender, noiseConfig, structureAccessor, chunk);
     }
 
     @Override
@@ -310,7 +312,7 @@ public final class ImageMapChunkGenerator extends ChunkGenerator {
         // Burg-driven village placement is handled via a custom structure.
         var villagesKey = net.minecraft.registry.RegistryKey.of(
                 RegistryKeys.STRUCTURE_SET,
-                Identifier.of("minecraft", "villages")
+                new Identifier("minecraft", "villages")
         );
         var filtered = FilteringRegistryWrapper.excludingKey(structureSetRegistry, villagesKey);
         this.worldSeed = seed;
@@ -369,7 +371,7 @@ public final class ImageMapChunkGenerator extends ChunkGenerator {
     }
 
     @Override
-    public void appendDebugHudText(List<String> text, NoiseConfig noiseConfig, BlockPos pos) {
+    public void getDebugHudText(List<String> text, NoiseConfig noiseConfig, BlockPos pos) {
         text.add("FMG map: " + mapInfo.fmgExport());
 
         // Debug info to validate that our height cap is being used.

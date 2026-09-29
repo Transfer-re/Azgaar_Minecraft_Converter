@@ -5,7 +5,6 @@ import java.util.Set;
 
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtIntArray;
-import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.world.PersistentState;
 
 /**
@@ -15,15 +14,9 @@ final class BurgVillageState extends PersistentState {
 
     private static final String NBT_KEY = "spawnedBurgs";
 
-        static final Type<BurgVillageState> TYPE = new Type<>(
-            BurgVillageState::new,
-            BurgVillageState::fromNbt,
-            null
-        );
-
     private final Set<Integer> spawnedBurgIds = new HashSet<>();
 
-    static BurgVillageState fromNbt(NbtCompound nbt, RegistryWrapper.WrapperLookup registries) {
+    static BurgVillageState fromNbt(NbtCompound nbt) {
         BurgVillageState state = new BurgVillageState();
         if (nbt.contains(NBT_KEY)) {
             int[] ids = nbt.getIntArray(NBT_KEY);
@@ -45,7 +38,7 @@ final class BurgVillageState extends PersistentState {
     }
 
     @Override
-    public NbtCompound writeNbt(NbtCompound nbt, RegistryWrapper.WrapperLookup registries) {
+    public NbtCompound writeNbt(NbtCompound nbt) {
         int[] ids = spawnedBurgIds.stream().mapToInt(Integer::intValue).toArray();
         nbt.put(NBT_KEY, new NbtIntArray(ids));
         return nbt;

@@ -222,7 +222,7 @@ public final class FmgContentProfile {
                 LOGGER.warn("Profile '{}': unparseable biome id '{}' (using {})", this.id, raw, biomes.fallback);
                 Identifier fallback = Identifier.tryParse(biomes.fallback);
                 return RegistryKey.of(RegistryKeys.BIOME,
-                        fallback != null ? fallback : Identifier.ofVanilla("plains"));
+                        fallback != null ? fallback : new Identifier("plains"));
             }
             return RegistryKey.of(RegistryKeys.BIOME, parsed);
         });
@@ -363,6 +363,8 @@ public final class FmgContentProfile {
         FmgContentProfile p = new FmgContentProfile();
         p.id = VANILLA_ID;
         p.displayName = "Vanilla / WWOO";
+        // 1: Minecraft 1.20.1 has no pale garden, so it left the forest pool
+        p.version = 1;
 
         Map<String, List<Weighted>> pools = p.biomes.pools;
         pools.put("grassland", pool(
@@ -371,7 +373,7 @@ public final class FmgContentProfile {
         pools.put("temperatedeciduousforest", pool(
                 w("minecraft:forest", 0.35), w("minecraft:flower_forest", 0.15),
                 w("minecraft:birch_forest", 0.20), w("minecraft:old_growth_birch_forest", 0.15),
-                w("minecraft:dark_forest", 0.10), w("minecraft:pale_garden", 0.05)));
+                w("minecraft:dark_forest", 0.15)));
         pools.put("taiga", pool(
                 w("minecraft:taiga", 0.55), w("minecraft:old_growth_pine_taiga", 0.25),
                 w("minecraft:old_growth_spruce_taiga", 0.20)));
@@ -408,8 +410,6 @@ public final class FmgContentProfile {
         aliases.put("rainforest", "tropicalrainforest");
 
         Map<String, String> rares = p.biomes.guaranteedRares;
-        rares.put("temperatedeciduousforest", "minecraft:pale_garden");
-        rares.put("forest", "minecraft:pale_garden");
         rares.put("grassland", "minecraft:cherry_grove");
         rares.put("plains", "minecraft:cherry_grove");
         rares.put("tropicalrainforest", "minecraft:bamboo_jungle");

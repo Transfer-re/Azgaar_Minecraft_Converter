@@ -2,10 +2,15 @@
 
 A fabric mod to generate a Minecraft overworld from a **Fantasy Map Generator (FMG)** JSON export from Azgaars fantasy map generator.
 
-- **Minecraft**: 1.21.4 (is currently most up to date)
+- **Minecraft**: 1.20.1 -- this is the Conquest Reforged branch. The vanilla
+  version lives on the `1.21.4` branch.
 - **Mod loader**: Fabric (`fabricloader >= 0.18.4`)
 - **Requires**: Fabric API
-- **Java**: 21+
+- **Optional**: [Conquest Reforged](https://www.curseforge.com/minecraft/mc-mods/conquest-reforged)
+  (Fabric, 1.20.1). With it installed the create-world screen offers a
+  "Conquest Reforged" content option: 29 Conquest biomes and a ground built
+  from Conquest layer blocks. See `docs/conquest/palettes.md`.
+- **Java**: 17+
 
 ---
 
@@ -34,7 +39,7 @@ These are additional map examples (less detailed than the HD overview above), us
 
 ## Install (Singleplayer)
 
-1. Install **Fabric Loader** for Minecraft **1.21.4**.
+1. Install **Fabric Loader** for Minecraft **1.20.1**.
 2. Download/install **Fabric API**.
 3. Put this mod’s `.jar` in your `.minecraft/mods` folder.
 4. Launch the game once (this creates the config file).

@@ -12,7 +12,7 @@ import com.example.FantasyMapGenerator;
 public final class FMGMapRegistries {
 
         public static final RegistryKey<Registry<MapInfo>> MAP_INFO =
-            RegistryKey.ofRegistry(Identifier.of(FantasyMapGenerator.MOD_ID, "map_info"));
+            RegistryKey.ofRegistry(new Identifier(FantasyMapGenerator.MOD_ID, "map_info"));
 
     private FMGMapRegistries() {
     }

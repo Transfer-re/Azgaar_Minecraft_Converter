@@ -131,7 +131,7 @@ public final class FMGBiomeVariantMap {
         RegistryKey<Biome>[] arr = new RegistryKey[n];
         for (int i = 0; i < n; i++) {
             String s = in.readUTF();
-            arr[i] = s.isEmpty() ? null : RegistryKey.of(RegistryKeys.BIOME, Identifier.of(s));
+            arr[i] = s.isEmpty() ? null : RegistryKey.of(RegistryKeys.BIOME, new Identifier(s));
         }
         return new FMGBiomeVariantMap(arr);
     }

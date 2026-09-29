@@ -134,7 +134,7 @@ final class BurgVillageConfig {
         // version field, allow the new defaults to take effect without forcing manual deletion.
         if (loaded.version() <= 0
                 && types.size() == 1
-                && "plains".equalsIgnoreCase(types.getFirst())) {
+                && "plains".equalsIgnoreCase(types.get(0))) {
             return defaults.defaultVillageTypes();
         }
 
@@ -151,7 +151,7 @@ final class BurgVillageConfig {
             List<String> types = e.getValue();
             if (collapseToSingle && types.size() > 1) {
                 // v3 migration: collapse any weighted lists to their first entry.
-                types = List.of(types.getFirst());
+                types = List.of(types.get(0));
             }
 
             out.put(e.getKey().toLowerCase(Locale.ROOT), types);
