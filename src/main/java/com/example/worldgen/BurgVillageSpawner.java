@@ -14,7 +14,8 @@ import com.example.fmg.FMGMapData;
 import com.example.worldmap.runtime.MapImageCache;
 import com.example.worldmap.runtime.MapImageData;
 
-import net.fabricmc.fabric.api.event.lifecycle.v1.ServerChunkEvents;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.level.ChunkEvent;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.command.ServerCommandSource;
@@ -65,8 +66,11 @@ public final class BurgVillageSpawner {
     }
 
     public static void register() {
-        ServerChunkEvents.CHUNK_LOAD.register((world, chunk) -> {
-            ServerWorld serverWorld = world;
+        MinecraftForge.EVENT_BUS.addListener((ChunkEvent.Load event) -> {
+            if (!(event.getLevel() instanceof ServerWorld serverWorld)
+                    || !(event.getChunk() instanceof WorldChunk chunk)) {
+                return;
+            }
 
             if (!(serverWorld.getChunkManager().getChunkGenerator() instanceof ImageMapChunkGenerator fmgGenerator)) {
                 return;

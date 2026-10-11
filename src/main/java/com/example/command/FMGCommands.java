@@ -20,7 +20,8 @@ import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 
-import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.RegisterCommandsEvent;
 import static net.minecraft.server.command.CommandManager.argument;
 import static net.minecraft.server.command.CommandManager.literal;
 import net.minecraft.registry.RegistryKeys;
@@ -35,8 +36,8 @@ import net.minecraft.world.biome.Biome;
 public class FMGCommands {
 
     public static void register() {
-        CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> {
-            registerCommands(dispatcher);
+        MinecraftForge.EVENT_BUS.addListener((RegisterCommandsEvent event) -> {
+            registerCommands(event.getDispatcher());
         });
     }
 

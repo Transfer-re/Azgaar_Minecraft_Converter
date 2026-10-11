@@ -18,7 +18,8 @@ import org.slf4j.LoggerFactory;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import net.fabricmc.loader.api.FabricLoader;
+import net.minecraftforge.fml.loading.FMLPaths;
+import net.minecraftforge.fml.ModList;
 
 /**
  * Loads the content profiles in {@code config/fantasymapgenerator/profiles/}.
@@ -61,7 +62,7 @@ public final class FmgProfiles {
         boolean all = Boolean.getBoolean("fmg.allProfiles");
         for (FmgContentProfile p : all().values()) {
             if (!all && p.requiresMod != null && !p.requiresMod.isBlank()
-                    && !FabricLoader.getInstance().isModLoaded(p.requiresMod)) {
+                    && !ModList.get().isLoaded(p.requiresMod)) {
                 continue;
             }
             out.add(p);
@@ -99,7 +100,7 @@ public final class FmgProfiles {
 
         Path dir;
         try {
-            dir = FabricLoader.getInstance().getConfigDir().resolve(RELATIVE_DIR).normalize();
+            dir = FMLPaths.CONFIGDIR.get().resolve(RELATIVE_DIR).normalize();
         } catch (Throwable t) {
             LOGGER.warn("config dir unavailable; using the built-in vanilla profile only", t);
             return out;

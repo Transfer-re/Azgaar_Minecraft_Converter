@@ -4,8 +4,6 @@ import org.joml.Matrix4f;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 
-import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
-import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.BufferBuilder;
 import net.minecraft.client.render.BufferRenderer;
@@ -17,6 +15,8 @@ import net.minecraft.client.render.VertexFormats;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.Heightmap;
+import net.minecraftforge.client.event.RenderLevelStageEvent;
+import net.minecraftforge.common.MinecraftForge;
 
 public final class ClientBorderOverlay {
 
@@ -38,24 +38,30 @@ public final class ClientBorderOverlay {
     private ClientBorderOverlay() {
     }
 
+    /**
+     * Border data from the server; {@link BorderDataPayload} handles it on the
+     * client thread.
+     */
+    public static void receive(BorderDataPayload payload) {
+        if (!payload.enabled()) {
+            clear();
+            return;
+        }
+
+        enabled = true;
+        mode = BorderMode.fromId(payload.modeId());
+        regionId = payload.regionId();
+        colorRgb = payload.colorRgb();
+        name = payload.name();
+        xs = payload.xs();
+        zs = payload.zs();
+    }
+
     public static void registerClient() {
-        // FabricPacket handlers already run on the client thread
-        ClientPlayNetworking.registerGlobalReceiver(BorderDataPayload.TYPE, (payload, player, responseSender) -> {
-            if (!payload.enabled()) {
-                clear();
+        MinecraftForge.EVENT_BUS.addListener((RenderLevelStageEvent context) -> {
+            if (context.getStage() != RenderLevelStageEvent.Stage.AFTER_LEVEL) {
                 return;
             }
-
-            enabled = true;
-            mode = BorderMode.fromId(payload.modeId());
-            regionId = payload.regionId();
-            colorRgb = payload.colorRgb();
-            name = payload.name();
-            xs = payload.xs();
-            zs = payload.zs();
-        });
-
-        WorldRenderEvents.LAST.register(context -> {
             float[] localXs = xs;
             float[] localZs = zs;
             int count = Math.min(localXs.length, localZs.length);
@@ -68,10 +74,10 @@ public final class ClientBorderOverlay {
                 return;
             }
 
-            Camera camera = context.camera();
+            Camera camera = context.getCamera();
             Vec3d camPos = camera.getPos();
 
-            MatrixStack matrices = context.matrixStack();
+            MatrixStack matrices = context.getPoseStack();
             matrices.push();
             matrices.translate(-camPos.x, -camPos.y, -camPos.z);
 

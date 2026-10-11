@@ -18,7 +18,7 @@ import org.slf4j.LoggerFactory;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import net.fabricmc.loader.api.FabricLoader;
+import net.minecraftforge.fml.loading.FMLPaths;
 
 /**
  * Loads/saves config for selecting a village "type" by biome.
@@ -56,9 +56,9 @@ final class BurgVillageConfig {
 
         Path configPath;
         try {
-            configPath = FabricLoader.getInstance().getConfigDir().resolve(CONFIG_RELATIVE_PATH).normalize();
+            configPath = FMLPaths.CONFIGDIR.get().resolve(CONFIG_RELATIVE_PATH).normalize();
         } catch (Throwable t) {
-            LOGGER.warn("FabricLoader config dir unavailable; using built-in village config", t);
+            LOGGER.warn("config dir unavailable; using built-in village config", t);
             return defaults;
         }
 

@@ -283,7 +283,7 @@ public final class FmgBake {
         }
         Path src = Path.of(mapInfo.fmgExport().replace('\\', '/'));
         if (!src.isAbsolute()) {
-            src = net.fabricmc.loader.api.FabricLoader.getInstance().getGameDir().resolve(src);
+            src = net.minecraftforge.fml.loading.FMLPaths.GAMEDIR.get().resolve(src);
         }
         return Files.readAllBytes(src);
     }

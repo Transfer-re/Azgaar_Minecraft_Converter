@@ -1,0 +1,25 @@
+modLoader = "javafml"
+loaderVersion = "[47,)"
+license = "CC0-1.0"
+
+[[mods]]
+modId = "fantasymapgenerator"
+version = "${version}"
+displayName = "FantasyMapGenerator"
+authors = "Me!"
+description = '''Generates the overworld from an Azgaar's Fantasy Map Generator JSON export, with an optional Conquest Reforged content profile.'''
+logoFile = "assets/fantasymapgenerator/icon.png"
+
+[[dependencies.fantasymapgenerator]]
+modId = "forge"
+mandatory = true
+versionRange = "[47,)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.fantasymapgenerator]]
+modId = "minecraft"
+mandatory = true
+versionRange = "[1.20.1,1.20.2)"
+ordering = "NONE"
+side = "BOTH"

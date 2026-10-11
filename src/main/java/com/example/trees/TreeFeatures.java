@@ -13,11 +13,12 @@ import com.example.surface.SurfaceSet;
 import com.example.worldgen.ImageMapChunkGenerator;
 import com.example.worldmap.runtime.MapImageCache;
 
-import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
-import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
-import net.fabricmc.loader.api.FabricLoader;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.Registry;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.OnDatapackSyncEvent;
+import net.minecraftforge.event.RegisterCommandsEvent;
+import net.minecraftforge.event.server.ServerStoppedEvent;
+import net.minecraftforge.fml.loading.FMLPaths;
+import net.minecraftforge.registries.RegisterEvent;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.server.command.ServerCommandSource;
@@ -56,12 +57,21 @@ public final class TreeFeatures {
     private TreeFeatures() {
     }
 
-    public static void register() {
-        Registry.register(Registries.FEATURE, new Identifier(FantasyMapGenerator.MOD_ID, "treegen_object"), OBJECT);
-        Registry.register(Registries.FEATURE, new Identifier(FantasyMapGenerator.MOD_ID, "treegen_mix"), MIX);
+    public static void registerFeatures(RegisterEvent event) {
+        event.register(RegistryKeys.FEATURE, helper -> {
+            helper.register(new Identifier(FantasyMapGenerator.MOD_ID, "treegen_object"), OBJECT);
+            helper.register(new Identifier(FantasyMapGenerator.MOD_ID, "treegen_mix"), MIX);
+        });
+    }
 
-        ServerLifecycleEvents.END_DATA_PACK_RELOAD.register((server, resources, ok) -> TreeShapes.clear());
-        ServerLifecycleEvents.SERVER_STOPPED.register(server -> {
+    public static void register() {
+        // no player = the sync after /reload
+        MinecraftForge.EVENT_BUS.addListener((OnDatapackSyncEvent event) -> {
+            if (event.getPlayer() == null) {
+                TreeShapes.clear();
+            }
+        });
+        MinecraftForge.EVENT_BUS.addListener((ServerStoppedEvent event) -> {
             logStats();
             names = null;
             TreeShapes.clear();
@@ -69,7 +79,7 @@ public final class TreeFeatures {
             PlacedObjects.clearAll();
         });
 
-        CommandRegistrationCallback.EVENT.register((dispatcher, access, env) -> dispatcher.register(
+        MinecraftForge.EVENT_BUS.addListener((RegisterCommandsEvent event) -> event.getDispatcher().register(
                 literal("fmg").then(literal("trees")
                         .requires(src -> src.hasPermissionLevel(2))
                         .then(literal("stats").executes(ctx -> stats(ctx.getSource())))
@@ -86,7 +96,7 @@ public final class TreeFeatures {
         if (context.getGenerator() instanceof ImageMapChunkGenerator fmg) {
             String palettes = MapImageCache.get(fmg.mapInfo()).profile().surfacePalettes;
             if (palettes != null) {
-                set = SurfaceSet.get(palettes, FabricLoader.getInstance().getConfigDir());
+                set = SurfaceSet.get(palettes, FMLPaths.CONFIGDIR.get());
             }
         }
         TreeGround ground = new TreeGround(set, context.getWorld().getBottomY());

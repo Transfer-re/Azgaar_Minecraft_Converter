@@ -1,9 +1,12 @@
 package com.example.border;
 
-import net.fabricmc.fabric.api.networking.v1.FabricPacket;
-import net.fabricmc.fabric.api.networking.v1.PacketType;
 import net.minecraft.network.PacketByteBuf;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
+import net.minecraftforge.network.NetworkDirection;
+import net.minecraftforge.network.NetworkRegistry;
+import net.minecraftforge.network.PacketDistributor;
+import net.minecraftforge.network.simple.SimpleChannel;
 
 /**
  * Server-to-client packet carrying border overlay data.
@@ -16,10 +19,31 @@ public record BorderDataPayload(
         String name,
         float[] xs,
         float[] zs
-) implements FabricPacket {
+) {
 
-    public static final PacketType<BorderDataPayload> TYPE = PacketType.create(
-            new Identifier("fantasymapgenerator", "border_data"), BorderDataPayload::read);
+    private static final String PROTOCOL = "1";
+    // optional on both ends: a client or server without the mod can still connect
+    private static final SimpleChannel CHANNEL = NetworkRegistry.newSimpleChannel(
+            new Identifier("fantasymapgenerator", "border_data"), () -> PROTOCOL,
+            NetworkRegistry.acceptMissingOr(PROTOCOL), NetworkRegistry.acceptMissingOr(PROTOCOL));
+
+    public static void register() {
+        CHANNEL.messageBuilder(BorderDataPayload.class, 0, NetworkDirection.PLAY_TO_CLIENT)
+                .encoder(BorderDataPayload::write)
+                .decoder(BorderDataPayload::read)
+                // the lambda body only loads the client class when a packet
+                // arrives, so a dedicated server never touches it
+                .consumerMainThread((payload, context) -> ClientBorderOverlay.receive(payload))
+                .add();
+    }
+
+    public static boolean canSend(ServerPlayerEntity player) {
+        return CHANNEL.isRemotePresent(player.networkHandler.connection);
+    }
+
+    public static void send(ServerPlayerEntity player, BorderDataPayload payload) {
+        CHANNEL.send(PacketDistributor.PLAYER.with(() -> player), payload);
+    }
 
     private static BorderDataPayload read(PacketByteBuf buf) {
         boolean enabled = buf.readBoolean();
@@ -43,7 +67,6 @@ public record BorderDataPayload(
         return new BorderDataPayload(true, modeId, regionId, colorRgb, name, xs, zs);
     }
 
-    @Override
     public void write(PacketByteBuf buf) {
         buf.writeBoolean(enabled);
         if (!enabled) {
@@ -63,8 +86,4 @@ public record BorderDataPayload(
         }
     }
 
-    @Override
-    public PacketType<?> getType() {
-        return TYPE;
-    }
 }

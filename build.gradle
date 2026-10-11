@@ -1,5 +1,8 @@
 plugins {
-	id 'net.fabricmc.fabric-loom-remap' version "${loom_version}"
+	// Architectury Loom builds Forge mods with Yarn names, so the source stays
+	// in the same mappings as the Fabric branch (fabric-1.20.1) and a port
+	// between them only swaps the Fabric API calls for Forge events.
+	id 'dev.architectury.loom' version "${loom_version}"
 	id 'maven-publish'
 }
 
@@ -12,72 +15,66 @@ base {
 
 repositories {
 	// Add repositories to retrieve artifacts from in here.
-	// You should only use this when depending on other mods because
-	// Loom adds the essential maven repositories to download Minecraft and libraries from automatically.
-	// See https://docs.gradle.org/current/userguide/declaring_repositories.html
-	// for more information about repositories.
+	// Loom adds the Minecraft, Forge and Architectury repositories itself.
+	exclusiveContent {
+		forRepository {
+			maven {
+				name = 'Modrinth'
+				url = 'https://api.modrinth.com/maven'
+			}
+		}
+		filter {
+			includeGroup 'maven.modrinth'
+		}
+	}
 }
 
 loom {
-	splitEnvironmentSourceSets()
+	forge {
+		mixinConfig "fantasymapgenerator.mixins.json"
+		mixinConfig "fantasymapgenerator.client.mixins.json"
+	}
 
-	// This branch is Minecraft 1.20.1: its dev runs get their own folder so
-	// their mods (Conquest Reforged) and worlds never mix with the 1.21.4
-	// branch's. Run folders live next to the repo (MapGeneratorMods/runs/),
-	// not in it, so worlds and run mods stay out of the working tree.
+	// This branch is Minecraft 1.20.1 on Forge, with the Conquest Reforged
+	// content like fabric-1.20.1. Run folders live next to the repo
+	// (MapGeneratorMods/runs/), not in it, so worlds and run mods stay out of
+	// the working tree.
 	runs {
 		client {
-			runDir = "../runs/fabric-1.20.1"
-			// the ArdaCraft mod set in runs/fabric-1.20.1/mods needs a modpack-sized heap;
-			// 8G covers single-player (client + integrated server) without
-			// Distant Horizons -- more than that runs a 16 GB machine out of RAM
+			runDir = "../runs/forge-1.20.1"
+			// a Conquest modpack needs a modpack-sized heap; 8G covers
+			// single-player without running a 16 GB machine out of RAM
 			vmArg "-Xmx8G"
-			// Loom runs 1.20.1 on LWJGL 3.3.2-snapshot under Java 21; Sodium 0.5
-			// refuses anything but 3.3.1 unless this check is switched off
-			vmArg "-Dsodium.checks.issue2561=false"
 		}
 		server {
-			// a dedicated server can't load the client-only mods, so it gets its
-			// own folder: runs/fabric-1.20.1-server/mods is the server-side subset of
-			// runs/fabric-1.20.1/mods, and the folder is what gets copied to a real server
-			runDir = "../runs/fabric-1.20.1-server"
-			// enough for local testing with one player; a pregen box wants 8-10G
+			// a dedicated server gets its own folder, which is what gets
+			// copied to a real server
+			runDir = "../runs/forge-1.20.1-server"
 			vmArg "-Xmx4G"
 		}
-	}
-
-	mods {
-		"fantasymapgenerator" {
-			sourceSet sourceSets.main
-			sourceSet sourceSets.client
-		}
-	}
-
-}
-
-fabricApi {
-	configureDataGeneration {
-		client = true
 	}
 }
 
 dependencies {
 	// To change the versions see the gradle.properties file
 	minecraft "com.mojang:minecraft:${project.minecraft_version}"
-	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 	mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
-	// Fabric API. This is technically optional, but you probably want it anyway.
-	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
-	
-	// Gson for JSON parsing
-	implementation 'com.google.code.gson:gson:2.10.1'
-	
+	forge "net.minecraftforge:forge:${project.forge_version}"
+
+	// Forge 1.20.1 doesn't ship MixinExtras (Fabric Loader and NeoForge do), so
+	// it goes into the jar (jar-in-jar) for @ModifyReturnValue / @WrapOperation
+	compileOnly(annotationProcessor("io.github.llamalad7:mixinextras-common:${project.mixinextras_version}"))
+	implementation(include("io.github.llamalad7:mixinextras-forge:${project.mixinextras_version}"))
+
+	// Conquest Reforged in the dev runs only. Forge dev runs don't remap jars
+	// dropped into runs/*/mods (Fabric's do), so it has to come through Loom.
+	modLocalRuntime "maven.modrinth:conquest-reforged:${project.conquest_version}"
 }
 
 processResources {
 	inputs.property "version", project.version
 
-	filesMatching("fabric.mod.json") {
+	filesMatching("META-INF/mods.toml") {
 		expand "version": inputs.properties.version
 	}
 

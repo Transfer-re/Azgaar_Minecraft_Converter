@@ -14,8 +14,10 @@ import com.example.worldmap.runtime.MapImageCache;
 import com.example.worldmap.runtime.MapImageData;
 import com.example.worldgen.ImageMapChunkGenerator;
 
-import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
-import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
+import net.minecraft.server.MinecraftServer;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraft.network.packet.s2c.play.SubtitleS2CPacket;
 import net.minecraft.network.packet.s2c.play.TitleFadeS2CPacket;
 import net.minecraft.network.packet.s2c.play.TitleS2CPacket;
@@ -40,7 +42,11 @@ public final class PlayerRegionTracker {
     }
 
     public static void register() {
-        ServerTickEvents.END_SERVER_TICK.register(server -> {
+        MinecraftForge.EVENT_BUS.addListener((TickEvent.ServerTickEvent event) -> {
+            if (event.phase != TickEvent.Phase.END) {
+                return;
+            }
+            MinecraftServer server = event.getServer();
             if (server.getTicks() % CHECK_INTERVAL_TICKS != 0) {
                 return;
             }
@@ -50,8 +56,8 @@ public final class PlayerRegionTracker {
             }
         });
 
-        ServerPlayConnectionEvents.DISCONNECT.register((handler, server) -> {
-            UUID id = handler.player.getUuid();
+        MinecraftForge.EVENT_BUS.addListener((PlayerEvent.PlayerLoggedOutEvent event) -> {
+            UUID id = event.getEntity().getUuid();
             LAST_STATE.remove(id);
             LAST_PROVINCE.remove(id);
         });

@@ -611,7 +611,7 @@ public final class ImageMapChunkGenerator extends ChunkGenerator {
             return null;
         }
         com.example.surface.SurfaceSet set = com.example.surface.SurfaceSet.get(profile.surfacePalettes,
-                net.fabricmc.loader.api.FabricLoader.getInstance().getConfigDir());
+                net.minecraftforge.fml.loading.FMLPaths.CONFIGDIR.get());
         if (set == null) {
             return null;
         }
