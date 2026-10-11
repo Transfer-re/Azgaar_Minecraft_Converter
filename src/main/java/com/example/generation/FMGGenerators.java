@@ -11,9 +11,9 @@ import net.minecraft.util.Identifier;
 public class FMGGenerators {
 
         public static final Identifier IMAGE_MAP_GENERATOR_ID =
-            new Identifier(FantasyMapGenerator.MOD_ID, "image_map");
+            Identifier.of(FantasyMapGenerator.MOD_ID, "image_map");
         public static final Identifier COLOR_MAP_BIOME_SOURCE_ID =
-            new Identifier(FantasyMapGenerator.MOD_ID, "color_map");
+            Identifier.of(FantasyMapGenerator.MOD_ID, "color_map");
 
     public static void register() {
         FantasyMapGenerator.LOGGER.info("Registering FMG worldgen codecs...");

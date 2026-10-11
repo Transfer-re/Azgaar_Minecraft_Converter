@@ -13,20 +13,23 @@ import com.example.fmg.FMGMapData;
 import com.example.profile.FmgContentProfile;
 import com.example.profile.FmgProfiles;
 import com.example.worldmap.runtime.FMGMapDataCache;
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.structure.StructureLiquidSettings;
 import net.minecraft.structure.pool.StructurePoolBasedGenerator;
+import net.minecraft.structure.pool.alias.StructurePoolAliasLookup;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.Heightmap;
 import net.minecraft.world.biome.Biome;
+import net.minecraft.world.gen.structure.DimensionPadding;
 import net.minecraft.world.gen.structure.Structure;
 import net.minecraft.world.gen.structure.StructureType;
 
@@ -38,12 +41,12 @@ import net.minecraft.world.gen.structure.StructureType;
  */
 public final class BurgVillageStructure extends Structure {
 
-    public static final Identifier ID = new Identifier("fantasymapgenerator", "burg_village");
+    public static final Identifier ID = Identifier.of("fantasymapgenerator", "burg_village");
 
     /** Registered in {@link com.example.generation.FMGGenerators#register()}. */
     public static StructureType<BurgVillageStructure> TYPE;
 
-    public static final Codec<BurgVillageStructure> CODEC = RecordCodecBuilder.create(instance ->
+    public static final MapCodec<BurgVillageStructure> CODEC = RecordCodecBuilder.mapCodec(instance ->
             instance.group(
                     Structure.configCodecBuilder(instance)
             ).apply(instance, BurgVillageStructure::new)
@@ -143,13 +146,16 @@ public final class BurgVillageStructure extends Structure {
             // We already computed an explicit Y for the start position. Passing a heightmap here
             // can cause the jigsaw generator to re-snap or offset the Y again.
             Optional.empty(),
-                maxDistanceFromCenter
+                maxDistanceFromCenter,
+                StructurePoolAliasLookup.EMPTY,
+                DimensionPadding.NONE,
+                StructureLiquidSettings.APPLY_WATERLOGGING
         );
     }
 
     private static BurgPos pickDeterministicBurg(List<BurgPos> burgs, Random random) {
         if (burgs.size() == 1) {
-            return burgs.get(0);
+            return burgs.getFirst();
         }
         // deterministic, but still uses the chunk's seeded random
         return burgs.get(Math.floorMod(random.nextInt(), burgs.size()));

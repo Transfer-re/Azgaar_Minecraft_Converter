@@ -5,11 +5,13 @@ import org.slf4j.LoggerFactory;
 
 import com.example.command.FMGCommands;
 import com.example.generation.FMGGenerators;
+import com.example.border.BorderDataPayload;
 import com.example.worldmap.runtime.PlayerRegionTracker;
 
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerWorldEvents;
+import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.fabricmc.fabric.api.resource.ResourcePackActivationType;
 import net.fabricmc.loader.api.FabricLoader;
@@ -27,6 +29,7 @@ public class FantasyMapGenerator implements ModInitializer {
 	@Override
 	public void onInitialize() {
 		LOGGER.info("Bootstrapping Fantasy Map Generator");
+		PayloadTypeRegistry.playS2C().register(BorderDataPayload.ID, BorderDataPayload.CODEC);
 		FMGGenerators.register();
 		FMGCommands.register();
 		// TreeGenerator objects as worldgen features (placed from the biome JSONs)
@@ -72,7 +75,7 @@ public class FantasyMapGenerator implements ModInitializer {
 		
 		FabricLoader.getInstance().getModContainer(FantasyMapGenerator.MOD_ID).ifPresent(container -> {
 			ResourceManagerHelper.registerBuiltinResourcePack(
-				new Identifier(FantasyMapGenerator.MOD_ID, "builtin"),
+				Identifier.of(FantasyMapGenerator.MOD_ID, "builtin"),
 				container, Text.literal("Fantasy Map Generator"),
 				ResourcePackActivationType.DEFAULT_ENABLED
 			);

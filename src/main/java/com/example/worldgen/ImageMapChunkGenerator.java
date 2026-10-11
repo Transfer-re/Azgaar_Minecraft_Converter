@@ -17,7 +17,6 @@ import com.example.mixin.NoiseConfigAccessor;
 import com.example.worldmap.MapInfo;
 import com.example.worldmap.runtime.MapImageCache;
 import com.example.worldmap.runtime.MapImageData;
-import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
@@ -55,7 +54,7 @@ import net.minecraft.world.gen.noise.NoiseRouter;
  */
 public final class ImageMapChunkGenerator extends ChunkGenerator {
 
-    public static final Codec<ImageMapChunkGenerator> CODEC = RecordCodecBuilder.create(instance ->
+    public static final MapCodec<ImageMapChunkGenerator> CODEC = RecordCodecBuilder.mapCodec(instance ->
             instance.group(
                     BiomeSource.CODEC.fieldOf("biome_source").forGetter(ChunkGenerator::getBiomeSource),
                         RegistryElementCodec.of(
@@ -228,7 +227,7 @@ public final class ImageMapChunkGenerator extends ChunkGenerator {
     }
 
     @Override
-    protected Codec<? extends ChunkGenerator> getCodec() {
+    protected MapCodec<? extends ChunkGenerator> getCodec() {
         return CODEC;
     }
 
@@ -320,10 +319,10 @@ public final class ImageMapChunkGenerator extends ChunkGenerator {
     }
 
     @Override
-    public CompletableFuture<Chunk> populateNoise(java.util.concurrent.Executor executor, Blender blender,
-            NoiseConfig noiseConfig, StructureAccessor structureAccessor, Chunk chunk) {
+    public CompletableFuture<Chunk> populateNoise(Blender blender, NoiseConfig noiseConfig,
+            StructureAccessor structureAccessor, Chunk chunk) {
         patchNoiseRouterOnce(noiseConfig);
-        return delegate.populateNoise(executor, blender, noiseConfig, structureAccessor, chunk);
+        return delegate.populateNoise(blender, noiseConfig, structureAccessor, chunk);
     }
 
     @Override
@@ -338,7 +337,7 @@ public final class ImageMapChunkGenerator extends ChunkGenerator {
         // Burg-driven village placement is handled via a custom structure.
         var villagesKey = net.minecraft.registry.RegistryKey.of(
                 RegistryKeys.STRUCTURE_SET,
-                new Identifier("minecraft", "villages")
+                Identifier.of("minecraft", "villages")
         );
         var filtered = FilteringRegistryWrapper.excludingKey(structureSetRegistry, villagesKey);
         this.worldSeed = seed;

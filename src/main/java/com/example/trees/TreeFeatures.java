@@ -57,8 +57,8 @@ public final class TreeFeatures {
     }
 
     public static void register() {
-        Registry.register(Registries.FEATURE, new Identifier(FantasyMapGenerator.MOD_ID, "treegen_object"), OBJECT);
-        Registry.register(Registries.FEATURE, new Identifier(FantasyMapGenerator.MOD_ID, "treegen_mix"), MIX);
+        Registry.register(Registries.FEATURE, Identifier.of(FantasyMapGenerator.MOD_ID, "treegen_object"), OBJECT);
+        Registry.register(Registries.FEATURE, Identifier.of(FantasyMapGenerator.MOD_ID, "treegen_mix"), MIX);
 
         ServerLifecycleEvents.END_DATA_PACK_RELOAD.register((server, resources, ok) -> TreeShapes.clear());
         ServerLifecycleEvents.SERVER_STOPPED.register(server -> {

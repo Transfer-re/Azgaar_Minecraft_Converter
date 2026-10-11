@@ -8,7 +8,6 @@ import com.example.worldmap.runtime.MapImageCache;
 import com.example.worldmap.runtime.MapImageData;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.DynamicOps;
-import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.MapLike;
 import com.mojang.serialization.RecordBuilder;
@@ -28,7 +27,7 @@ import net.minecraft.world.biome.source.util.MultiNoiseUtil;
  */
 public final class ColorMapBiomeSource extends BiomeSource {
 
-    private static final MapCodec<ColorMapBiomeSource> MAP_CODEC = new MapCodec<>() {
+    public static final MapCodec<ColorMapBiomeSource> CODEC = new MapCodec<>() {
         @Override
         public <T> DataResult<ColorMapBiomeSource> decode(DynamicOps<T> ops, MapLike<T> input) {
             if (!(ops instanceof RegistryOps<?> registryOps)) {
@@ -100,8 +99,6 @@ public final class ColorMapBiomeSource extends BiomeSource {
         }
     };
 
-    public static final Codec<ColorMapBiomeSource> CODEC = MAP_CODEC.codec();
-
     private final RegistryEntryLookup<Biome> biomeLookup;
     private final MapInfo mapInfo;
 
@@ -161,7 +158,7 @@ public final class ColorMapBiomeSource extends BiomeSource {
     }
 
     @Override
-    protected Codec<? extends BiomeSource> getCodec() {
+    protected MapCodec<? extends BiomeSource> getCodec() {
         return CODEC;
     }
 

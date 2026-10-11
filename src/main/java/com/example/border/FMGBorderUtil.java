@@ -10,7 +10,7 @@ public final class FMGBorderUtil {
         if (raw == null || raw.isBlank()) {
             return fallbackRgb;
         }
-        TextColor parsed = TextColor.parse(raw);
+        TextColor parsed = TextColor.parse(raw).result().orElse(null);
         return parsed != null ? parsed.getRgb() : fallbackRgb;
     }
 }

@@ -38,7 +38,7 @@ public final class FmgWorldCreateScreen extends Screen {
 
     public static final RegistryKey<net.minecraft.world.gen.WorldPreset> FMG_PRESET_KEY =
             RegistryKey.of(RegistryKeys.WORLD_PRESET,
-                    new Identifier(FantasyMapGenerator.MOD_ID, "fmg_test"));
+                    Identifier.of(FantasyMapGenerator.MOD_ID, "fmg_test"));
 
     // Legacy terrain keeps the bundled fmg_overworld_tall range; blended terrain
     // picks a taller dimension type from FmgHeightTiers.
@@ -230,7 +230,7 @@ public final class FmgWorldCreateScreen extends Screen {
         if (id == null) {
             FantasyMapGenerator.LOGGER.warn("Profile '{}' has an unparseable noiseSettings '{}'; using the default",
                     profile.id, profile.noiseSettings);
-            return new Identifier(FantasyMapGenerator.MOD_ID, "fmg_overworld_base");
+            return Identifier.of(FantasyMapGenerator.MOD_ID, "fmg_overworld_base");
         }
         return id;
     }

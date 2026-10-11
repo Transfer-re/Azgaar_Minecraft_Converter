@@ -237,7 +237,7 @@ public final class FmgContentProfile {
                 LOGGER.warn("Profile '{}': unparseable biome id '{}' (using {})", this.id, raw, biomes.fallback);
                 Identifier fallback = Identifier.tryParse(biomes.fallback);
                 return RegistryKey.of(RegistryKeys.BIOME,
-                        fallback != null ? fallback : new Identifier("plains"));
+                        fallback != null ? fallback : Identifier.ofVanilla("plains"));
             }
             return RegistryKey.of(RegistryKeys.BIOME, parsed);
         });
@@ -463,114 +463,6 @@ public final class FmgContentProfile {
                 w("minecraft:gravel", 6), w("minecraft:sand", 2), w("minecraft:clay", 1)));
         p.blocks.riverBed.put("desert", pool(w("minecraft:sand", 1)));
 
-        return p;
-    }
-
-    /**
-     * Revision of {@link #conquest()}; bump when its defaults change
-     * (3: biomeEdgeBlend, 4: structureStandIns).
-     */
-    public static final int CONQUEST_VERSION = 4;
-
-    private static final String CQ = "fantasymapgenerator:conquest/";
-
-    /**
-     * The Conquest Reforged profile: the 29 Conquest biomes
-     * ({@code data/fantasymapgenerator/worldgen/biome/conquest/}) over the Azgaar
-     * categories, and a layered ground built from Conquest layer blocks
-     * ({@code surface/conquest.json}). Oceans, beaches and rivers keep their
-     * vanilla biomes; their ground comes from the sea palettes.
-     */
-    public static FmgContentProfile conquest() {
-        FmgContentProfile p = vanilla();
-        p.id = "conquest";
-        p.displayName = "Conquest Reforged";
-        p.version = CONQUEST_VERSION;
-        p.requiresMod = "conquest";
-        p.noiseSettings = "fantasymapgenerator:fmg_overworld_conquest";
-        p.townStructureRoot = "towns_conquest/";
-        p.surfacePalettes = "conquest";
-        p.biomeEdgeWarp = 18.0;
-        p.biomeEdgeBlend = 16.0;
-
-        Map<String, List<Weighted>> pools = p.biomes.pools;
-        pools.clear();
-        pools.put("grassland", pool(
-                w(CQ + "meadow", 0.45), w(CQ + "moorland", 0.30), w(CQ + "downland", 0.25)));
-        pools.put("temperatedeciduousforest", pool(
-                w(CQ + "oak_woodland", 0.26), w(CQ + "mixed_broadleaf_forest", 0.20),
-                w(CQ + "beech_forest", 0.14), w(CQ + "autumn_broadleaf_forest", 0.12),
-                w(CQ + "birch_wood", 0.10), w(CQ + "mixed_conifer_broadleaf", 0.10),
-                w(CQ + "aspen_grove", 0.08)));
-        pools.put("taiga", pool(
-                w(CQ + "spruce_taiga", 0.30), w(CQ + "pine_taiga", 0.20), w(CQ + "larch_taiga", 0.15),
-                w(CQ + "autumn_larch_taiga", 0.10), w(CQ + "old_growth_spruce", 0.10),
-                w(CQ + "mixed_conifer_broadleaf", 0.05), w(CQ + "birch_wood", 0.05),
-                w(CQ + "dead_taiga", 0.05)));
-        pools.put("temperaterainforest", pool(
-                w(CQ + "mossy_conifer_forest", 0.80), w(CQ + "old_growth_spruce", 0.20)));
-        pools.put("savanna", pool(w(CQ + "savanna", 1.0)));
-        pools.put("hotdesert", pool(w(CQ + "hot_desert", 1.0)));
-        pools.put("mesa", pool(w(CQ + "hot_desert", 1.0)));
-        pools.put("colddesert", pool(w(CQ + "cold_steppe", 1.0)));
-        pools.put("steppe", pool(w(CQ + "cold_steppe", 0.7), w(CQ + "savanna", 0.3)));
-        pools.put("tropicalseasonalforest", pool(
-                w(CQ + "tropical_seasonal_forest", 0.8), w(CQ + "savanna", 0.2)));
-        pools.put("tropicalrainforest", pool(w(CQ + "tropical_rainforest", 1.0)));
-        // "wetland" is a weighted pool here; the temperature rule below only
-        // catches the other spellings
-        pools.put("wetland", pool(
-                w(CQ + "sphagnum_bog", 0.40), w(CQ + "fen_reedbed", 0.35), w(CQ + "willow_carr", 0.25)));
-        p.biomes.wetlandNames = new ArrayList<>(List.of("swamp", "marsh"));
-        p.biomes.wetland.cool = CQ + "sphagnum_bog";
-        p.biomes.wetland.warm = CQ + "willow_carr";
-
-        p.biomes.guaranteedRares.clear();
-        Map<String, List<Rung>> ladders = p.biomes.elevationLadders;
-        ladders.clear();
-        ladders.put("tundra", new ArrayList<>(List.of(
-                new Rung(CQ + "shrub_tundra", 40), new Rung(CQ + "lichen_tundra", 60),
-                new Rung(CQ + "alpine_scree", Double.MAX_VALUE))));
-        ladders.put("glacier", new ArrayList<>(List.of(new Rung(CQ + "glacier", Double.MAX_VALUE))));
-        List<Rung> mountain = new ArrayList<>(List.of(
-                new Rung(CQ + "spruce_taiga", 35), new Rung(CQ + "larch_taiga", 50),
-                new Rung(CQ + "alpine_scree", 70), new Rung(CQ + "glacier", Double.MAX_VALUE)));
-        ladders.put("mountain", mountain);
-        ladders.put("highlands", new ArrayList<>(mountain));
-        p.biomes.fallback = CQ + "meadow";
-
-        // the vanilla biome each one stands in for, for structures; mostly what
-        // the vanilla profile would have put on the same ground
-        Map<String, List<String>> standIns = p.biomes.structureStandIns;
-        standIns.put(CQ + "meadow", List.of("minecraft:meadow"));
-        standIns.put(CQ + "downland", List.of("minecraft:plains"));
-        standIns.put(CQ + "moorland", List.of("minecraft:plains", "minecraft:windswept_hills"));
-        standIns.put(CQ + "cold_steppe", List.of("minecraft:plains", "minecraft:windswept_hills"));
-        standIns.put(CQ + "oak_woodland", List.of("minecraft:forest"));
-        standIns.put(CQ + "mixed_broadleaf_forest", List.of("minecraft:forest"));
-        standIns.put(CQ + "beech_forest", List.of("minecraft:forest"));
-        standIns.put(CQ + "autumn_broadleaf_forest", List.of("minecraft:forest"));
-        standIns.put(CQ + "birch_wood", List.of("minecraft:birch_forest"));
-        standIns.put(CQ + "aspen_grove", List.of("minecraft:birch_forest"));
-        standIns.put(CQ + "mixed_conifer_broadleaf", List.of("minecraft:forest", "minecraft:taiga"));
-        standIns.put(CQ + "spruce_taiga", List.of("minecraft:taiga"));
-        standIns.put(CQ + "pine_taiga", List.of("minecraft:taiga"));
-        standIns.put(CQ + "larch_taiga", List.of("minecraft:taiga"));
-        standIns.put(CQ + "autumn_larch_taiga", List.of("minecraft:taiga"));
-        standIns.put(CQ + "dead_taiga", List.of("minecraft:taiga"));
-        standIns.put(CQ + "old_growth_spruce", List.of("minecraft:old_growth_spruce_taiga"));
-        standIns.put(CQ + "mossy_conifer_forest", List.of("minecraft:old_growth_spruce_taiga"));
-        standIns.put(CQ + "savanna", List.of("minecraft:savanna"));
-        standIns.put(CQ + "hot_desert", List.of("minecraft:desert"));
-        standIns.put(CQ + "tropical_seasonal_forest", List.of("minecraft:sparse_jungle"));
-        standIns.put(CQ + "tropical_rainforest", List.of("minecraft:jungle"));
-        standIns.put(CQ + "sphagnum_bog", List.of("minecraft:swamp"));
-        standIns.put(CQ + "fen_reedbed", List.of("minecraft:swamp"));
-        standIns.put(CQ + "willow_carr", List.of("minecraft:swamp"));
-        standIns.put(CQ + "shrub_tundra", List.of("minecraft:snowy_plains"));
-        standIns.put(CQ + "lichen_tundra", List.of("minecraft:snowy_plains"));
-        standIns.put(CQ + "alpine_scree", List.of("minecraft:stony_peaks"));
-        standIns.put(CQ + "glacier", List.of("minecraft:snowy_slopes", "minecraft:frozen_peaks"));
         return p;
     }
 }

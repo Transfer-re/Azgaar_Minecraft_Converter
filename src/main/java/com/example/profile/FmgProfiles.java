@@ -23,8 +23,7 @@ import net.fabricmc.loader.api.FabricLoader;
 /**
  * Loads the content profiles in {@code config/fantasymapgenerator/profiles/}.
  *
- * <p>The built-in {@code vanilla} and {@code conquest} profiles are written out
- * on first run so they can be edited in place; any other {@code *.json} dropped
+ * <p>The built-in {@code vanilla} profile is written out on first run so they can be edited in place; any other {@code *.json} dropped
  * in that folder is picked up as an extra profile. A built-in file whose
  * {@code version} is older than the mod's is replaced (the old one is kept as
  * {@code <id>.json.v<N>.bak}). A profile whose {@code requiresMod} is not
@@ -108,7 +107,6 @@ public final class FmgProfiles {
         try {
             Files.createDirectories(dir);
             writeIfOutdated(dir.resolve(vanilla.id + ".json"), vanilla);
-            writeIfOutdated(dir.resolve("conquest.json"), FmgContentProfile.conquest());
         } catch (IOException ex) {
             LOGGER.warn("could not write default FMG profiles to {}", dir, ex);
         }

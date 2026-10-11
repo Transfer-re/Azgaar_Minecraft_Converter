@@ -66,7 +66,9 @@ public final class BurgVillageSpawner {
 
     public static void register() {
         ServerChunkEvents.CHUNK_LOAD.register((world, chunk) -> {
-            ServerWorld serverWorld = world;
+            if (!(world instanceof ServerWorld serverWorld)) {
+                return;
+            }
 
             if (!(serverWorld.getChunkManager().getChunkGenerator() instanceof ImageMapChunkGenerator fmgGenerator)) {
                 return;
@@ -216,7 +218,7 @@ public final class BurgVillageSpawner {
 
     private static BurgVillageState getState(ServerWorld world) {
         PersistentStateManager mgr = world.getPersistentStateManager();
-        return mgr.getOrCreate(BurgVillageState::fromNbt, BurgVillageState::new, STATE_KEY);
+        return mgr.getOrCreate(BurgVillageState.TYPE, STATE_KEY);
     }
 
     private static String pickVillageStructureId(ServerWorld world, FMGMapData mapData, BlockPos pos, BurgVillageConfig.Config config, int burgId) {

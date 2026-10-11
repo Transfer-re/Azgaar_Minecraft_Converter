@@ -39,20 +39,21 @@ public final class ClientBorderOverlay {
     }
 
     public static void registerClient() {
-        // FabricPacket handlers already run on the client thread
-        ClientPlayNetworking.registerGlobalReceiver(BorderDataPayload.TYPE, (payload, player, responseSender) -> {
-            if (!payload.enabled()) {
-                clear();
-                return;
-            }
+        ClientPlayNetworking.registerGlobalReceiver(BorderDataPayload.ID, (payload, context) -> {
+            context.client().execute(() -> {
+                if (!payload.enabled()) {
+                    clear();
+                    return;
+                }
 
-            enabled = true;
-            mode = BorderMode.fromId(payload.modeId());
-            regionId = payload.regionId();
-            colorRgb = payload.colorRgb();
-            name = payload.name();
-            xs = payload.xs();
-            zs = payload.zs();
+                enabled = true;
+                mode = BorderMode.fromId(payload.modeId());
+                regionId = payload.regionId();
+                colorRgb = payload.colorRgb();
+                name = payload.name();
+                xs = payload.xs();
+                zs = payload.zs();
+            });
         });
 
         WorldRenderEvents.LAST.register(context -> {
@@ -134,8 +135,7 @@ public final class ClientBorderOverlay {
 
                     BufferBuilder builder = builderRef[0];
                     if (builder == null) {
-                        builder = Tessellator.getInstance().getBuffer();
-                        builder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_COLOR);
+                        builder = Tessellator.getInstance().begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_COLOR);
                         builderRef[0] = builder;
                     }
 
@@ -342,9 +342,9 @@ public final class ClientBorderOverlay {
         float fy0 = (float) yBottom;
         float fy1 = (float) yTop;
 
-        builder.vertex(matrix, fx0, fy0, fz0).color(r, g, b, a).next();
-        builder.vertex(matrix, fx1, fy0, fz1).color(r, g, b, a).next();
-        builder.vertex(matrix, fx1, fy1, fz1).color(r, g, b, a).next();
-        builder.vertex(matrix, fx0, fy1, fz0).color(r, g, b, a).next();
+        builder.vertex(matrix, fx0, fy0, fz0).color(r, g, b, a);
+        builder.vertex(matrix, fx1, fy0, fz1).color(r, g, b, a);
+        builder.vertex(matrix, fx1, fy1, fz1).color(r, g, b, a);
+        builder.vertex(matrix, fx0, fy1, fz0).color(r, g, b, a);
     }
 }

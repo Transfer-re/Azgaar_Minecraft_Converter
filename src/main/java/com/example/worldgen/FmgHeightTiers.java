@@ -38,6 +38,6 @@ public final class FmgHeightTiers {
 
     public static RegistryKey<DimensionType> dimensionType(int top) {
         String path = top == 400 ? "fmg_overworld_tall" : "fmg_overworld_h" + top;
-        return RegistryKey.of(RegistryKeys.DIMENSION_TYPE, new Identifier(FantasyMapGenerator.MOD_ID, path));
+        return RegistryKey.of(RegistryKeys.DIMENSION_TYPE, Identifier.of(FantasyMapGenerator.MOD_ID, path));
     }
 }

@@ -45,7 +45,7 @@ public final class FmgNoiseCaves {
     }
 
     private static RegistryKey<DensityFunction> df(String path) {
-        return RegistryKey.of(RegistryKeys.DENSITY_FUNCTION, new Identifier(path));
+        return RegistryKey.of(RegistryKeys.DENSITY_FUNCTION, Identifier.ofVanilla(path));
     }
 
     private static final RegistryKey<DensityFunction> ENTRANCES = df("overworld/caves/entrances");
