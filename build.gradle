@@ -27,6 +27,15 @@ repositories {
 			includeGroup 'maven.modrinth'
 		}
 	}
+	maven {
+		// Forgified Fabric API, published module by module
+		name = 'Sinytra'
+		url = 'https://maven.su5ed.dev/releases'
+		content {
+			includeGroupByRegex 'dev\\.su5ed\\.sinytra.*'
+			includeGroupByRegex 'org\\.sinytra.*'
+		}
+	}
 }
 
 loom {
@@ -69,6 +78,9 @@ dependencies {
 	// Conquest Reforged in the dev runs only. Forge dev runs don't remap jars
 	// dropped into runs/*/mods (Fabric's do), so it has to come through Loom.
 	modLocalRuntime "maven.modrinth:conquest-reforged:${project.conquest_version}"
+	// ...and the same goes for the Forgified Fabric API that Conquest Reforged
+	// bundles as a nested jar: its client models need fabric-renderer-api
+	modLocalRuntime "dev.su5ed.sinytra.fabric-api:fabric-api:${project.forgified_fabric_api_version}"
 }
 
 processResources {
