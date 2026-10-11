@@ -162,7 +162,9 @@
       "minecraft:spring_lava"
     ],
     [
-      "minecraft:glow_lichen"
+      "minecraft:glow_lichen",
+      "fantasymapgenerator:treegen/shrub_tundra/dead",
+      "fantasymapgenerator:treegen/shrub_tundra/shrubs"
     ],
     []
   ]

@@ -186,7 +186,11 @@
       "minecraft:spring_lava"
     ],
     [
-      "minecraft:glow_lichen"
+      "minecraft:glow_lichen",
+      "fantasymapgenerator:treegen/mossy_conifer_forest/trees",
+      "fantasymapgenerator:treegen/mossy_conifer_forest/dead",
+      "fantasymapgenerator:treegen/mossy_conifer_forest/logs",
+      "fantasymapgenerator:treegen/mossy_conifer_forest/shrubs"
     ],
     []
   ]

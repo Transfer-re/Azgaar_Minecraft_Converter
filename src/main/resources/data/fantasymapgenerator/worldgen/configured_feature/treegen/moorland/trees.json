@@ -1,0 +1,67 @@
+{
+ "type": "fantasymapgenerator:treegen_mix",
+ "config": {
+  "layer": "trees",
+  "spacing": 0.9,
+  "attempts": 5,
+  "slope": 3,
+  "gradient": 1.7,
+  "entries": [
+   {
+    "preset": "fantasymapgenerator:treegen/preset/rowan",
+    "weight": 2.0,
+    "sizes": {
+     "tiny": 1.0,
+     "small": 2.0,
+     "medium": 1.0
+    },
+    "ground": [
+     "grass",
+     "floor",
+     "soil",
+     "moss",
+     "wet",
+     "gravel",
+     "rock"
+    ]
+   },
+   {
+    "preset": "fantasymapgenerator:treegen/preset/mountain_birch",
+    "weight": 2.0,
+    "sizes": {
+     "tiny": 1.0,
+     "small": 2.0,
+     "medium": 1.0
+    },
+    "ground": [
+     "grass",
+     "floor",
+     "soil",
+     "moss",
+     "wet",
+     "gravel",
+     "rock"
+    ]
+   },
+   {
+    "preset": "fantasymapgenerator:treegen/preset/crag_pine",
+    "weight": 0.5,
+    "sizes": {
+     "tiny": 1.0,
+     "small": 2.0,
+     "medium": 1.0
+    },
+    "ground": [
+     "grass",
+     "floor",
+     "soil",
+     "moss",
+     "wet",
+     "sand",
+     "gravel",
+     "rock"
+    ]
+   }
+  ]
+ }
+}

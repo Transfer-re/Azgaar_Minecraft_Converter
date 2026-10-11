@@ -1,0 +1,536 @@
+{
+ "type": "fantasymapgenerator:treegen_object",
+ "config": {
+  "preset": "scots_pine",
+  "layer": "trees",
+  "ground": [
+   "grass",
+   "floor",
+   "soil",
+   "moss",
+   "wet"
+  ],
+  "objects": [
+   {
+    "template": "fantasymapgenerator:treegen/scots_pine/scots_pine_t1",
+    "size": "tiny",
+    "anchor": [
+     2,
+     2,
+     2
+    ],
+    "crown": 3.7,
+    "base": 0.5,
+    "height": 6,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/scots_pine/scots_pine_t2",
+    "size": "tiny",
+    "anchor": [
+     2,
+     2,
+     3
+    ],
+    "crown": 3.7,
+    "base": 0.5,
+    "height": 8,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/scots_pine/scots_pine_t3",
+    "size": "tiny",
+    "anchor": [
+     2,
+     2,
+     2
+    ],
+    "crown": 3.7,
+    "base": 0.5,
+    "height": 7,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/scots_pine/scots_pine_t4",
+    "size": "tiny",
+    "anchor": [
+     2,
+     2,
+     2
+    ],
+    "crown": 3.7,
+    "base": 0.5,
+    "height": 8,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/scots_pine/scots_pine_t5",
+    "size": "tiny",
+    "anchor": [
+     2,
+     2,
+     3
+    ],
+    "crown": 4.1,
+    "base": 0.5,
+    "height": 7,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/scots_pine/scots_pine_t6",
+    "size": "tiny",
+    "anchor": [
+     2,
+     2,
+     2
+    ],
+    "crown": 3.3,
+    "base": 0.5,
+    "height": 6,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/scots_pine/scots_pine_t7",
+    "size": "tiny",
+    "anchor": [
+     2,
+     2,
+     3
+    ],
+    "crown": 4.1,
+    "base": 0.5,
+    "height": 8,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/scots_pine/scots_pine_t8",
+    "size": "tiny",
+    "anchor": [
+     2,
+     2,
+     3
+    ],
+    "crown": 3.7,
+    "base": 0.5,
+    "height": 8,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/scots_pine/scots_pine_s1",
+    "size": "small",
+    "anchor": [
+     2,
+     2,
+     2
+    ],
+    "crown": 3.7,
+    "base": 0.5,
+    "height": 10,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/scots_pine/scots_pine_s2",
+    "size": "small",
+    "anchor": [
+     5,
+     2,
+     3
+    ],
+    "crown": 5.6,
+    "base": 0.5,
+    "height": 11,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/scots_pine/scots_pine_s3",
+    "size": "small",
+    "anchor": [
+     3,
+     2,
+     4
+    ],
+    "crown": 5.0,
+    "base": 0.5,
+    "height": 11,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/scots_pine/scots_pine_s4",
+    "size": "small",
+    "anchor": [
+     4,
+     2,
+     2
+    ],
+    "crown": 5.0,
+    "base": 0.5,
+    "height": 11,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/scots_pine/scots_pine_s5",
+    "size": "small",
+    "anchor": [
+     4,
+     2,
+     3
+    ],
+    "crown": 4.6,
+    "base": 0.5,
+    "height": 10,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/scots_pine/scots_pine_s6",
+    "size": "small",
+    "anchor": [
+     3,
+     2,
+     3
+    ],
+    "crown": 4.7,
+    "base": 0.5,
+    "height": 10,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/scots_pine/scots_pine_s7",
+    "size": "small",
+    "anchor": [
+     3,
+     2,
+     5
+    ],
+    "crown": 5.6,
+    "base": 0.5,
+    "height": 12,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/scots_pine/scots_pine_s8",
+    "size": "small",
+    "anchor": [
+     2,
+     2,
+     3
+    ],
+    "crown": 4.6,
+    "base": 0.5,
+    "height": 11,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/scots_pine/scots_pine_m1",
+    "size": "medium",
+    "anchor": [
+     3,
+     2,
+     3
+    ],
+    "crown": 5.9,
+    "base": 0.5,
+    "height": 15,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/scots_pine/scots_pine_m2",
+    "size": "medium",
+    "anchor": [
+     7,
+     2,
+     7
+    ],
+    "crown": 8.3,
+    "base": 0.5,
+    "height": 18,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/scots_pine/scots_pine_m3",
+    "size": "medium",
+    "anchor": [
+     6,
+     2,
+     5
+    ],
+    "crown": 6.8,
+    "base": 0.5,
+    "height": 18,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/scots_pine/scots_pine_m4",
+    "size": "medium",
+    "anchor": [
+     6,
+     2,
+     5
+    ],
+    "crown": 8.3,
+    "base": 0.5,
+    "height": 17,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/scots_pine/scots_pine_m5",
+    "size": "medium",
+    "anchor": [
+     5,
+     2,
+     5
+    ],
+    "crown": 5.9,
+    "base": 0.5,
+    "height": 18,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/scots_pine/scots_pine_m6",
+    "size": "medium",
+    "anchor": [
+     4,
+     2,
+     5
+    ],
+    "crown": 6.3,
+    "base": 0.5,
+    "height": 16,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/scots_pine/scots_pine_m7",
+    "size": "medium",
+    "anchor": [
+     6,
+     2,
+     6
+    ],
+    "crown": 7.2,
+    "base": 0.5,
+    "height": 18,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/scots_pine/scots_pine_m8",
+    "size": "medium",
+    "anchor": [
+     5,
+     2,
+     4
+    ],
+    "crown": 5.9,
+    "base": 0.5,
+    "height": 17,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/scots_pine/scots_pine_l1",
+    "size": "large",
+    "anchor": [
+     7,
+     2,
+     5
+    ],
+    "crown": 7.8,
+    "base": 0.5,
+    "height": 21,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/scots_pine/scots_pine_l2",
+    "size": "large",
+    "anchor": [
+     8,
+     2,
+     9
+    ],
+    "crown": 9.5,
+    "base": 1.5,
+    "height": 24,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/scots_pine/scots_pine_l3",
+    "size": "large",
+    "anchor": [
+     9,
+     2,
+     7
+    ],
+    "crown": 10.3,
+    "base": 1.5,
+    "height": 22,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/scots_pine/scots_pine_l4",
+    "size": "large",
+    "anchor": [
+     8,
+     2,
+     7
+    ],
+    "crown": 9.7,
+    "base": 1.5,
+    "height": 23,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/scots_pine/scots_pine_l5",
+    "size": "large",
+    "anchor": [
+     7,
+     2,
+     6
+    ],
+    "crown": 8.6,
+    "base": 1.5,
+    "height": 23,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/scots_pine/scots_pine_l6",
+    "size": "large",
+    "anchor": [
+     7,
+     2,
+     7
+    ],
+    "crown": 8.6,
+    "base": 1.5,
+    "height": 21,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/scots_pine/scots_pine_l7",
+    "size": "large",
+    "anchor": [
+     7,
+     2,
+     9
+    ],
+    "crown": 10.8,
+    "base": 1.5,
+    "height": 24,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/scots_pine/scots_pine_l8",
+    "size": "large",
+    "anchor": [
+     8,
+     2,
+     6
+    ],
+    "crown": 8.5,
+    "base": 1.5,
+    "height": 23,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/scots_pine/scots_pine_f1",
+    "size": "forest",
+    "anchor": [
+     8,
+     2,
+     8
+    ],
+    "crown": 9.7,
+    "base": 1.5,
+    "height": 28,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/scots_pine/scots_pine_f2",
+    "size": "forest",
+    "anchor": [
+     10,
+     2,
+     11
+    ],
+    "crown": 12.2,
+    "base": 1.5,
+    "height": 30,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/scots_pine/scots_pine_f3",
+    "size": "forest",
+    "anchor": [
+     12,
+     2,
+     10
+    ],
+    "crown": 12.9,
+    "base": 1.5,
+    "height": 30,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/scots_pine/scots_pine_f4",
+    "size": "forest",
+    "anchor": [
+     12,
+     2,
+     11
+    ],
+    "crown": 13.0,
+    "base": 1.5,
+    "height": 30,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/scots_pine/scots_pine_f5",
+    "size": "forest",
+    "anchor": [
+     9,
+     2,
+     9
+    ],
+    "crown": 11.3,
+    "base": 1.5,
+    "height": 29,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/scots_pine/scots_pine_f6",
+    "size": "forest",
+    "anchor": [
+     10,
+     2,
+     9
+    ],
+    "crown": 11.7,
+    "base": 1.5,
+    "height": 28,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/scots_pine/scots_pine_f7",
+    "size": "forest",
+    "anchor": [
+     10,
+     2,
+     9
+    ],
+    "crown": 11.7,
+    "base": 1.5,
+    "height": 31,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/scots_pine/scots_pine_f8",
+    "size": "forest",
+    "anchor": [
+     9,
+     2,
+     8
+    ],
+    "crown": 11.7,
+    "base": 1.5,
+    "height": 30,
+    "depth": 2
+   }
+  ]
+ }
+}

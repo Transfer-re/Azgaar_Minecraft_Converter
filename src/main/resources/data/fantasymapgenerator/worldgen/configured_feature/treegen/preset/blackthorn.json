@@ -1,0 +1,536 @@
+{
+ "type": "fantasymapgenerator:treegen_object",
+ "config": {
+  "preset": "blackthorn",
+  "layer": "shrubs",
+  "ground": [
+   "grass",
+   "floor",
+   "soil",
+   "moss",
+   "wet"
+  ],
+  "objects": [
+   {
+    "template": "fantasymapgenerator:treegen/blackthorn/blackthorn_t1",
+    "size": "tiny",
+    "anchor": [
+     1,
+     1,
+     1
+    ],
+    "crown": 2.7,
+    "base": 1.5,
+    "height": 3,
+    "depth": 1
+   },
+   {
+    "template": "fantasymapgenerator:treegen/blackthorn/blackthorn_t2",
+    "size": "tiny",
+    "anchor": [
+     2,
+     1,
+     2
+    ],
+    "crown": 2.7,
+    "base": 0.5,
+    "height": 3,
+    "depth": 1
+   },
+   {
+    "template": "fantasymapgenerator:treegen/blackthorn/blackthorn_t3",
+    "size": "tiny",
+    "anchor": [
+     2,
+     1,
+     2
+    ],
+    "crown": 2.7,
+    "base": 0.5,
+    "height": 3,
+    "depth": 1
+   },
+   {
+    "template": "fantasymapgenerator:treegen/blackthorn/blackthorn_t4",
+    "size": "tiny",
+    "anchor": [
+     2,
+     1,
+     2
+    ],
+    "crown": 2.7,
+    "base": 1.5,
+    "height": 4,
+    "depth": 1
+   },
+   {
+    "template": "fantasymapgenerator:treegen/blackthorn/blackthorn_t5",
+    "size": "tiny",
+    "anchor": [
+     2,
+     1,
+     1
+    ],
+    "crown": 2.7,
+    "base": 0.5,
+    "height": 3,
+    "depth": 1
+   },
+   {
+    "template": "fantasymapgenerator:treegen/blackthorn/blackthorn_t6",
+    "size": "tiny",
+    "anchor": [
+     2,
+     1,
+     1
+    ],
+    "crown": 2.7,
+    "base": 1.5,
+    "height": 3,
+    "depth": 1
+   },
+   {
+    "template": "fantasymapgenerator:treegen/blackthorn/blackthorn_t7",
+    "size": "tiny",
+    "anchor": [
+     2,
+     1,
+     2
+    ],
+    "crown": 2.7,
+    "base": 1.5,
+    "height": 3,
+    "depth": 1
+   },
+   {
+    "template": "fantasymapgenerator:treegen/blackthorn/blackthorn_t8",
+    "size": "tiny",
+    "anchor": [
+     2,
+     1,
+     2
+    ],
+    "crown": 3.3,
+    "base": 1.5,
+    "height": 3,
+    "depth": 1
+   },
+   {
+    "template": "fantasymapgenerator:treegen/blackthorn/blackthorn_s1",
+    "size": "small",
+    "anchor": [
+     2,
+     2,
+     1
+    ],
+    "crown": 2.7,
+    "base": 0.5,
+    "height": 3,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/blackthorn/blackthorn_s2",
+    "size": "small",
+    "anchor": [
+     2,
+     2,
+     2
+    ],
+    "crown": 2.7,
+    "base": 1.5,
+    "height": 4,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/blackthorn/blackthorn_s3",
+    "size": "small",
+    "anchor": [
+     2,
+     1,
+     2
+    ],
+    "crown": 4.1,
+    "base": 1.9,
+    "height": 4,
+    "depth": 1
+   },
+   {
+    "template": "fantasymapgenerator:treegen/blackthorn/blackthorn_s4",
+    "size": "small",
+    "anchor": [
+     4,
+     1,
+     2
+    ],
+    "crown": 5.0,
+    "base": 1.5,
+    "height": 4,
+    "depth": 1
+   },
+   {
+    "template": "fantasymapgenerator:treegen/blackthorn/blackthorn_s5",
+    "size": "small",
+    "anchor": [
+     2,
+     1,
+     2
+    ],
+    "crown": 3.3,
+    "base": 0.5,
+    "height": 4,
+    "depth": 1
+   },
+   {
+    "template": "fantasymapgenerator:treegen/blackthorn/blackthorn_s6",
+    "size": "small",
+    "anchor": [
+     2,
+     1,
+     1
+    ],
+    "crown": 2.7,
+    "base": 1.5,
+    "height": 4,
+    "depth": 1
+   },
+   {
+    "template": "fantasymapgenerator:treegen/blackthorn/blackthorn_s7",
+    "size": "small",
+    "anchor": [
+     3,
+     1,
+     4
+    ],
+    "crown": 4.6,
+    "base": 1.5,
+    "height": 4,
+    "depth": 1
+   },
+   {
+    "template": "fantasymapgenerator:treegen/blackthorn/blackthorn_s8",
+    "size": "small",
+    "anchor": [
+     2,
+     1,
+     2
+    ],
+    "crown": 3.3,
+    "base": 0.5,
+    "height": 4,
+    "depth": 1
+   },
+   {
+    "template": "fantasymapgenerator:treegen/blackthorn/blackthorn_m1",
+    "size": "medium",
+    "anchor": [
+     3,
+     2,
+     2
+    ],
+    "crown": 3.5,
+    "base": 1.5,
+    "height": 3,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/blackthorn/blackthorn_m2",
+    "size": "medium",
+    "anchor": [
+     2,
+     1,
+     2
+    ],
+    "crown": 4.7,
+    "base": 1.5,
+    "height": 5,
+    "depth": 1
+   },
+   {
+    "template": "fantasymapgenerator:treegen/blackthorn/blackthorn_m3",
+    "size": "medium",
+    "anchor": [
+     3,
+     1,
+     3
+    ],
+    "crown": 4.7,
+    "base": 1.5,
+    "height": 5,
+    "depth": 1
+   },
+   {
+    "template": "fantasymapgenerator:treegen/blackthorn/blackthorn_m4",
+    "size": "medium",
+    "anchor": [
+     3,
+     1,
+     3
+    ],
+    "crown": 4.7,
+    "base": 1.5,
+    "height": 5,
+    "depth": 1
+   },
+   {
+    "template": "fantasymapgenerator:treegen/blackthorn/blackthorn_m5",
+    "size": "medium",
+    "anchor": [
+     3,
+     1,
+     3
+    ],
+    "crown": 4.1,
+    "base": 1.5,
+    "height": 5,
+    "depth": 1
+   },
+   {
+    "template": "fantasymapgenerator:treegen/blackthorn/blackthorn_m6",
+    "size": "medium",
+    "anchor": [
+     2,
+     1,
+     2
+    ],
+    "crown": 2.7,
+    "base": 1.5,
+    "height": 4,
+    "depth": 1
+   },
+   {
+    "template": "fantasymapgenerator:treegen/blackthorn/blackthorn_m7",
+    "size": "medium",
+    "anchor": [
+     3,
+     1,
+     3
+    ],
+    "crown": 4.1,
+    "base": 0.5,
+    "height": 6,
+    "depth": 1
+   },
+   {
+    "template": "fantasymapgenerator:treegen/blackthorn/blackthorn_m8",
+    "size": "medium",
+    "anchor": [
+     3,
+     1,
+     2
+    ],
+    "crown": 3.7,
+    "base": 0.5,
+    "height": 4,
+    "depth": 1
+   },
+   {
+    "template": "fantasymapgenerator:treegen/blackthorn/blackthorn_l1",
+    "size": "large",
+    "anchor": [
+     2,
+     1,
+     3
+    ],
+    "crown": 4.1,
+    "base": 1.5,
+    "height": 5,
+    "depth": 1
+   },
+   {
+    "template": "fantasymapgenerator:treegen/blackthorn/blackthorn_l2",
+    "size": "large",
+    "anchor": [
+     4,
+     1,
+     2
+    ],
+    "crown": 4.6,
+    "base": 1.5,
+    "height": 6,
+    "depth": 1
+   },
+   {
+    "template": "fantasymapgenerator:treegen/blackthorn/blackthorn_l3",
+    "size": "large",
+    "anchor": [
+     5,
+     1,
+     4
+    ],
+    "crown": 5.6,
+    "base": 1.5,
+    "height": 6,
+    "depth": 1
+   },
+   {
+    "template": "fantasymapgenerator:treegen/blackthorn/blackthorn_l4",
+    "size": "large",
+    "anchor": [
+     5,
+     1,
+     4
+    ],
+    "crown": 5.5,
+    "base": 1.9,
+    "height": 7,
+    "depth": 1
+   },
+   {
+    "template": "fantasymapgenerator:treegen/blackthorn/blackthorn_l5",
+    "size": "large",
+    "anchor": [
+     4,
+     1,
+     4
+    ],
+    "crown": 5.5,
+    "base": 1.5,
+    "height": 6,
+    "depth": 1
+   },
+   {
+    "template": "fantasymapgenerator:treegen/blackthorn/blackthorn_l6",
+    "size": "large",
+    "anchor": [
+     3,
+     1,
+     3
+    ],
+    "crown": 4.7,
+    "base": 1.5,
+    "height": 5,
+    "depth": 1
+   },
+   {
+    "template": "fantasymapgenerator:treegen/blackthorn/blackthorn_l7",
+    "size": "large",
+    "anchor": [
+     3,
+     1,
+     4
+    ],
+    "crown": 5.9,
+    "base": 1.5,
+    "height": 6,
+    "depth": 1
+   },
+   {
+    "template": "fantasymapgenerator:treegen/blackthorn/blackthorn_l8",
+    "size": "large",
+    "anchor": [
+     4,
+     1,
+     3
+    ],
+    "crown": 5.0,
+    "base": 0.5,
+    "height": 6,
+    "depth": 1
+   },
+   {
+    "template": "fantasymapgenerator:treegen/blackthorn/blackthorn_f1",
+    "size": "forest",
+    "anchor": [
+     4,
+     1,
+     3
+    ],
+    "crown": 4.7,
+    "base": 0.5,
+    "height": 6,
+    "depth": 1
+   },
+   {
+    "template": "fantasymapgenerator:treegen/blackthorn/blackthorn_f2",
+    "size": "forest",
+    "anchor": [
+     5,
+     1,
+     6
+    ],
+    "crown": 7.2,
+    "base": 0.5,
+    "height": 6,
+    "depth": 1
+   },
+   {
+    "template": "fantasymapgenerator:treegen/blackthorn/blackthorn_f3",
+    "size": "forest",
+    "anchor": [
+     5,
+     1,
+     4
+    ],
+    "crown": 5.9,
+    "base": 1.5,
+    "height": 7,
+    "depth": 1
+   },
+   {
+    "template": "fantasymapgenerator:treegen/blackthorn/blackthorn_f4",
+    "size": "forest",
+    "anchor": [
+     6,
+     1,
+     3
+    ],
+    "crown": 7.2,
+    "base": 1.5,
+    "height": 7,
+    "depth": 1
+   },
+   {
+    "template": "fantasymapgenerator:treegen/blackthorn/blackthorn_f5",
+    "size": "forest",
+    "anchor": [
+     5,
+     1,
+     4
+    ],
+    "crown": 5.9,
+    "base": 1.5,
+    "height": 7,
+    "depth": 1
+   },
+   {
+    "template": "fantasymapgenerator:treegen/blackthorn/blackthorn_f6",
+    "size": "forest",
+    "anchor": [
+     3,
+     2,
+     4
+    ],
+    "crown": 5.5,
+    "base": 0.5,
+    "height": 6,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/blackthorn/blackthorn_f7",
+    "size": "forest",
+    "anchor": [
+     4,
+     1,
+     5
+    ],
+    "crown": 6.3,
+    "base": 1.5,
+    "height": 7,
+    "depth": 1
+   },
+   {
+    "template": "fantasymapgenerator:treegen/blackthorn/blackthorn_f8",
+    "size": "forest",
+    "anchor": [
+     4,
+     1,
+     4
+    ],
+    "crown": 5.5,
+    "base": 0.5,
+    "height": 7,
+    "depth": 1
+   }
+  ]
+ }
+}

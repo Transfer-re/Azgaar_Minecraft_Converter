@@ -5,10 +5,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.ConcurrentHashMap;
 
 import com.example.fmg.FMGBurg;
 import com.example.fmg.FMGHeightSampler;
 import com.example.fmg.FMGMapData;
+import com.example.profile.FmgContentProfile;
+import com.example.profile.FmgProfiles;
 import com.example.worldmap.runtime.FMGMapDataCache;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
@@ -46,7 +49,8 @@ public final class BurgVillageStructure extends Structure {
             ).apply(instance, BurgVillageStructure::new)
     );
 
-    private static final Map<String, Map<Long, List<BurgPos>>> BURG_POS_CACHE = new HashMap<>();
+    /** Concurrent: structure starts run in parallel under C2ME. */
+    private static final Map<String, Map<Long, List<BurgPos>>> BURG_POS_CACHE = new ConcurrentHashMap<>();
 
     private static final class BurgPos {
         final int burgId;
@@ -104,7 +108,8 @@ public final class BurgVillageStructure extends Structure {
         BlockPos start = new BlockPos(burg.x, surfaceY, burg.z);
 
         BurgVillageConfig.Config cfg = BurgVillageConfig.loadOrCreate();
-        BurgVillageConfig.VillageType typeCfg = pickVillageType(context, map, start, cfg, burg.burgId);
+        BurgVillageConfig.VillageType typeCfg = pickVillageType(context, map, start, cfg, burg.burgId,
+                FmgProfiles.get(fmgGenerator.mapInfo().profile()));
 
         Identifier startPoolId = Identifier.tryParse(typeCfg.startPool());
         if (startPoolId == null) {
@@ -155,7 +160,8 @@ public final class BurgVillageStructure extends Structure {
             FMGMapData mapData,
             BlockPos pos,
             BurgVillageConfig.Config config,
-            int burgId
+            int burgId,
+            FmgContentProfile profile
     ) {
         Registry<Biome> biomeRegistry = context.dynamicRegistryManager().get(RegistryKeys.BIOME);
         RegistryEntry<Biome> biomeEntry = context.biomeSource().getBiome(
@@ -175,6 +181,15 @@ public final class BurgVillageStructure extends Structure {
         }
         if (types == null || types.isEmpty()) {
             types = config.biomeVillageTypes().get(biomeKey);
+        }
+        if (types == null || types.isEmpty()) {
+            // a custom (Conquest) biome builds like the vanilla biome it stands in for
+            for (String standIn : profile.biomes.structureStandIns.getOrDefault(biomeKey, List.of())) {
+                types = config.biomeVillageTypes().get(standIn);
+                if (types != null && !types.isEmpty()) {
+                    break;
+                }
+            }
         }
         if (types == null || types.isEmpty()) {
             types = config.defaultVillageTypes();

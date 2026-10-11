@@ -15,7 +15,7 @@ import java.util.Locale;
  * <pre>
  *   javac -d out src/main/java/com/example/heightmap/HeightField.java \
  *                src/main/java/com/example/heightmap/HeightPostProcess.java
- *   java -cp out com.example.heightmap.HeightPostProcess run/fmg_heightmaps/foo.fmgh --detail
+ *   java -cp out com.example.heightmap.HeightPostProcess ../runs/fabric-1.20.1/fmg_heightmaps/foo.fmgh --detail
  * </pre>
  *
  * The {@link FractalDetail} pass here is the exact one the generator uses

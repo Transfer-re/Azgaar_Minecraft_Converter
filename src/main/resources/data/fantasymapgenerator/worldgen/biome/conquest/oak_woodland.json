@@ -180,7 +180,11 @@
       "minecraft:spring_lava"
     ],
     [
-      "minecraft:glow_lichen"
+      "minecraft:glow_lichen",
+      "fantasymapgenerator:treegen/oak_woodland/trees",
+      "fantasymapgenerator:treegen/oak_woodland/dead",
+      "fantasymapgenerator:treegen/oak_woodland/logs",
+      "fantasymapgenerator:treegen/oak_woodland/shrubs"
     ],
     []
   ]

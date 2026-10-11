@@ -7,8 +7,8 @@ rem  Usage (from the repo root):
 rem    surface.cmd <bakeBase> <out.json> [--center X Z] [--size 256] [--palette <id>] [--seed N]
 rem
 rem  Example:
-rem    surface.cmd ..\refinemap\outj\EnciaNow run\surface\encia.json --center 1200 -300 --size 256
-rem    python tools\fmgtrees\render_surface_dump.py run\surface\encia.json
+rem    surface.cmd ..\..\refinemap\outj\EnciaNow ..\tool-output\surface\encia.json --center 1200 -300 --size 256
+rem    python tools\fmgtrees\render_surface_dump.py ..\tool-output\surface\encia.json
 setlocal enabledelayedexpansion
 
 set "ROOT=%~dp0"

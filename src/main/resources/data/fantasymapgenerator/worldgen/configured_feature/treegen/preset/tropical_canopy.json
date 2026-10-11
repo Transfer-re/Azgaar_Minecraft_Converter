@@ -1,0 +1,536 @@
+{
+ "type": "fantasymapgenerator:treegen_object",
+ "config": {
+  "preset": "tropical_canopy",
+  "layer": "trees",
+  "ground": [
+   "grass",
+   "floor",
+   "soil",
+   "moss",
+   "wet"
+  ],
+  "objects": [
+   {
+    "template": "fantasymapgenerator:treegen/tropical_canopy/tropical_canopy_t1",
+    "size": "tiny",
+    "anchor": [
+     4,
+     2,
+     3
+    ],
+    "crown": 4.6,
+    "base": 3.7,
+    "height": 9,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/tropical_canopy/tropical_canopy_t2",
+    "size": "tiny",
+    "anchor": [
+     6,
+     2,
+     4
+    ],
+    "crown": 6.6,
+    "base": 3.7,
+    "height": 11,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/tropical_canopy/tropical_canopy_t3",
+    "size": "tiny",
+    "anchor": [
+     3,
+     2,
+     6
+    ],
+    "crown": 6.8,
+    "base": 4.1,
+    "height": 11,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/tropical_canopy/tropical_canopy_t4",
+    "size": "tiny",
+    "anchor": [
+     5,
+     2,
+     5
+    ],
+    "crown": 6.9,
+    "base": 2.7,
+    "height": 11,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/tropical_canopy/tropical_canopy_t5",
+    "size": "tiny",
+    "anchor": [
+     3,
+     2,
+     5
+    ],
+    "crown": 6.3,
+    "base": 2.7,
+    "height": 11,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/tropical_canopy/tropical_canopy_t6",
+    "size": "tiny",
+    "anchor": [
+     3,
+     2,
+     3
+    ],
+    "crown": 4.7,
+    "base": 3.3,
+    "height": 9,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/tropical_canopy/tropical_canopy_t7",
+    "size": "tiny",
+    "anchor": [
+     4,
+     2,
+     4
+    ],
+    "crown": 7.2,
+    "base": 4.1,
+    "height": 11,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/tropical_canopy/tropical_canopy_t8",
+    "size": "tiny",
+    "anchor": [
+     4,
+     2,
+     4
+    ],
+    "crown": 6.2,
+    "base": 4.1,
+    "height": 12,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/tropical_canopy/tropical_canopy_s1",
+    "size": "small",
+    "anchor": [
+     4,
+     2,
+     6
+    ],
+    "crown": 7.2,
+    "base": 4.1,
+    "height": 15,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/tropical_canopy/tropical_canopy_s2",
+    "size": "small",
+    "anchor": [
+     8,
+     2,
+     7
+    ],
+    "crown": 8.7,
+    "base": 4.1,
+    "height": 16,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/tropical_canopy/tropical_canopy_s3",
+    "size": "small",
+    "anchor": [
+     8,
+     2,
+     8
+    ],
+    "crown": 9.9,
+    "base": 4.1,
+    "height": 16,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/tropical_canopy/tropical_canopy_s4",
+    "size": "small",
+    "anchor": [
+     6,
+     2,
+     7
+    ],
+    "crown": 8.7,
+    "base": 4.1,
+    "height": 16,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/tropical_canopy/tropical_canopy_s5",
+    "size": "small",
+    "anchor": [
+     7,
+     2,
+     7
+    ],
+    "crown": 8.1,
+    "base": 4.7,
+    "height": 15,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/tropical_canopy/tropical_canopy_s6",
+    "size": "small",
+    "anchor": [
+     6,
+     2,
+     4
+    ],
+    "crown": 6.8,
+    "base": 3.7,
+    "height": 14,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/tropical_canopy/tropical_canopy_s7",
+    "size": "small",
+    "anchor": [
+     8,
+     2,
+     8
+    ],
+    "crown": 9.7,
+    "base": 4.1,
+    "height": 16,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/tropical_canopy/tropical_canopy_s8",
+    "size": "small",
+    "anchor": [
+     5,
+     2,
+     5
+    ],
+    "crown": 6.9,
+    "base": 4.1,
+    "height": 16,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/tropical_canopy/tropical_canopy_m1",
+    "size": "medium",
+    "anchor": [
+     10,
+     2,
+     8
+    ],
+    "crown": 10.7,
+    "base": 4.7,
+    "height": 20,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/tropical_canopy/tropical_canopy_m2",
+    "size": "medium",
+    "anchor": [
+     10,
+     2,
+     11
+    ],
+    "crown": 12.2,
+    "base": 4.6,
+    "height": 22,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/tropical_canopy/tropical_canopy_m3",
+    "size": "medium",
+    "anchor": [
+     11,
+     2,
+     10
+    ],
+    "crown": 13.0,
+    "base": 4.1,
+    "height": 22,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/tropical_canopy/tropical_canopy_m4",
+    "size": "medium",
+    "anchor": [
+     13,
+     2,
+     10
+    ],
+    "crown": 14.1,
+    "base": 3.7,
+    "height": 21,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/tropical_canopy/tropical_canopy_m5",
+    "size": "medium",
+    "anchor": [
+     10,
+     2,
+     9
+    ],
+    "crown": 11.3,
+    "base": 4.1,
+    "height": 21,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/tropical_canopy/tropical_canopy_m6",
+    "size": "medium",
+    "anchor": [
+     8,
+     2,
+     10
+    ],
+    "crown": 11.1,
+    "base": 4.1,
+    "height": 20,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/tropical_canopy/tropical_canopy_m7",
+    "size": "medium",
+    "anchor": [
+     10,
+     2,
+     11
+    ],
+    "crown": 12.2,
+    "base": 4.6,
+    "height": 22,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/tropical_canopy/tropical_canopy_m8",
+    "size": "medium",
+    "anchor": [
+     8,
+     2,
+     9
+    ],
+    "crown": 10.9,
+    "base": 4.6,
+    "height": 21,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/tropical_canopy/tropical_canopy_l1",
+    "size": "large",
+    "anchor": [
+     11,
+     2,
+     12
+    ],
+    "crown": 13.2,
+    "base": 4.1,
+    "height": 27,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/tropical_canopy/tropical_canopy_l2",
+    "size": "large",
+    "anchor": [
+     14,
+     2,
+     14
+    ],
+    "crown": 17.1,
+    "base": 4.1,
+    "height": 30,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/tropical_canopy/tropical_canopy_l3",
+    "size": "large",
+    "anchor": [
+     14,
+     2,
+     14
+    ],
+    "crown": 16.2,
+    "base": 4.5,
+    "height": 28,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/tropical_canopy/tropical_canopy_l4",
+    "size": "large",
+    "anchor": [
+     17,
+     2,
+     15
+    ],
+    "crown": 17.8,
+    "base": 4.6,
+    "height": 29,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/tropical_canopy/tropical_canopy_l5",
+    "size": "large",
+    "anchor": [
+     14,
+     2,
+     14
+    ],
+    "crown": 15.4,
+    "base": 4.1,
+    "height": 29,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/tropical_canopy/tropical_canopy_l6",
+    "size": "large",
+    "anchor": [
+     13,
+     2,
+     11
+    ],
+    "crown": 14.1,
+    "base": 4.6,
+    "height": 26,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/tropical_canopy/tropical_canopy_l7",
+    "size": "large",
+    "anchor": [
+     13,
+     2,
+     15
+    ],
+    "crown": 17.1,
+    "base": 4.1,
+    "height": 29,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/tropical_canopy/tropical_canopy_l8",
+    "size": "large",
+    "anchor": [
+     13,
+     2,
+     14
+    ],
+    "crown": 15.3,
+    "base": 3.7,
+    "height": 29,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/tropical_canopy/tropical_canopy_f1",
+    "size": "forest",
+    "anchor": [
+     16,
+     2,
+     15
+    ],
+    "crown": 16.9,
+    "base": 3.7,
+    "height": 34,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/tropical_canopy/tropical_canopy_f2",
+    "size": "forest",
+    "anchor": [
+     3,
+     2,
+     4
+    ],
+    "crown": 18.9,
+    "base": 4.1,
+    "height": 36,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/tropical_canopy/tropical_canopy_f3",
+    "size": "forest",
+    "anchor": [
+     19,
+     2,
+     16
+    ],
+    "crown": 20.4,
+    "base": 4.6,
+    "height": 36,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/tropical_canopy/tropical_canopy_f4",
+    "size": "forest",
+    "anchor": [
+     18,
+     2,
+     20
+    ],
+    "crown": 22.1,
+    "base": 3.7,
+    "height": 37,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/tropical_canopy/tropical_canopy_f5",
+    "size": "forest",
+    "anchor": [
+     18,
+     2,
+     17
+    ],
+    "crown": 18.9,
+    "base": 4.6,
+    "height": 35,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/tropical_canopy/tropical_canopy_f6",
+    "size": "forest",
+    "anchor": [
+     17,
+     2,
+     17
+    ],
+    "crown": 18.5,
+    "base": 4.6,
+    "height": 34,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/tropical_canopy/tropical_canopy_f7",
+    "size": "forest",
+    "anchor": [
+     15,
+     2,
+     18
+    ],
+    "crown": 20.2,
+    "base": 4.1,
+    "height": 38,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/tropical_canopy/tropical_canopy_f8",
+    "size": "forest",
+    "anchor": [
+     16,
+     2,
+     17
+    ],
+    "crown": 18.7,
+    "base": 4.1,
+    "height": 37,
+    "depth": 2
+   }
+  ]
+ }
+}

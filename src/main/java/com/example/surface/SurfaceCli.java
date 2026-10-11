@@ -63,12 +63,13 @@ public final class SurfaceCli {
     public static void main(String[] args) throws IOException {
         if (args.length < 2) {
             System.out.println("usage: SurfaceCli <bakeBase> <out.json> [--center X Z] [--size 256]"
-                    + " [--palettes <conquest.json>] [--palette <id>] [--seed N]");
+                    + " [--palettes <conquest.json>] [--palette <id>] [--seed N] [--blend 16]");
             return;
         }
         String base = args[0];
         Path out = Path.of(args[1]);
         int cx = 0, cz = 0, size = 256, seed = 1;
+        double blend = 16.0;                       // the conquest profile's biomeEdgeBlend
         String forced = null;
         Path palettes = Path.of("src/main/resources/fantasymapgenerator/surface/conquest.json");
         for (int i = 2; i < args.length; i++) {
@@ -81,6 +82,7 @@ public final class SurfaceCli {
                 case "--palettes" -> palettes = Path.of(args[++i]);
                 case "--palette" -> forced = args[++i];
                 case "--seed" -> seed = Integer.parseInt(args[++i]);
+                case "--blend" -> blend = Double.parseDouble(args[++i]);
                 default -> System.out.println("(ignoring " + args[i] + ")");
             }
         }
@@ -138,6 +140,15 @@ public final class SurfaceCli {
         float[] dSea = SurfaceVars.chamfer(kind, n, SurfaceVars.SEA);
         float[] dFresh = SurfaceVars.chamfer(kind, n, SurfaceVars.FRESH);
 
+        // palettes for the whole window, blended across borders like the game
+        final int wx0 = x0 + pad, wz0 = z0 + pad, fseed = seed;
+        final double fbpp = bpp, fox = ox, foz = oz;
+        final TerrainRaster fr = raster;
+        String[] blended = forced != null ? null : SurfaceBlend.choose(
+                (bx, bz) -> paletteFor(biomes, fbpp, fox, foz, bx, bz,
+                        SurfaceVars.altitude(fr.heightAt(bx, bz), sea, top), fseed),
+                wx0, wz0, size, size, blend, seed);
+
         SurfaceSet.Vars v = new SurfaceSet.Vars();
         SurfaceSet.Choice c = new SurfaceSet.Choice();
         java.util.List<String> paletteIds = new java.util.ArrayList<>();
@@ -162,7 +173,7 @@ public final class SurfaceCli {
                 double surfaceY = fresh ? water[k] : sea;
                 v.depth = underwater ? surfaceY - h : 0;
 
-                String pid = forced != null ? forced : paletteFor(biomes, bpp, ox, oz, x, z, v.alt, seed);
+                String pid = forced != null ? forced : blended[(x - wx0) * size + (z - wz0)];
                 SurfaceSet.Palette p = set.palette(pid);
                 if (p == null) p = set.forBiome(null);
                 int pi = paletteIds.indexOf(p.id);

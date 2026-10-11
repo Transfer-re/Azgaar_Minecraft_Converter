@@ -168,7 +168,11 @@
       "minecraft:spring_lava"
     ],
     [
-      "minecraft:glow_lichen"
+      "minecraft:glow_lichen",
+      "fantasymapgenerator:treegen/willow_carr/trees",
+      "fantasymapgenerator:treegen/willow_carr/dead",
+      "fantasymapgenerator:treegen/willow_carr/logs",
+      "fantasymapgenerator:treegen/willow_carr/shrubs"
     ],
     []
   ]

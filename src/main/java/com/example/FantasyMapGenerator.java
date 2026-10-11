@@ -29,6 +29,8 @@ public class FantasyMapGenerator implements ModInitializer {
 		LOGGER.info("Bootstrapping Fantasy Map Generator");
 		FMGGenerators.register();
 		FMGCommands.register();
+		// TreeGenerator objects as worldgen features (placed from the biome JSONs)
+		com.example.trees.TreeFeatures.register();
 
 		// Grab the density-function registry before world load so the FMG chunk
 		// generator can carve vanilla-style noise caves into its heightmap, and
@@ -37,8 +39,13 @@ public class FantasyMapGenerator implements ModInitializer {
 			com.example.worldgen.FmgNoiseCaves.capture(server.getRegistryManager());
 			com.example.worldgen.FmgWorldSettings.setSaveDir(
 				server.getSavePath(net.minecraft.util.WorldSavePath.ROOT));
+			// before the worlds exist: their structure placement reads it
+			com.example.worldgen.FmgStructureBiomes.capture(server.getRegistryManager());
 		});
+		ServerLifecycleEvents.END_DATA_PACK_RELOAD.register((server, resources, success) ->
+			com.example.worldgen.FmgStructureBiomes.capture(server.getRegistryManager()));
 		ServerLifecycleEvents.SERVER_STOPPED.register(server -> {
+			com.example.worldgen.FmgStructureBiomes.clear();
 			com.example.worldgen.FmgWorldSettings.clear();
 			com.example.worldmap.runtime.FMGMapDataCache.invalidate();
 		});

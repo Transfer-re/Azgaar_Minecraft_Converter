@@ -1,10 +1,10 @@
 """
 Export the ground palettes for review: textures on disk plus one HTML page.
 
-    python -m fmgtrees.palette_preview [--out ../run/conquest_palettes]
+    python -m fmgtrees.palette_preview [--out <dir>]
 
-Writes, under --out (gitignored `run/` by default, since everything in it is
-Conquest / ACRP artwork):
+Writes, under --out (`tool-output/conquest_palettes` next to the repo by
+default, outside git since everything in it is Conquest / ACRP artwork):
 
     textures/<biome>/<material>.png   top face, 4x4 blocks, tinted with that
                                       biome's colours and with Continuity
@@ -147,7 +147,8 @@ def _multiply(img, rgb):
 
 def main(argv=None):
     ap = argparse.ArgumentParser(prog="fmgtrees.palette_preview")
-    ap.add_argument("--out", default=os.path.join("..", "run", "conquest_palettes"))
+    ap.add_argument("--out", default=os.path.join(HERE, "..", "..", "..", "tool-output",
+                                                  "conquest_palettes"))
     ap.add_argument("--jar", default=CR_JAR)
     ap.add_argument("--pack", action="append", default=None,
                     help="resource pack zip, highest priority first (default: ACRP)")

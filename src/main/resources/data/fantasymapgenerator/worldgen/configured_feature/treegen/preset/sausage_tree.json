@@ -1,0 +1,536 @@
+{
+ "type": "fantasymapgenerator:treegen_object",
+ "config": {
+  "preset": "sausage_tree",
+  "layer": "trees",
+  "ground": [
+   "grass",
+   "floor",
+   "soil",
+   "moss",
+   "wet"
+  ],
+  "objects": [
+   {
+    "template": "fantasymapgenerator:treegen/sausage_tree/sausage_tree_t1",
+    "size": "tiny",
+    "anchor": [
+     4,
+     2,
+     2
+    ],
+    "crown": 4.6,
+    "base": 1.9,
+    "height": 5,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/sausage_tree/sausage_tree_t2",
+    "size": "tiny",
+    "anchor": [
+     3,
+     2,
+     3
+    ],
+    "crown": 5.5,
+    "base": 1.5,
+    "height": 6,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/sausage_tree/sausage_tree_t3",
+    "size": "tiny",
+    "anchor": [
+     4,
+     2,
+     4
+    ],
+    "crown": 6.2,
+    "base": 2.7,
+    "height": 8,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/sausage_tree/sausage_tree_t4",
+    "size": "tiny",
+    "anchor": [
+     4,
+     2,
+     4
+    ],
+    "crown": 5.5,
+    "base": 1.9,
+    "height": 7,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/sausage_tree/sausage_tree_t5",
+    "size": "tiny",
+    "anchor": [
+     3,
+     2,
+     3
+    ],
+    "crown": 4.1,
+    "base": 0.5,
+    "height": 7,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/sausage_tree/sausage_tree_t6",
+    "size": "tiny",
+    "anchor": [
+     3,
+     2,
+     2
+    ],
+    "crown": 4.1,
+    "base": 0.5,
+    "height": 5,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/sausage_tree/sausage_tree_t7",
+    "size": "tiny",
+    "anchor": [
+     4,
+     2,
+     4
+    ],
+    "crown": 5.0,
+    "base": 0.5,
+    "height": 7,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/sausage_tree/sausage_tree_t8",
+    "size": "tiny",
+    "anchor": [
+     3,
+     2,
+     3
+    ],
+    "crown": 4.7,
+    "base": 1.9,
+    "height": 7,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/sausage_tree/sausage_tree_s1",
+    "size": "small",
+    "anchor": [
+     4,
+     2,
+     4
+    ],
+    "crown": 5.5,
+    "base": 0.5,
+    "height": 8,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/sausage_tree/sausage_tree_s2",
+    "size": "small",
+    "anchor": [
+     5,
+     2,
+     5
+    ],
+    "crown": 6.6,
+    "base": 0.5,
+    "height": 9,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/sausage_tree/sausage_tree_s3",
+    "size": "small",
+    "anchor": [
+     6,
+     2,
+     4
+    ],
+    "crown": 6.8,
+    "base": 2.5,
+    "height": 9,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/sausage_tree/sausage_tree_s4",
+    "size": "small",
+    "anchor": [
+     6,
+     2,
+     5
+    ],
+    "crown": 6.8,
+    "base": 2.7,
+    "height": 9,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/sausage_tree/sausage_tree_s5",
+    "size": "small",
+    "anchor": [
+     5,
+     2,
+     5
+    ],
+    "crown": 7.7,
+    "base": 0.5,
+    "height": 9,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/sausage_tree/sausage_tree_s6",
+    "size": "small",
+    "anchor": [
+     4,
+     2,
+     4
+    ],
+    "crown": 5.5,
+    "base": 1.9,
+    "height": 9,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/sausage_tree/sausage_tree_s7",
+    "size": "small",
+    "anchor": [
+     5,
+     2,
+     5
+    ],
+    "crown": 6.6,
+    "base": 0.5,
+    "height": 9,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/sausage_tree/sausage_tree_s8",
+    "size": "small",
+    "anchor": [
+     6,
+     2,
+     5
+    ],
+    "crown": 7.2,
+    "base": 0.5,
+    "height": 8,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/sausage_tree/sausage_tree_m1",
+    "size": "medium",
+    "anchor": [
+     5,
+     2,
+     6
+    ],
+    "crown": 6.8,
+    "base": 0.5,
+    "height": 10,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/sausage_tree/sausage_tree_m2",
+    "size": "medium",
+    "anchor": [
+     5,
+     2,
+     8
+    ],
+    "crown": 9.0,
+    "base": 1.5,
+    "height": 13,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/sausage_tree/sausage_tree_m3",
+    "size": "medium",
+    "anchor": [
+     7,
+     2,
+     7
+    ],
+    "crown": 9.6,
+    "base": 1.5,
+    "height": 13,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/sausage_tree/sausage_tree_m4",
+    "size": "medium",
+    "anchor": [
+     7,
+     2,
+     6
+    ],
+    "crown": 9.1,
+    "base": 0.5,
+    "height": 13,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/sausage_tree/sausage_tree_m5",
+    "size": "medium",
+    "anchor": [
+     7,
+     2,
+     6
+    ],
+    "crown": 7.8,
+    "base": 1.5,
+    "height": 12,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/sausage_tree/sausage_tree_m6",
+    "size": "medium",
+    "anchor": [
+     5,
+     2,
+     5
+    ],
+    "crown": 7.6,
+    "base": 0.5,
+    "height": 10,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/sausage_tree/sausage_tree_m7",
+    "size": "medium",
+    "anchor": [
+     6,
+     2,
+     7
+    ],
+    "crown": 8.7,
+    "base": 1.5,
+    "height": 13,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/sausage_tree/sausage_tree_m8",
+    "size": "medium",
+    "anchor": [
+     7,
+     2,
+     5
+    ],
+    "crown": 7.7,
+    "base": 0.5,
+    "height": 12,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/sausage_tree/sausage_tree_l1",
+    "size": "large",
+    "anchor": [
+     7,
+     2,
+     7
+    ],
+    "crown": 8.3,
+    "base": 1.5,
+    "height": 15,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/sausage_tree/sausage_tree_l2",
+    "size": "large",
+    "anchor": [
+     10,
+     2,
+     10
+    ],
+    "crown": 11.3,
+    "base": 1.5,
+    "height": 17,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/sausage_tree/sausage_tree_l3",
+    "size": "large",
+    "anchor": [
+     10,
+     2,
+     9
+    ],
+    "crown": 11.7,
+    "base": 1.5,
+    "height": 17,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/sausage_tree/sausage_tree_l4",
+    "size": "large",
+    "anchor": [
+     11,
+     2,
+     8
+    ],
+    "crown": 11.9,
+    "base": 1.5,
+    "height": 15,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/sausage_tree/sausage_tree_l5",
+    "size": "large",
+    "anchor": [
+     8,
+     2,
+     9
+    ],
+    "crown": 10.5,
+    "base": 1.5,
+    "height": 15,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/sausage_tree/sausage_tree_l6",
+    "size": "large",
+    "anchor": [
+     8,
+     2,
+     9
+    ],
+    "crown": 9.5,
+    "base": 1.5,
+    "height": 13,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/sausage_tree/sausage_tree_l7",
+    "size": "large",
+    "anchor": [
+     9,
+     2,
+     9
+    ],
+    "crown": 11.3,
+    "base": 1.5,
+    "height": 16,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/sausage_tree/sausage_tree_l8",
+    "size": "large",
+    "anchor": [
+     6,
+     2,
+     7
+    ],
+    "crown": 9.6,
+    "base": 1.5,
+    "height": 15,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/sausage_tree/sausage_tree_f1",
+    "size": "forest",
+    "anchor": [
+     9,
+     2,
+     8
+    ],
+    "crown": 10.9,
+    "base": 1.9,
+    "height": 17,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/sausage_tree/sausage_tree_f2",
+    "size": "forest",
+    "anchor": [
+     13,
+     2,
+     11
+    ],
+    "crown": 13.7,
+    "base": 1.9,
+    "height": 19,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/sausage_tree/sausage_tree_f3",
+    "size": "forest",
+    "anchor": [
+     12,
+     2,
+     11
+    ],
+    "crown": 14.4,
+    "base": 1.9,
+    "height": 19,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/sausage_tree/sausage_tree_f4",
+    "size": "forest",
+    "anchor": [
+     12,
+     2,
+     9
+    ],
+    "crown": 14.1,
+    "base": 1.9,
+    "height": 19,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/sausage_tree/sausage_tree_f5",
+    "size": "forest",
+    "anchor": [
+     11,
+     2,
+     10
+    ],
+    "crown": 11.9,
+    "base": 1.9,
+    "height": 18,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/sausage_tree/sausage_tree_f6",
+    "size": "forest",
+    "anchor": [
+     10,
+     2,
+     9
+    ],
+    "crown": 10.9,
+    "base": 1.5,
+    "height": 17,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/sausage_tree/sausage_tree_f7",
+    "size": "forest",
+    "anchor": [
+     11,
+     2,
+     12
+    ],
+    "crown": 13.7,
+    "base": 1.9,
+    "height": 18,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/sausage_tree/sausage_tree_f8",
+    "size": "forest",
+    "anchor": [
+     10,
+     2,
+     8
+    ],
+    "crown": 11.5,
+    "base": 1.5,
+    "height": 18,
+    "depth": 2
+   }
+  ]
+ }
+}

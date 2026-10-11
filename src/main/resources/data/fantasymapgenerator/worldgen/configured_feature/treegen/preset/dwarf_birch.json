@@ -1,0 +1,536 @@
+{
+ "type": "fantasymapgenerator:treegen_object",
+ "config": {
+  "preset": "dwarf_birch",
+  "layer": "shrubs",
+  "ground": [
+   "grass",
+   "floor",
+   "soil",
+   "moss",
+   "wet"
+  ],
+  "objects": [
+   {
+    "template": "fantasymapgenerator:treegen/dwarf_birch/dwarf_birch_t1",
+    "size": "tiny",
+    "anchor": [
+     2,
+     2,
+     1
+    ],
+    "crown": 2.7,
+    "base": 1.5,
+    "height": 3,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/dwarf_birch/dwarf_birch_t2",
+    "size": "tiny",
+    "anchor": [
+     2,
+     1,
+     1
+    ],
+    "crown": 2.7,
+    "base": 1.5,
+    "height": 3,
+    "depth": 1
+   },
+   {
+    "template": "fantasymapgenerator:treegen/dwarf_birch/dwarf_birch_t3",
+    "size": "tiny",
+    "anchor": [
+     2,
+     1,
+     1
+    ],
+    "crown": 3.3,
+    "base": 1.5,
+    "height": 3,
+    "depth": 1
+   },
+   {
+    "template": "fantasymapgenerator:treegen/dwarf_birch/dwarf_birch_t4",
+    "size": "tiny",
+    "anchor": [
+     2,
+     1,
+     1
+    ],
+    "crown": 2.7,
+    "base": 1.5,
+    "height": 3,
+    "depth": 1
+   },
+   {
+    "template": "fantasymapgenerator:treegen/dwarf_birch/dwarf_birch_t5",
+    "size": "tiny",
+    "anchor": [
+     2,
+     1,
+     2
+    ],
+    "crown": 2.7,
+    "base": 0.5,
+    "height": 3,
+    "depth": 1
+   },
+   {
+    "template": "fantasymapgenerator:treegen/dwarf_birch/dwarf_birch_t6",
+    "size": "tiny",
+    "anchor": [
+     2,
+     2,
+     2
+    ],
+    "crown": 2.7,
+    "base": 1.5,
+    "height": 2,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/dwarf_birch/dwarf_birch_t7",
+    "size": "tiny",
+    "anchor": [
+     2,
+     1,
+     1
+    ],
+    "crown": 2.7,
+    "base": 1.5,
+    "height": 3,
+    "depth": 1
+   },
+   {
+    "template": "fantasymapgenerator:treegen/dwarf_birch/dwarf_birch_t8",
+    "size": "tiny",
+    "anchor": [
+     2,
+     1,
+     1
+    ],
+    "crown": 2.7,
+    "base": 1.5,
+    "height": 3,
+    "depth": 1
+   },
+   {
+    "template": "fantasymapgenerator:treegen/dwarf_birch/dwarf_birch_s1",
+    "size": "small",
+    "anchor": [
+     2,
+     1,
+     2
+    ],
+    "crown": 2.7,
+    "base": 1.5,
+    "height": 3,
+    "depth": 1
+   },
+   {
+    "template": "fantasymapgenerator:treegen/dwarf_birch/dwarf_birch_s2",
+    "size": "small",
+    "anchor": [
+     2,
+     1,
+     3
+    ],
+    "crown": 4.7,
+    "base": 1.5,
+    "height": 4,
+    "depth": 1
+   },
+   {
+    "template": "fantasymapgenerator:treegen/dwarf_birch/dwarf_birch_s3",
+    "size": "small",
+    "anchor": [
+     2,
+     1,
+     3
+    ],
+    "crown": 4.1,
+    "base": 0.5,
+    "height": 4,
+    "depth": 1
+   },
+   {
+    "template": "fantasymapgenerator:treegen/dwarf_birch/dwarf_birch_s4",
+    "size": "small",
+    "anchor": [
+     2,
+     1,
+     3
+    ],
+    "crown": 4.1,
+    "base": 1.5,
+    "height": 4,
+    "depth": 1
+   },
+   {
+    "template": "fantasymapgenerator:treegen/dwarf_birch/dwarf_birch_s5",
+    "size": "small",
+    "anchor": [
+     2,
+     1,
+     2
+    ],
+    "crown": 4.1,
+    "base": 1.5,
+    "height": 4,
+    "depth": 1
+   },
+   {
+    "template": "fantasymapgenerator:treegen/dwarf_birch/dwarf_birch_s6",
+    "size": "small",
+    "anchor": [
+     2,
+     1,
+     1
+    ],
+    "crown": 2.7,
+    "base": 0.5,
+    "height": 3,
+    "depth": 1
+   },
+   {
+    "template": "fantasymapgenerator:treegen/dwarf_birch/dwarf_birch_s7",
+    "size": "small",
+    "anchor": [
+     2,
+     1,
+     3
+    ],
+    "crown": 3.7,
+    "base": 1.5,
+    "height": 5,
+    "depth": 1
+   },
+   {
+    "template": "fantasymapgenerator:treegen/dwarf_birch/dwarf_birch_s8",
+    "size": "small",
+    "anchor": [
+     3,
+     1,
+     1
+    ],
+    "crown": 3.7,
+    "base": 1.5,
+    "height": 4,
+    "depth": 1
+   },
+   {
+    "template": "fantasymapgenerator:treegen/dwarf_birch/dwarf_birch_m1",
+    "size": "medium",
+    "anchor": [
+     2,
+     1,
+     2
+    ],
+    "crown": 2.7,
+    "base": 1.5,
+    "height": 3,
+    "depth": 1
+   },
+   {
+    "template": "fantasymapgenerator:treegen/dwarf_birch/dwarf_birch_m2",
+    "size": "medium",
+    "anchor": [
+     2,
+     1,
+     3
+    ],
+    "crown": 4.7,
+    "base": 1.5,
+    "height": 4,
+    "depth": 1
+   },
+   {
+    "template": "fantasymapgenerator:treegen/dwarf_birch/dwarf_birch_m3",
+    "size": "medium",
+    "anchor": [
+     2,
+     1,
+     3
+    ],
+    "crown": 4.1,
+    "base": 0.5,
+    "height": 4,
+    "depth": 1
+   },
+   {
+    "template": "fantasymapgenerator:treegen/dwarf_birch/dwarf_birch_m4",
+    "size": "medium",
+    "anchor": [
+     2,
+     1,
+     3
+    ],
+    "crown": 4.1,
+    "base": 1.5,
+    "height": 4,
+    "depth": 1
+   },
+   {
+    "template": "fantasymapgenerator:treegen/dwarf_birch/dwarf_birch_m5",
+    "size": "medium",
+    "anchor": [
+     2,
+     1,
+     2
+    ],
+    "crown": 4.1,
+    "base": 1.5,
+    "height": 4,
+    "depth": 1
+   },
+   {
+    "template": "fantasymapgenerator:treegen/dwarf_birch/dwarf_birch_m6",
+    "size": "medium",
+    "anchor": [
+     2,
+     1,
+     1
+    ],
+    "crown": 2.7,
+    "base": 0.5,
+    "height": 3,
+    "depth": 1
+   },
+   {
+    "template": "fantasymapgenerator:treegen/dwarf_birch/dwarf_birch_m7",
+    "size": "medium",
+    "anchor": [
+     2,
+     1,
+     3
+    ],
+    "crown": 3.7,
+    "base": 1.5,
+    "height": 5,
+    "depth": 1
+   },
+   {
+    "template": "fantasymapgenerator:treegen/dwarf_birch/dwarf_birch_m8",
+    "size": "medium",
+    "anchor": [
+     3,
+     1,
+     1
+    ],
+    "crown": 3.7,
+    "base": 1.5,
+    "height": 4,
+    "depth": 1
+   },
+   {
+    "template": "fantasymapgenerator:treegen/dwarf_birch/dwarf_birch_l1",
+    "size": "large",
+    "anchor": [
+     2,
+     1,
+     2
+    ],
+    "crown": 3.3,
+    "base": 1.9,
+    "height": 4,
+    "depth": 1
+   },
+   {
+    "template": "fantasymapgenerator:treegen/dwarf_birch/dwarf_birch_l2",
+    "size": "large",
+    "anchor": [
+     3,
+     1,
+     3
+    ],
+    "crown": 4.7,
+    "base": 1.5,
+    "height": 6,
+    "depth": 1
+   },
+   {
+    "template": "fantasymapgenerator:treegen/dwarf_birch/dwarf_birch_l3",
+    "size": "large",
+    "anchor": [
+     3,
+     1,
+     3
+    ],
+    "crown": 4.7,
+    "base": 1.5,
+    "height": 5,
+    "depth": 1
+   },
+   {
+    "template": "fantasymapgenerator:treegen/dwarf_birch/dwarf_birch_l4",
+    "size": "large",
+    "anchor": [
+     3,
+     1,
+     3
+    ],
+    "crown": 4.1,
+    "base": 1.9,
+    "height": 5,
+    "depth": 1
+   },
+   {
+    "template": "fantasymapgenerator:treegen/dwarf_birch/dwarf_birch_l5",
+    "size": "large",
+    "anchor": [
+     3,
+     1,
+     3
+    ],
+    "crown": 4.7,
+    "base": 1.5,
+    "height": 5,
+    "depth": 1
+   },
+   {
+    "template": "fantasymapgenerator:treegen/dwarf_birch/dwarf_birch_l6",
+    "size": "large",
+    "anchor": [
+     2,
+     2,
+     2
+    ],
+    "crown": 2.7,
+    "base": 1.5,
+    "height": 4,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/dwarf_birch/dwarf_birch_l7",
+    "size": "large",
+    "anchor": [
+     3,
+     1,
+     2
+    ],
+    "crown": 3.7,
+    "base": 0.5,
+    "height": 5,
+    "depth": 1
+   },
+   {
+    "template": "fantasymapgenerator:treegen/dwarf_birch/dwarf_birch_l8",
+    "size": "large",
+    "anchor": [
+     3,
+     1,
+     2
+    ],
+    "crown": 4.1,
+    "base": 1.5,
+    "height": 5,
+    "depth": 1
+   },
+   {
+    "template": "fantasymapgenerator:treegen/dwarf_birch/dwarf_birch_f1",
+    "size": "forest",
+    "anchor": [
+     3,
+     1,
+     3
+    ],
+    "crown": 4.1,
+    "base": 0.5,
+    "height": 5,
+    "depth": 1
+   },
+   {
+    "template": "fantasymapgenerator:treegen/dwarf_birch/dwarf_birch_f2",
+    "size": "forest",
+    "anchor": [
+     4,
+     1,
+     4
+    ],
+    "crown": 5.0,
+    "base": 1.5,
+    "height": 7,
+    "depth": 1
+   },
+   {
+    "template": "fantasymapgenerator:treegen/dwarf_birch/dwarf_birch_f3",
+    "size": "forest",
+    "anchor": [
+     5,
+     1,
+     3
+    ],
+    "crown": 5.6,
+    "base": 1.9,
+    "height": 6,
+    "depth": 1
+   },
+   {
+    "template": "fantasymapgenerator:treegen/dwarf_birch/dwarf_birch_f4",
+    "size": "forest",
+    "anchor": [
+     5,
+     1,
+     3
+    ],
+    "crown": 5.9,
+    "base": 1.9,
+    "height": 6,
+    "depth": 1
+   },
+   {
+    "template": "fantasymapgenerator:treegen/dwarf_birch/dwarf_birch_f5",
+    "size": "forest",
+    "anchor": [
+     3,
+     1,
+     3
+    ],
+    "crown": 5.9,
+    "base": 0.5,
+    "height": 7,
+    "depth": 1
+   },
+   {
+    "template": "fantasymapgenerator:treegen/dwarf_birch/dwarf_birch_f6",
+    "size": "forest",
+    "anchor": [
+     3,
+     1,
+     3
+    ],
+    "crown": 4.1,
+    "base": 0.5,
+    "height": 5,
+    "depth": 1
+   },
+   {
+    "template": "fantasymapgenerator:treegen/dwarf_birch/dwarf_birch_f7",
+    "size": "forest",
+    "anchor": [
+     3,
+     1,
+     6
+    ],
+    "crown": 6.6,
+    "base": 1.5,
+    "height": 7,
+    "depth": 1
+   },
+   {
+    "template": "fantasymapgenerator:treegen/dwarf_birch/dwarf_birch_f8",
+    "size": "forest",
+    "anchor": [
+     3,
+     1,
+     3
+    ],
+    "crown": 5.0,
+    "base": 1.9,
+    "height": 6,
+    "depth": 1
+   }
+  ]
+ }
+}

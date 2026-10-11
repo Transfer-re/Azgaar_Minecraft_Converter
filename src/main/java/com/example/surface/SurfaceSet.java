@@ -49,6 +49,7 @@ public final class SurfaceSet {
     static final class RawPalette {
         RawTints tints; String soil, stone; int soilDepth; double clump, patch;
         List<RawSub> sub; List<RawRamp> ramps; RawRamp bed;
+        SurfaceCover.Raw cover;
     }
     static final class RawFile {
         String id, fallback;
@@ -127,9 +128,12 @@ public final class SurfaceSet {
         final Mix[] subMixes;
         final Ramp[] ramps;
         final Ramp bed;
+        /** Plants, props and patches on this ground, or null for none. */
+        public final SurfaceCover cover;
 
         Palette(String id, String soil, int stone, int soilDepth, int[] tints, double clump, double patch,
-                String[] subNames, double[] subWeights, Mix[] subMixes, Ramp[] ramps, Ramp bed) {
+                String[] subNames, double[] subWeights, Mix[] subMixes, Ramp[] ramps, Ramp bed,
+                SurfaceCover cover) {
             this.id = id;
             this.soil = soil;
             this.stone = stone;
@@ -146,6 +150,7 @@ public final class SurfaceSet {
             this.subMixes = subMixes;
             this.ramps = ramps;
             this.bed = bed;
+            this.cover = cover;
         }
 
         public String subName(int i) {
@@ -269,7 +274,8 @@ public final class SurfaceSet {
         Integer stone = index.get(raw.stone);
         if (stone == null) throw new IllegalArgumentException(id + ": stone '" + raw.stone + "' is not a material");
         return new Palette(id, raw.soil, stone, raw.soilDepth, tints, raw.clump, raw.patch,
-                names, weights, mixes, ramps.toArray(new Ramp[0]), ramp(raw.bed, index, id));
+                names, weights, mixes, ramps.toArray(new Ramp[0]), ramp(raw.bed, index, id),
+                SurfaceCover.compile(raw.cover, index, id));
     }
 
     private static Ramp ramp(RawRamp r, Map<String, Integer> index, String id) {
@@ -327,6 +333,17 @@ public final class SurfaceSet {
 
     public int materialCount() {
         return materialNames.length;
+    }
+
+    /** Every block id the palettes' ground cover scatters: plants, rocks, cones. */
+    public java.util.Set<String> coverIds() {
+        java.util.Set<String> out = new java.util.LinkedHashSet<>();
+        for (Palette p : palettes.values()) {
+            if (p.cover == null) continue;
+            out.addAll(List.of(p.cover.plants.blocks));
+            out.addAll(List.of(p.cover.props.blocks));
+        }
+        return out;
     }
 
     /**

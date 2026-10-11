@@ -6,8 +6,8 @@ rem  Usage (from anywhere):
 rem    terrain.cmd <map.json> <outBase> [--scale 12] [--max-y 768] [--peak 420] [--gamma 1.8] [--seed N] [--no-roads]
 rem
 rem  Example:
-rem    terrain.cmd "run\Encia Full 2026-08-29-22-43.json" ..\refinemap\outj\Encia
-rem    python ..\refinemap\render3d.py ..\refinemap\outj\Encia --auto 4
+rem    terrain.cmd "..\maps\Encia Full 2026-08-29-22-43.json" ..\..\refinemap\outj\Encia
+rem    python ..\..\refinemap\render3d.py ..\..\refinemap\outj\Encia --auto 4
 setlocal enabledelayedexpansion
 
 set "ROOT=%~dp0"

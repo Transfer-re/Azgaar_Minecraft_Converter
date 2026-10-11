@@ -1,0 +1,96 @@
+{
+ "type": "fantasymapgenerator:treegen_mix",
+ "config": {
+  "layer": "shrubs",
+  "spacing": 0.7,
+  "attempts": 5,
+  "slope": 2,
+  "gradient": 1.4,
+  "entries": [
+   {
+    "preset": "fantasymapgenerator:treegen/preset/sagebrush",
+    "weight": 4.0,
+    "sizes": {
+     "tiny": 1.0,
+     "small": 2.0,
+     "medium": 3.0,
+     "large": 2.0,
+     "forest": 1.0
+    },
+    "ground": [
+     "grass",
+     "floor",
+     "soil",
+     "moss",
+     "wet",
+     "sand",
+     "gravel",
+     "rock"
+    ]
+   },
+   {
+    "preset": "fantasymapgenerator:treegen/preset/saxaul",
+    "weight": 1.5,
+    "sizes": {
+     "tiny": 1.0,
+     "small": 2.0,
+     "medium": 3.0,
+     "large": 2.0,
+     "forest": 1.0
+    },
+    "ground": [
+     "grass",
+     "floor",
+     "soil",
+     "moss",
+     "wet",
+     "sand",
+     "gravel",
+     "rock"
+    ]
+   },
+   {
+    "preset": "fantasymapgenerator:treegen/preset/juniper_shrub",
+    "weight": 1.0,
+    "sizes": {
+     "tiny": 1.0,
+     "small": 2.0,
+     "medium": 3.0,
+     "large": 2.0,
+     "forest": 1.0
+    },
+    "ground": [
+     "grass",
+     "floor",
+     "soil",
+     "moss",
+     "wet",
+     "gravel",
+     "rock",
+     "sand"
+    ]
+   },
+   {
+    "preset": "fantasymapgenerator:treegen/preset/gorse_bush",
+    "weight": 0.5,
+    "sizes": {
+     "tiny": 1.0,
+     "small": 2.0,
+     "medium": 3.0,
+     "large": 2.0,
+     "forest": 1.0
+    },
+    "ground": [
+     "grass",
+     "floor",
+     "soil",
+     "moss",
+     "wet",
+     "sand",
+     "gravel",
+     "rock"
+    ]
+   }
+  ]
+ }
+}

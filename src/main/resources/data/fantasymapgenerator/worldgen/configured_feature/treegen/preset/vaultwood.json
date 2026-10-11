@@ -1,0 +1,536 @@
+{
+ "type": "fantasymapgenerator:treegen_object",
+ "config": {
+  "preset": "vaultwood",
+  "layer": "trees",
+  "ground": [
+   "grass",
+   "floor",
+   "soil",
+   "moss",
+   "wet"
+  ],
+  "objects": [
+   {
+    "template": "fantasymapgenerator:treegen/vaultwood/vaultwood_t1",
+    "size": "tiny",
+    "anchor": [
+     4,
+     2,
+     5
+    ],
+    "crown": 5.9,
+    "base": 5.5,
+    "height": 13,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/vaultwood/vaultwood_t2",
+    "size": "tiny",
+    "anchor": [
+     6,
+     2,
+     6
+    ],
+    "crown": 9.0,
+    "base": 5.9,
+    "height": 16,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/vaultwood/vaultwood_t3",
+    "size": "tiny",
+    "anchor": [
+     9,
+     2,
+     7
+    ],
+    "crown": 10.0,
+    "base": 6.3,
+    "height": 15,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/vaultwood/vaultwood_t4",
+    "size": "tiny",
+    "anchor": [
+     9,
+     2,
+     7
+    ],
+    "crown": 9.7,
+    "base": 5.6,
+    "height": 14,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/vaultwood/vaultwood_t5",
+    "size": "tiny",
+    "anchor": [
+     6,
+     2,
+     6
+    ],
+    "crown": 8.1,
+    "base": 5.9,
+    "height": 14,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/vaultwood/vaultwood_t6",
+    "size": "tiny",
+    "anchor": [
+     6,
+     2,
+     5
+    ],
+    "crown": 7.6,
+    "base": 6.5,
+    "height": 13,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/vaultwood/vaultwood_t7",
+    "size": "tiny",
+    "anchor": [
+     5,
+     2,
+     7
+    ],
+    "crown": 9.1,
+    "base": 6.6,
+    "height": 14,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/vaultwood/vaultwood_t8",
+    "size": "tiny",
+    "anchor": [
+     6,
+     2,
+     5
+    ],
+    "crown": 8.1,
+    "base": 6.2,
+    "height": 14,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/vaultwood/vaultwood_s1",
+    "size": "small",
+    "anchor": [
+     6,
+     2,
+     8
+    ],
+    "crown": 9.7,
+    "base": 6.9,
+    "height": 20,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/vaultwood/vaultwood_s2",
+    "size": "small",
+    "anchor": [
+     13,
+     2,
+     11
+    ],
+    "crown": 13.5,
+    "base": 8.6,
+    "height": 21,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/vaultwood/vaultwood_s3",
+    "size": "small",
+    "anchor": [
+     11,
+     2,
+     10
+    ],
+    "crown": 12.7,
+    "base": 6.2,
+    "height": 22,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/vaultwood/vaultwood_s4",
+    "size": "small",
+    "anchor": [
+     11,
+     2,
+     9
+    ],
+    "crown": 12.7,
+    "base": 7.6,
+    "height": 20,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/vaultwood/vaultwood_s5",
+    "size": "small",
+    "anchor": [
+     11,
+     2,
+     11
+    ],
+    "crown": 11.7,
+    "base": 6.9,
+    "height": 20,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/vaultwood/vaultwood_s6",
+    "size": "small",
+    "anchor": [
+     11,
+     2,
+     8
+    ],
+    "crown": 11.7,
+    "base": 6.5,
+    "height": 20,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/vaultwood/vaultwood_s7",
+    "size": "small",
+    "anchor": [
+     10,
+     2,
+     12
+    ],
+    "crown": 12.7,
+    "base": 6.2,
+    "height": 22,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/vaultwood/vaultwood_s8",
+    "size": "small",
+    "anchor": [
+     10,
+     2,
+     11
+    ],
+    "crown": 12.2,
+    "base": 7.6,
+    "height": 21,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/vaultwood/vaultwood_m1",
+    "size": "medium",
+    "anchor": [
+     11,
+     2,
+     10
+    ],
+    "crown": 12.7,
+    "base": 8.6,
+    "height": 26,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/vaultwood/vaultwood_m2",
+    "size": "medium",
+    "anchor": [
+     14,
+     2,
+     16
+    ],
+    "crown": 17.5,
+    "base": 8.1,
+    "height": 27,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/vaultwood/vaultwood_m3",
+    "size": "medium",
+    "anchor": [
+     16,
+     2,
+     14
+    ],
+    "crown": 17.3,
+    "base": 8.1,
+    "height": 27,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/vaultwood/vaultwood_m4",
+    "size": "medium",
+    "anchor": [
+     13,
+     2,
+     14
+    ],
+    "crown": 16.3,
+    "base": 7.5,
+    "height": 27,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/vaultwood/vaultwood_m5",
+    "size": "medium",
+    "anchor": [
+     12,
+     2,
+     14
+    ],
+    "crown": 14.6,
+    "base": 8.3,
+    "height": 27,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/vaultwood/vaultwood_m6",
+    "size": "medium",
+    "anchor": [
+     13,
+     2,
+     13
+    ],
+    "crown": 15.3,
+    "base": 7.7,
+    "height": 26,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/vaultwood/vaultwood_m7",
+    "size": "medium",
+    "anchor": [
+     15,
+     2,
+     13
+    ],
+    "crown": 15.5,
+    "base": 7.6,
+    "height": 28,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/vaultwood/vaultwood_m8",
+    "size": "medium",
+    "anchor": [
+     13,
+     2,
+     14
+    ],
+    "crown": 15.6,
+    "base": 7.6,
+    "height": 27,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/vaultwood/vaultwood_l1",
+    "size": "large",
+    "anchor": [
+     8,
+     2,
+     5
+    ],
+    "crown": 2.7,
+    "base": 8.1,
+    "height": 30,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/vaultwood/vaultwood_l2",
+    "size": "large",
+    "anchor": [
+     19,
+     2,
+     19
+    ],
+    "crown": 21.1,
+    "base": 8.3,
+    "height": 35,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/vaultwood/vaultwood_l3",
+    "size": "large",
+    "anchor": [
+     6,
+     2,
+     7
+    ],
+    "crown": 5.9,
+    "base": 8.1,
+    "height": 33,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/vaultwood/vaultwood_l4",
+    "size": "large",
+    "anchor": [
+     19,
+     2,
+     18
+    ],
+    "crown": 21.5,
+    "base": 7.7,
+    "height": 35,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/vaultwood/vaultwood_l5",
+    "size": "large",
+    "anchor": [
+     16,
+     2,
+     8
+    ],
+    "crown": 19.9,
+    "base": 8.5,
+    "height": 33,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/vaultwood/vaultwood_l6",
+    "size": "large",
+    "anchor": [
+     17,
+     2,
+     12
+    ],
+    "crown": 18.0,
+    "base": 8.5,
+    "height": 33,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/vaultwood/vaultwood_l7",
+    "size": "large",
+    "anchor": [
+     8,
+     2,
+     8
+    ],
+    "crown": 5.0,
+    "base": 7.8,
+    "height": 35,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/vaultwood/vaultwood_l8",
+    "size": "large",
+    "anchor": [
+     14,
+     2,
+     18
+    ],
+    "crown": 18.5,
+    "base": 8.6,
+    "height": 35,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/vaultwood/vaultwood_f1",
+    "size": "forest",
+    "anchor": [
+     6,
+     2,
+     6
+    ],
+    "crown": 5.0,
+    "base": 7.7,
+    "height": 38,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/vaultwood/vaultwood_f2",
+    "size": "forest",
+    "anchor": [
+     8,
+     2,
+     7
+    ],
+    "crown": 23.8,
+    "base": 7.8,
+    "height": 41,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/vaultwood/vaultwood_f3",
+    "size": "forest",
+    "anchor": [
+     12,
+     2,
+     22
+    ],
+    "crown": 22.7,
+    "base": 8.6,
+    "height": 41,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/vaultwood/vaultwood_f4",
+    "size": "forest",
+    "anchor": [
+     8,
+     2,
+     8
+    ],
+    "crown": 4.1,
+    "base": 7.8,
+    "height": 39,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/vaultwood/vaultwood_f5",
+    "size": "forest",
+    "anchor": [
+     20,
+     2,
+     19
+    ],
+    "crown": 23.0,
+    "base": 8.5,
+    "height": 39,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/vaultwood/vaultwood_f6",
+    "size": "forest",
+    "anchor": [
+     18,
+     2,
+     20
+    ],
+    "crown": 22.1,
+    "base": 7.8,
+    "height": 39,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/vaultwood/vaultwood_f7",
+    "size": "forest",
+    "anchor": [
+     13,
+     2,
+     20
+    ],
+    "crown": 25.3,
+    "base": 7.8,
+    "height": 42,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/vaultwood/vaultwood_f8",
+    "size": "forest",
+    "anchor": [
+     20,
+     2,
+     19
+    ],
+    "crown": 23.5,
+    "base": 8.6,
+    "height": 41,
+    "depth": 2
+   }
+  ]
+ }
+}

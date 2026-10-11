@@ -1,0 +1,536 @@
+{
+ "type": "fantasymapgenerator:treegen_object",
+ "config": {
+  "preset": "saxaul",
+  "layer": "shrubs",
+  "ground": [
+   "grass",
+   "floor",
+   "soil",
+   "moss",
+   "wet"
+  ],
+  "objects": [
+   {
+    "template": "fantasymapgenerator:treegen/saxaul/saxaul_t1",
+    "size": "tiny",
+    "anchor": [
+     2,
+     2,
+     3
+    ],
+    "crown": 2.7,
+    "base": 1.5,
+    "height": 3,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/saxaul/saxaul_t2",
+    "size": "tiny",
+    "anchor": [
+     3,
+     2,
+     3
+    ],
+    "crown": 2.7,
+    "base": 1.5,
+    "height": 4,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/saxaul/saxaul_t3",
+    "size": "tiny",
+    "anchor": [
+     2,
+     2,
+     3
+    ],
+    "crown": 3.3,
+    "base": 0.5,
+    "height": 4,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/saxaul/saxaul_t4",
+    "size": "tiny",
+    "anchor": [
+     1,
+     2,
+     3
+    ],
+    "crown": 2.7,
+    "base": 1.9,
+    "height": 4,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/saxaul/saxaul_t5",
+    "size": "tiny",
+    "anchor": [
+     3,
+     2,
+     3
+    ],
+    "crown": 2.7,
+    "base": 1.5,
+    "height": 3,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/saxaul/saxaul_t6",
+    "size": "tiny",
+    "anchor": [
+     3,
+     2,
+     3
+    ],
+    "crown": 2.7,
+    "base": 1.9,
+    "height": 3,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/saxaul/saxaul_t7",
+    "size": "tiny",
+    "anchor": [
+     2,
+     2,
+     3
+    ],
+    "crown": 3.3,
+    "base": 1.9,
+    "height": 4,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/saxaul/saxaul_t8",
+    "size": "tiny",
+    "anchor": [
+     3,
+     2,
+     3
+    ],
+    "crown": 2.7,
+    "base": 1.9,
+    "height": 3,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/saxaul/saxaul_s1",
+    "size": "small",
+    "anchor": [
+     3,
+     2,
+     3
+    ],
+    "crown": 2.7,
+    "base": 1.5,
+    "height": 4,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/saxaul/saxaul_s2",
+    "size": "small",
+    "anchor": [
+     2,
+     2,
+     2
+    ],
+    "crown": 4.1,
+    "base": 1.5,
+    "height": 5,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/saxaul/saxaul_s3",
+    "size": "small",
+    "anchor": [
+     3,
+     2,
+     3
+    ],
+    "crown": 3.3,
+    "base": 1.5,
+    "height": 4,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/saxaul/saxaul_s4",
+    "size": "small",
+    "anchor": [
+     3,
+     2,
+     2
+    ],
+    "crown": 3.7,
+    "base": 1.5,
+    "height": 4,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/saxaul/saxaul_s5",
+    "size": "small",
+    "anchor": [
+     3,
+     2,
+     3
+    ],
+    "crown": 3.3,
+    "base": 0.5,
+    "height": 5,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/saxaul/saxaul_s6",
+    "size": "small",
+    "anchor": [
+     3,
+     2,
+     3
+    ],
+    "crown": 2.7,
+    "base": 1.5,
+    "height": 4,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/saxaul/saxaul_s7",
+    "size": "small",
+    "anchor": [
+     3,
+     2,
+     2
+    ],
+    "crown": 2.7,
+    "base": 0.5,
+    "height": 5,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/saxaul/saxaul_s8",
+    "size": "small",
+    "anchor": [
+     2,
+     2,
+     3
+    ],
+    "crown": 2.7,
+    "base": 0.5,
+    "height": 5,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/saxaul/saxaul_m1",
+    "size": "medium",
+    "anchor": [
+     3,
+     2,
+     2
+    ],
+    "crown": 3.3,
+    "base": 0.5,
+    "height": 5,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/saxaul/saxaul_m2",
+    "size": "medium",
+    "anchor": [
+     3,
+     2,
+     2
+    ],
+    "crown": 3.5,
+    "base": 0.5,
+    "height": 6,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/saxaul/saxaul_m3",
+    "size": "medium",
+    "anchor": [
+     3,
+     2,
+     2
+    ],
+    "crown": 4.1,
+    "base": 0.5,
+    "height": 6,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/saxaul/saxaul_m4",
+    "size": "medium",
+    "anchor": [
+     4,
+     2,
+     3
+    ],
+    "crown": 4.6,
+    "base": 0.5,
+    "height": 6,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/saxaul/saxaul_m5",
+    "size": "medium",
+    "anchor": [
+     2,
+     2,
+     3
+    ],
+    "crown": 4.1,
+    "base": 0.5,
+    "height": 6,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/saxaul/saxaul_m6",
+    "size": "medium",
+    "anchor": [
+     2,
+     2,
+     2
+    ],
+    "crown": 2.7,
+    "base": 0.5,
+    "height": 5,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/saxaul/saxaul_m7",
+    "size": "medium",
+    "anchor": [
+     3,
+     2,
+     3
+    ],
+    "crown": 4.5,
+    "base": 0.5,
+    "height": 6,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/saxaul/saxaul_m8",
+    "size": "medium",
+    "anchor": [
+     3,
+     2,
+     2
+    ],
+    "crown": 3.7,
+    "base": 0.5,
+    "height": 6,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/saxaul/saxaul_l1",
+    "size": "large",
+    "anchor": [
+     4,
+     2,
+     3
+    ],
+    "crown": 4.6,
+    "base": 0.5,
+    "height": 7,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/saxaul/saxaul_l2",
+    "size": "large",
+    "anchor": [
+     4,
+     2,
+     4
+    ],
+    "crown": 5.5,
+    "base": 1.5,
+    "height": 8,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/saxaul/saxaul_l3",
+    "size": "large",
+    "anchor": [
+     4,
+     2,
+     5
+    ],
+    "crown": 6.3,
+    "base": 0.5,
+    "height": 8,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/saxaul/saxaul_l4",
+    "size": "large",
+    "anchor": [
+     5,
+     2,
+     5
+    ],
+    "crown": 6.3,
+    "base": 1.5,
+    "height": 8,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/saxaul/saxaul_l5",
+    "size": "large",
+    "anchor": [
+     3,
+     2,
+     4
+    ],
+    "crown": 5.0,
+    "base": 1.5,
+    "height": 8,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/saxaul/saxaul_l6",
+    "size": "large",
+    "anchor": [
+     4,
+     2,
+     3
+    ],
+    "crown": 5.0,
+    "base": 0.5,
+    "height": 7,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/saxaul/saxaul_l7",
+    "size": "large",
+    "anchor": [
+     4,
+     2,
+     4
+    ],
+    "crown": 5.0,
+    "base": 0.5,
+    "height": 8,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/saxaul/saxaul_l8",
+    "size": "large",
+    "anchor": [
+     4,
+     2,
+     4
+    ],
+    "crown": 4.7,
+    "base": 1.5,
+    "height": 8,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/saxaul/saxaul_f1",
+    "size": "forest",
+    "anchor": [
+     3,
+     2,
+     3
+    ],
+    "crown": 4.6,
+    "base": 1.5,
+    "height": 8,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/saxaul/saxaul_f2",
+    "size": "forest",
+    "anchor": [
+     5,
+     2,
+     5
+    ],
+    "crown": 5.6,
+    "base": 1.5,
+    "height": 9,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/saxaul/saxaul_f3",
+    "size": "forest",
+    "anchor": [
+     5,
+     2,
+     4
+    ],
+    "crown": 5.9,
+    "base": 1.5,
+    "height": 9,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/saxaul/saxaul_f4",
+    "size": "forest",
+    "anchor": [
+     5,
+     2,
+     3
+    ],
+    "crown": 6.3,
+    "base": 1.5,
+    "height": 9,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/saxaul/saxaul_f5",
+    "size": "forest",
+    "anchor": [
+     3,
+     2,
+     4
+    ],
+    "crown": 5.6,
+    "base": 1.5,
+    "height": 9,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/saxaul/saxaul_f6",
+    "size": "forest",
+    "anchor": [
+     4,
+     2,
+     3
+    ],
+    "crown": 5.0,
+    "base": 1.5,
+    "height": 8,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/saxaul/saxaul_f7",
+    "size": "forest",
+    "anchor": [
+     4,
+     2,
+     4
+    ],
+    "crown": 6.6,
+    "base": 1.5,
+    "height": 9,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/saxaul/saxaul_f8",
+    "size": "forest",
+    "anchor": [
+     4,
+     2,
+     3
+    ],
+    "crown": 5.5,
+    "base": 1.5,
+    "height": 9,
+    "depth": 2
+   }
+  ]
+ }
+}

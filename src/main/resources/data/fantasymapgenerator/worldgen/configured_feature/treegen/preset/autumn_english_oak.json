@@ -1,0 +1,536 @@
+{
+ "type": "fantasymapgenerator:treegen_object",
+ "config": {
+  "preset": "autumn_english_oak",
+  "layer": "trees",
+  "ground": [
+   "grass",
+   "floor",
+   "soil",
+   "moss",
+   "wet"
+  ],
+  "objects": [
+   {
+    "template": "fantasymapgenerator:treegen/autumn_english_oak/autumn_english_oak_t1",
+    "size": "tiny",
+    "anchor": [
+     3,
+     2,
+     4
+    ],
+    "crown": 4.6,
+    "base": 1.9,
+    "height": 7,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/autumn_english_oak/autumn_english_oak_t2",
+    "size": "tiny",
+    "anchor": [
+     5,
+     2,
+     4
+    ],
+    "crown": 6.3,
+    "base": 2.7,
+    "height": 8,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/autumn_english_oak/autumn_english_oak_t3",
+    "size": "tiny",
+    "anchor": [
+     4,
+     2,
+     5
+    ],
+    "crown": 6.2,
+    "base": 1.5,
+    "height": 9,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/autumn_english_oak/autumn_english_oak_t4",
+    "size": "tiny",
+    "anchor": [
+     4,
+     2,
+     4
+    ],
+    "crown": 5.9,
+    "base": 2.5,
+    "height": 9,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/autumn_english_oak/autumn_english_oak_t5",
+    "size": "tiny",
+    "anchor": [
+     3,
+     2,
+     5
+    ],
+    "crown": 5.9,
+    "base": 2.7,
+    "height": 10,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/autumn_english_oak/autumn_english_oak_t6",
+    "size": "tiny",
+    "anchor": [
+     3,
+     2,
+     4
+    ],
+    "crown": 5.5,
+    "base": 1.9,
+    "height": 8,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/autumn_english_oak/autumn_english_oak_t7",
+    "size": "tiny",
+    "anchor": [
+     5,
+     2,
+     5
+    ],
+    "crown": 5.9,
+    "base": 0.5,
+    "height": 8,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/autumn_english_oak/autumn_english_oak_t8",
+    "size": "tiny",
+    "anchor": [
+     4,
+     2,
+     4
+    ],
+    "crown": 5.5,
+    "base": 1.5,
+    "height": 9,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/autumn_english_oak/autumn_english_oak_s1",
+    "size": "small",
+    "anchor": [
+     4,
+     2,
+     3
+    ],
+    "crown": 6.6,
+    "base": 1.5,
+    "height": 11,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/autumn_english_oak/autumn_english_oak_s2",
+    "size": "small",
+    "anchor": [
+     7,
+     2,
+     7
+    ],
+    "crown": 9.1,
+    "base": 1.5,
+    "height": 12,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/autumn_english_oak/autumn_english_oak_s3",
+    "size": "small",
+    "anchor": [
+     8,
+     2,
+     7
+    ],
+    "crown": 8.6,
+    "base": 1.5,
+    "height": 13,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/autumn_english_oak/autumn_english_oak_s4",
+    "size": "small",
+    "anchor": [
+     7,
+     2,
+     6
+    ],
+    "crown": 8.6,
+    "base": 1.5,
+    "height": 11,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/autumn_english_oak/autumn_english_oak_s5",
+    "size": "small",
+    "anchor": [
+     6,
+     2,
+     4
+    ],
+    "crown": 6.6,
+    "base": 1.5,
+    "height": 11,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/autumn_english_oak/autumn_english_oak_s6",
+    "size": "small",
+    "anchor": [
+     4,
+     2,
+     6
+    ],
+    "crown": 6.9,
+    "base": 1.5,
+    "height": 12,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/autumn_english_oak/autumn_english_oak_s7",
+    "size": "small",
+    "anchor": [
+     6,
+     2,
+     7
+    ],
+    "crown": 8.6,
+    "base": 1.5,
+    "height": 13,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/autumn_english_oak/autumn_english_oak_s8",
+    "size": "small",
+    "anchor": [
+     5,
+     2,
+     5
+    ],
+    "crown": 6.3,
+    "base": 1.5,
+    "height": 13,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/autumn_english_oak/autumn_english_oak_m1",
+    "size": "medium",
+    "anchor": [
+     8,
+     2,
+     8
+    ],
+    "crown": 9.1,
+    "base": 1.9,
+    "height": 16,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/autumn_english_oak/autumn_english_oak_m2",
+    "size": "medium",
+    "anchor": [
+     10,
+     2,
+     9
+    ],
+    "crown": 11.7,
+    "base": 1.9,
+    "height": 17,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/autumn_english_oak/autumn_english_oak_m3",
+    "size": "medium",
+    "anchor": [
+     11,
+     2,
+     11
+    ],
+    "crown": 11.9,
+    "base": 1.9,
+    "height": 17,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/autumn_english_oak/autumn_english_oak_m4",
+    "size": "medium",
+    "anchor": [
+     10,
+     2,
+     8
+    ],
+    "crown": 11.3,
+    "base": 1.9,
+    "height": 17,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/autumn_english_oak/autumn_english_oak_m5",
+    "size": "medium",
+    "anchor": [
+     9,
+     2,
+     7
+    ],
+    "crown": 10.0,
+    "base": 1.9,
+    "height": 18,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/autumn_english_oak/autumn_english_oak_m6",
+    "size": "medium",
+    "anchor": [
+     8,
+     2,
+     8
+    ],
+    "crown": 8.6,
+    "base": 1.5,
+    "height": 16,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/autumn_english_oak/autumn_english_oak_m7",
+    "size": "medium",
+    "anchor": [
+     10,
+     2,
+     10
+    ],
+    "crown": 11.3,
+    "base": 1.9,
+    "height": 18,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/autumn_english_oak/autumn_english_oak_m8",
+    "size": "medium",
+    "anchor": [
+     8,
+     2,
+     8
+    ],
+    "crown": 10.8,
+    "base": 1.9,
+    "height": 16,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/autumn_english_oak/autumn_english_oak_l1",
+    "size": "large",
+    "anchor": [
+     10,
+     2,
+     8
+    ],
+    "crown": 12.2,
+    "base": 1.9,
+    "height": 22,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/autumn_english_oak/autumn_english_oak_l2",
+    "size": "large",
+    "anchor": [
+     12,
+     2,
+     12
+    ],
+    "crown": 14.0,
+    "base": 1.9,
+    "height": 23,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/autumn_english_oak/autumn_english_oak_l3",
+    "size": "large",
+    "anchor": [
+     13,
+     2,
+     12
+    ],
+    "crown": 14.8,
+    "base": 1.9,
+    "height": 24,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/autumn_english_oak/autumn_english_oak_l4",
+    "size": "large",
+    "anchor": [
+     14,
+     2,
+     13
+    ],
+    "crown": 14.8,
+    "base": 1.9,
+    "height": 23,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/autumn_english_oak/autumn_english_oak_l5",
+    "size": "large",
+    "anchor": [
+     11,
+     2,
+     10
+    ],
+    "crown": 13.5,
+    "base": 1.9,
+    "height": 22,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/autumn_english_oak/autumn_english_oak_l6",
+    "size": "large",
+    "anchor": [
+     12,
+     2,
+     11
+    ],
+    "crown": 12.9,
+    "base": 1.9,
+    "height": 21,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/autumn_english_oak/autumn_english_oak_l7",
+    "size": "large",
+    "anchor": [
+     13,
+     2,
+     13
+    ],
+    "crown": 14.8,
+    "base": 1.9,
+    "height": 23,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/autumn_english_oak/autumn_english_oak_l8",
+    "size": "large",
+    "anchor": [
+     11,
+     2,
+     10
+    ],
+    "crown": 12.5,
+    "base": 1.9,
+    "height": 22,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/autumn_english_oak/autumn_english_oak_f1",
+    "size": "forest",
+    "anchor": [
+     13,
+     2,
+     10
+    ],
+    "crown": 14.1,
+    "base": 1.9,
+    "height": 25,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/autumn_english_oak/autumn_english_oak_f2",
+    "size": "forest",
+    "anchor": [
+     14,
+     2,
+     15
+    ],
+    "crown": 17.5,
+    "base": 1.9,
+    "height": 28,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/autumn_english_oak/autumn_english_oak_f3",
+    "size": "forest",
+    "anchor": [
+     16,
+     2,
+     14
+    ],
+    "crown": 16.8,
+    "base": 1.9,
+    "height": 27,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/autumn_english_oak/autumn_english_oak_f4",
+    "size": "forest",
+    "anchor": [
+     17,
+     2,
+     14
+    ],
+    "crown": 17.5,
+    "base": 1.9,
+    "height": 25,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/autumn_english_oak/autumn_english_oak_f5",
+    "size": "forest",
+    "anchor": [
+     14,
+     2,
+     13
+    ],
+    "crown": 15.5,
+    "base": 1.9,
+    "height": 26,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/autumn_english_oak/autumn_english_oak_f6",
+    "size": "forest",
+    "anchor": [
+     14,
+     2,
+     13
+    ],
+    "crown": 14.5,
+    "base": 1.9,
+    "height": 26,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/autumn_english_oak/autumn_english_oak_f7",
+    "size": "forest",
+    "anchor": [
+     15,
+     2,
+     15
+    ],
+    "crown": 17.1,
+    "base": 1.9,
+    "height": 27,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/autumn_english_oak/autumn_english_oak_f8",
+    "size": "forest",
+    "anchor": [
+     14,
+     2,
+     13
+    ],
+    "crown": 14.9,
+    "base": 1.9,
+    "height": 26,
+    "depth": 2
+   }
+  ]
+ }
+}

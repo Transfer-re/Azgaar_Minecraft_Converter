@@ -168,7 +168,9 @@
       "minecraft:spring_lava"
     ],
     [
-      "minecraft:glow_lichen"
+      "minecraft:glow_lichen",
+      "fantasymapgenerator:treegen/fen_reedbed/trees",
+      "fantasymapgenerator:treegen/fen_reedbed/shrubs"
     ],
     []
   ]

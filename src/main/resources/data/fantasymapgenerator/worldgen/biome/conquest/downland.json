@@ -180,7 +180,9 @@
       "minecraft:spring_lava"
     ],
     [
-      "minecraft:glow_lichen"
+      "minecraft:glow_lichen",
+      "fantasymapgenerator:treegen/downland/trees",
+      "fantasymapgenerator:treegen/downland/shrubs"
     ],
     []
   ]

@@ -73,6 +73,13 @@ public final class FmgContentProfile {
      * keeps existing worlds identical.
      */
     public double biomeEdgeWarp = 0.0;
+    /**
+     * Radius, in blocks, over which two biomes' ground palettes blend at a
+     * border: patches of each reach into the other, thinning out over this
+     * distance (see {@code SurfaceBlend}). Affects the layered surface only;
+     * biome ids and tints keep the warped border. 0 = a clean switch.
+     */
+    public double biomeEdgeBlend = 0.0;
 
     /** Chunk generator settings (and therefore surface rules) this profile generates with. */
     public String noiseSettings = "fantasymapgenerator:fmg_overworld_base";
@@ -160,6 +167,14 @@ public final class FmgContentProfile {
         public String deepDark = "minecraft:deep_dark";
         /** Used when a mapping names a biome this profile's datapack does not register. */
         public String fallback = "minecraft:plains";
+        /**
+         * Custom biome id -> the vanilla biomes whose structures it hosts. A
+         * structure allowed in any listed biome is allowed in this one too
+         * (vanilla's and any structure mod's, however its biome list is written),
+         * and burg villages pick their style from the list when nothing more
+         * specific matches. See {@code FmgStructureBiomes}.
+         */
+        public Map<String, List<String>> structureStandIns = new LinkedHashMap<>();
     }
 
     // ---- block content -------------------------------------------
@@ -334,6 +349,7 @@ public final class FmgContentProfile {
         if (biomes.wetland == null) biomes.wetland = d.biomes.wetland;
         if (biomes.ocean == null) biomes.ocean = d.biomes.ocean;
         if (biomes.fallback == null || biomes.fallback.isBlank()) biomes.fallback = d.biomes.fallback;
+        if (biomes.structureStandIns == null) biomes.structureStandIns = new LinkedHashMap<>();
         if (blocks == null) blocks = d.blocks;
         if (blocks.roads == null || blocks.roads.isEmpty()) blocks.roads = d.blocks.roads;
         if (blocks.riverBed == null || blocks.riverBed.isEmpty()) blocks.riverBed = d.blocks.riverBed;
@@ -450,8 +466,11 @@ public final class FmgContentProfile {
         return p;
     }
 
-    /** Revision of {@link #conquest()}; bump when its defaults change. */
-    public static final int CONQUEST_VERSION = 2;
+    /**
+     * Revision of {@link #conquest()}; bump when its defaults change
+     * (3: biomeEdgeBlend, 4: structureStandIns).
+     */
+    public static final int CONQUEST_VERSION = 4;
 
     private static final String CQ = "fantasymapgenerator:conquest/";
 
@@ -472,6 +491,7 @@ public final class FmgContentProfile {
         p.townStructureRoot = "towns_conquest/";
         p.surfacePalettes = "conquest";
         p.biomeEdgeWarp = 18.0;
+        p.biomeEdgeBlend = 16.0;
 
         Map<String, List<Weighted>> pools = p.biomes.pools;
         pools.clear();
@@ -518,6 +538,39 @@ public final class FmgContentProfile {
         ladders.put("mountain", mountain);
         ladders.put("highlands", new ArrayList<>(mountain));
         p.biomes.fallback = CQ + "meadow";
+
+        // the vanilla biome each one stands in for, for structures; mostly what
+        // the vanilla profile would have put on the same ground
+        Map<String, List<String>> standIns = p.biomes.structureStandIns;
+        standIns.put(CQ + "meadow", List.of("minecraft:meadow"));
+        standIns.put(CQ + "downland", List.of("minecraft:plains"));
+        standIns.put(CQ + "moorland", List.of("minecraft:plains", "minecraft:windswept_hills"));
+        standIns.put(CQ + "cold_steppe", List.of("minecraft:plains", "minecraft:windswept_hills"));
+        standIns.put(CQ + "oak_woodland", List.of("minecraft:forest"));
+        standIns.put(CQ + "mixed_broadleaf_forest", List.of("minecraft:forest"));
+        standIns.put(CQ + "beech_forest", List.of("minecraft:forest"));
+        standIns.put(CQ + "autumn_broadleaf_forest", List.of("minecraft:forest"));
+        standIns.put(CQ + "birch_wood", List.of("minecraft:birch_forest"));
+        standIns.put(CQ + "aspen_grove", List.of("minecraft:birch_forest"));
+        standIns.put(CQ + "mixed_conifer_broadleaf", List.of("minecraft:forest", "minecraft:taiga"));
+        standIns.put(CQ + "spruce_taiga", List.of("minecraft:taiga"));
+        standIns.put(CQ + "pine_taiga", List.of("minecraft:taiga"));
+        standIns.put(CQ + "larch_taiga", List.of("minecraft:taiga"));
+        standIns.put(CQ + "autumn_larch_taiga", List.of("minecraft:taiga"));
+        standIns.put(CQ + "dead_taiga", List.of("minecraft:taiga"));
+        standIns.put(CQ + "old_growth_spruce", List.of("minecraft:old_growth_spruce_taiga"));
+        standIns.put(CQ + "mossy_conifer_forest", List.of("minecraft:old_growth_spruce_taiga"));
+        standIns.put(CQ + "savanna", List.of("minecraft:savanna"));
+        standIns.put(CQ + "hot_desert", List.of("minecraft:desert"));
+        standIns.put(CQ + "tropical_seasonal_forest", List.of("minecraft:sparse_jungle"));
+        standIns.put(CQ + "tropical_rainforest", List.of("minecraft:jungle"));
+        standIns.put(CQ + "sphagnum_bog", List.of("minecraft:swamp"));
+        standIns.put(CQ + "fen_reedbed", List.of("minecraft:swamp"));
+        standIns.put(CQ + "willow_carr", List.of("minecraft:swamp"));
+        standIns.put(CQ + "shrub_tundra", List.of("minecraft:snowy_plains"));
+        standIns.put(CQ + "lichen_tundra", List.of("minecraft:snowy_plains"));
+        standIns.put(CQ + "alpine_scree", List.of("minecraft:stony_peaks"));
+        standIns.put(CQ + "glacier", List.of("minecraft:snowy_slopes", "minecraft:frozen_peaks"));
         return p;
     }
 }

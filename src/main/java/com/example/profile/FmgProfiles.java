@@ -72,6 +72,11 @@ public final class FmgProfiles {
         return out;
     }
 
+    /** Every loaded profile, offered or not (a world may use one whose mod is missing). */
+    public static java.util.Collection<FmgContentProfile> loaded() {
+        return all().values();
+    }
+
     public static void invalidate() {
         cached = null;
     }

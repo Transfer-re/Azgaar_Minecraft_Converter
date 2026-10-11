@@ -1,0 +1,92 @@
+{
+ "type": "fantasymapgenerator:treegen_mix",
+ "config": {
+  "layer": "trees",
+  "spacing": 0.42,
+  "attempts": 5,
+  "slope": 3,
+  "gradient": 1.7,
+  "entries": [
+   {
+    "preset": "fantasymapgenerator:treegen/preset/english_oak",
+    "weight": 6.0,
+    "sizes": {
+     "tiny": 0.5,
+     "small": 1.0,
+     "medium": 2.0,
+     "large": 3.0,
+     "forest": 2.0
+    },
+    "ground": [
+     "grass",
+     "floor",
+     "soil",
+     "moss",
+     "wet",
+     "gravel",
+     "rock"
+    ]
+   },
+   {
+    "preset": "fantasymapgenerator:treegen/preset/hornbeam",
+    "weight": 2.0,
+    "sizes": {
+     "tiny": 0.5,
+     "small": 1.0,
+     "medium": 2.0,
+     "large": 3.0,
+     "forest": 2.0
+    },
+    "ground": [
+     "grass",
+     "floor",
+     "soil",
+     "moss",
+     "wet",
+     "gravel",
+     "rock"
+    ]
+   },
+   {
+    "preset": "fantasymapgenerator:treegen/preset/common_ash",
+    "weight": 1.5,
+    "sizes": {
+     "tiny": 0.5,
+     "small": 1.0,
+     "medium": 2.0,
+     "large": 3.0,
+     "forest": 2.0
+    },
+    "ground": [
+     "grass",
+     "floor",
+     "soil",
+     "moss",
+     "wet",
+     "gravel",
+     "rock"
+    ]
+   },
+   {
+    "preset": "fantasymapgenerator:treegen/preset/horse_chestnut",
+    "weight": 1.0,
+    "sizes": {
+     "tiny": 0.5,
+     "small": 1.0,
+     "medium": 2.0,
+     "large": 3.0,
+     "forest": 2.0
+    },
+    "ground": [
+     "grass",
+     "floor",
+     "soil",
+     "moss",
+     "wet",
+     "gravel",
+     "rock"
+    ]
+   }
+  ]
+ }
+}

@@ -6,7 +6,7 @@ rem  Usage (from anywhere):
 rem    hpp.cmd <in.fmgh> [--seed N] [--detail[=amp]] [--out <base>]
 rem
 rem  Example:
-rem    hpp.cmd run\fmg_heightmaps\granesia.fmgh --detail --out run\fmg_heightmaps\granesia.d
+rem    hpp.cmd ..\runs\fabric-1.20.1\fmg_heightmaps\granesia.fmgh --detail --out ..\runs\fabric-1.20.1\fmg_heightmaps\granesia.d
 rem
 rem  Run the synthetic-fixture generator instead:  hpp.cmd --synth sample 650 42
 setlocal enabledelayedexpansion

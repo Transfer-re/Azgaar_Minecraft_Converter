@@ -1,0 +1,536 @@
+{
+ "type": "fantasymapgenerator:treegen_object",
+ "config": {
+  "preset": "olive",
+  "layer": "trees",
+  "ground": [
+   "grass",
+   "floor",
+   "soil",
+   "moss",
+   "wet"
+  ],
+  "objects": [
+   {
+    "template": "fantasymapgenerator:treegen/olive/olive_t1",
+    "size": "tiny",
+    "anchor": [
+     2,
+     2,
+     2
+    ],
+    "crown": 2.7,
+    "base": 1.5,
+    "height": 4,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/olive/olive_t2",
+    "size": "tiny",
+    "anchor": [
+     2,
+     2,
+     2
+    ],
+    "crown": 3.7,
+    "base": 1.5,
+    "height": 5,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/olive/olive_t3",
+    "size": "tiny",
+    "anchor": [
+     3,
+     2,
+     2
+    ],
+    "crown": 4.7,
+    "base": 1.5,
+    "height": 4,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/olive/olive_t4",
+    "size": "tiny",
+    "anchor": [
+     2,
+     2,
+     2
+    ],
+    "crown": 4.1,
+    "base": 1.5,
+    "height": 5,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/olive/olive_t5",
+    "size": "tiny",
+    "anchor": [
+     2,
+     2,
+     2
+    ],
+    "crown": 3.3,
+    "base": 0.5,
+    "height": 5,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/olive/olive_t6",
+    "size": "tiny",
+    "anchor": [
+     2,
+     2,
+     2
+    ],
+    "crown": 2.7,
+    "base": 1.5,
+    "height": 4,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/olive/olive_t7",
+    "size": "tiny",
+    "anchor": [
+     2,
+     2,
+     2
+    ],
+    "crown": 2.7,
+    "base": 0.5,
+    "height": 5,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/olive/olive_t8",
+    "size": "tiny",
+    "anchor": [
+     2,
+     2,
+     2
+    ],
+    "crown": 2.7,
+    "base": 0.5,
+    "height": 5,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/olive/olive_s1",
+    "size": "small",
+    "anchor": [
+     3,
+     2,
+     3
+    ],
+    "crown": 3.7,
+    "base": 0.5,
+    "height": 6,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/olive/olive_s2",
+    "size": "small",
+    "anchor": [
+     4,
+     2,
+     4
+    ],
+    "crown": 5.0,
+    "base": 0.5,
+    "height": 7,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/olive/olive_s3",
+    "size": "small",
+    "anchor": [
+     2,
+     2,
+     4
+    ],
+    "crown": 5.0,
+    "base": 0.5,
+    "height": 7,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/olive/olive_s4",
+    "size": "small",
+    "anchor": [
+     4,
+     2,
+     3
+    ],
+    "crown": 5.5,
+    "base": 0.5,
+    "height": 7,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/olive/olive_s5",
+    "size": "small",
+    "anchor": [
+     3,
+     2,
+     3
+    ],
+    "crown": 4.7,
+    "base": 0.5,
+    "height": 6,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/olive/olive_s6",
+    "size": "small",
+    "anchor": [
+     3,
+     2,
+     3
+    ],
+    "crown": 4.1,
+    "base": 0.5,
+    "height": 6,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/olive/olive_s7",
+    "size": "small",
+    "anchor": [
+     3,
+     2,
+     4
+    ],
+    "crown": 5.9,
+    "base": 0.5,
+    "height": 7,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/olive/olive_s8",
+    "size": "small",
+    "anchor": [
+     3,
+     2,
+     3
+    ],
+    "crown": 4.1,
+    "base": 0.5,
+    "height": 7,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/olive/olive_m1",
+    "size": "medium",
+    "anchor": [
+     3,
+     2,
+     3
+    ],
+    "crown": 5.0,
+    "base": 1.5,
+    "height": 8,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/olive/olive_m2",
+    "size": "medium",
+    "anchor": [
+     5,
+     2,
+     5
+    ],
+    "crown": 5.6,
+    "base": 1.5,
+    "height": 9,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/olive/olive_m3",
+    "size": "medium",
+    "anchor": [
+     5,
+     2,
+     4
+    ],
+    "crown": 6.3,
+    "base": 1.5,
+    "height": 9,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/olive/olive_m4",
+    "size": "medium",
+    "anchor": [
+     5,
+     2,
+     3
+    ],
+    "crown": 6.3,
+    "base": 1.5,
+    "height": 9,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/olive/olive_m5",
+    "size": "medium",
+    "anchor": [
+     3,
+     2,
+     4
+    ],
+    "crown": 5.6,
+    "base": 1.5,
+    "height": 9,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/olive/olive_m6",
+    "size": "medium",
+    "anchor": [
+     4,
+     2,
+     4
+    ],
+    "crown": 5.5,
+    "base": 1.5,
+    "height": 8,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/olive/olive_m7",
+    "size": "medium",
+    "anchor": [
+     4,
+     2,
+     4
+    ],
+    "crown": 6.6,
+    "base": 1.5,
+    "height": 9,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/olive/olive_m8",
+    "size": "medium",
+    "anchor": [
+     5,
+     2,
+     3
+    ],
+    "crown": 5.9,
+    "base": 1.5,
+    "height": 9,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/olive/olive_l1",
+    "size": "large",
+    "anchor": [
+     4,
+     2,
+     4
+    ],
+    "crown": 5.6,
+    "base": 1.9,
+    "height": 10,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/olive/olive_l2",
+    "size": "large",
+    "anchor": [
+     6,
+     2,
+     6
+    ],
+    "crown": 7.7,
+    "base": 1.5,
+    "height": 11,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/olive/olive_l3",
+    "size": "large",
+    "anchor": [
+     6,
+     2,
+     5
+    ],
+    "crown": 7.7,
+    "base": 1.5,
+    "height": 10,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/olive/olive_l4",
+    "size": "large",
+    "anchor": [
+     7,
+     2,
+     6
+    ],
+    "crown": 8.6,
+    "base": 1.9,
+    "height": 12,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/olive/olive_l5",
+    "size": "large",
+    "anchor": [
+     7,
+     2,
+     6
+    ],
+    "crown": 8.1,
+    "base": 1.9,
+    "height": 11,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/olive/olive_l6",
+    "size": "large",
+    "anchor": [
+     5,
+     2,
+     5
+    ],
+    "crown": 6.3,
+    "base": 1.5,
+    "height": 10,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/olive/olive_l7",
+    "size": "large",
+    "anchor": [
+     4,
+     2,
+     6
+    ],
+    "crown": 7.7,
+    "base": 1.5,
+    "height": 11,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/olive/olive_l8",
+    "size": "large",
+    "anchor": [
+     5,
+     2,
+     5
+    ],
+    "crown": 6.3,
+    "base": 1.9,
+    "height": 11,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/olive/olive_f1",
+    "size": "forest",
+    "anchor": [
+     6,
+     2,
+     5
+    ],
+    "crown": 6.9,
+    "base": 1.9,
+    "height": 12,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/olive/olive_f2",
+    "size": "forest",
+    "anchor": [
+     7,
+     2,
+     7
+    ],
+    "crown": 9.1,
+    "base": 1.9,
+    "height": 13,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/olive/olive_f3",
+    "size": "forest",
+    "anchor": [
+     8,
+     2,
+     6
+    ],
+    "crown": 8.6,
+    "base": 1.9,
+    "height": 12,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/olive/olive_f4",
+    "size": "forest",
+    "anchor": [
+     9,
+     2,
+     7
+    ],
+    "crown": 9.7,
+    "base": 1.9,
+    "height": 13,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/olive/olive_f5",
+    "size": "forest",
+    "anchor": [
+     7,
+     2,
+     6
+    ],
+    "crown": 8.3,
+    "base": 1.9,
+    "height": 13,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/olive/olive_f6",
+    "size": "forest",
+    "anchor": [
+     6,
+     2,
+     6
+    ],
+    "crown": 7.2,
+    "base": 1.9,
+    "height": 12,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/olive/olive_f7",
+    "size": "forest",
+    "anchor": [
+     7,
+     2,
+     6
+    ],
+    "crown": 8.3,
+    "base": 1.9,
+    "height": 13,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/olive/olive_f8",
+    "size": "forest",
+    "anchor": [
+     6,
+     2,
+     6
+    ],
+    "crown": 7.7,
+    "base": 1.9,
+    "height": 14,
+    "depth": 2
+   }
+  ]
+ }
+}

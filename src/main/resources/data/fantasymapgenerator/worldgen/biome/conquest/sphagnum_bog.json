@@ -168,7 +168,11 @@
       "minecraft:spring_lava"
     ],
     [
-      "minecraft:glow_lichen"
+      "minecraft:glow_lichen",
+      "fantasymapgenerator:treegen/sphagnum_bog/trees",
+      "fantasymapgenerator:treegen/sphagnum_bog/dead",
+      "fantasymapgenerator:treegen/sphagnum_bog/logs",
+      "fantasymapgenerator:treegen/sphagnum_bog/shrubs"
     ],
     []
   ]

@@ -1,0 +1,536 @@
+{
+ "type": "fantasymapgenerator:treegen_object",
+ "config": {
+  "preset": "broom",
+  "layer": "shrubs",
+  "ground": [
+   "grass",
+   "floor",
+   "soil",
+   "moss",
+   "wet"
+  ],
+  "objects": [
+   {
+    "template": "fantasymapgenerator:treegen/broom/broom_t1",
+    "size": "tiny",
+    "anchor": [
+     2,
+     1,
+     1
+    ],
+    "crown": 2.7,
+    "base": 0.5,
+    "height": 3,
+    "depth": 1
+   },
+   {
+    "template": "fantasymapgenerator:treegen/broom/broom_t2",
+    "size": "tiny",
+    "anchor": [
+     2,
+     1,
+     2
+    ],
+    "crown": 2.7,
+    "base": 0.5,
+    "height": 3,
+    "depth": 1
+   },
+   {
+    "template": "fantasymapgenerator:treegen/broom/broom_t3",
+    "size": "tiny",
+    "anchor": [
+     2,
+     1,
+     1
+    ],
+    "crown": 3.7,
+    "base": 0.5,
+    "height": 3,
+    "depth": 1
+   },
+   {
+    "template": "fantasymapgenerator:treegen/broom/broom_t4",
+    "size": "tiny",
+    "anchor": [
+     1,
+     1,
+     2
+    ],
+    "crown": 2.7,
+    "base": 0.5,
+    "height": 4,
+    "depth": 1
+   },
+   {
+    "template": "fantasymapgenerator:treegen/broom/broom_t5",
+    "size": "tiny",
+    "anchor": [
+     2,
+     1,
+     2
+    ],
+    "crown": 2.7,
+    "base": 0.5,
+    "height": 3,
+    "depth": 1
+   },
+   {
+    "template": "fantasymapgenerator:treegen/broom/broom_t6",
+    "size": "tiny",
+    "anchor": [
+     1,
+     1,
+     1
+    ],
+    "crown": 2.7,
+    "base": 0.5,
+    "height": 3,
+    "depth": 1
+   },
+   {
+    "template": "fantasymapgenerator:treegen/broom/broom_t7",
+    "size": "tiny",
+    "anchor": [
+     2,
+     2,
+     1
+    ],
+    "crown": 2.7,
+    "base": 0.5,
+    "height": 3,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/broom/broom_t8",
+    "size": "tiny",
+    "anchor": [
+     1,
+     1,
+     1
+    ],
+    "crown": 1.9,
+    "base": 0.5,
+    "height": 3,
+    "depth": 1
+   },
+   {
+    "template": "fantasymapgenerator:treegen/broom/broom_s1",
+    "size": "small",
+    "anchor": [
+     2,
+     2,
+     1
+    ],
+    "crown": 2.5,
+    "base": 0.5,
+    "height": 3,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/broom/broom_s2",
+    "size": "small",
+    "anchor": [
+     2,
+     1,
+     2
+    ],
+    "crown": 3.3,
+    "base": 0.5,
+    "height": 4,
+    "depth": 1
+   },
+   {
+    "template": "fantasymapgenerator:treegen/broom/broom_s3",
+    "size": "small",
+    "anchor": [
+     2,
+     2,
+     2
+    ],
+    "crown": 2.7,
+    "base": 1.5,
+    "height": 4,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/broom/broom_s4",
+    "size": "small",
+    "anchor": [
+     3,
+     2,
+     2
+    ],
+    "crown": 3.5,
+    "base": 1.5,
+    "height": 3,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/broom/broom_s5",
+    "size": "small",
+    "anchor": [
+     2,
+     1,
+     2
+    ],
+    "crown": 2.7,
+    "base": 1.5,
+    "height": 4,
+    "depth": 1
+   },
+   {
+    "template": "fantasymapgenerator:treegen/broom/broom_s6",
+    "size": "small",
+    "anchor": [
+     2,
+     1,
+     1
+    ],
+    "crown": 2.7,
+    "base": 0.5,
+    "height": 3,
+    "depth": 1
+   },
+   {
+    "template": "fantasymapgenerator:treegen/broom/broom_s7",
+    "size": "small",
+    "anchor": [
+     2,
+     2,
+     2
+    ],
+    "crown": 3.7,
+    "base": 1.5,
+    "height": 4,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/broom/broom_s8",
+    "size": "small",
+    "anchor": [
+     2,
+     1,
+     2
+    ],
+    "crown": 3.3,
+    "base": 1.5,
+    "height": 4,
+    "depth": 1
+   },
+   {
+    "template": "fantasymapgenerator:treegen/broom/broom_m1",
+    "size": "medium",
+    "anchor": [
+     2,
+     2,
+     1
+    ],
+    "crown": 2.5,
+    "base": 0.5,
+    "height": 3,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/broom/broom_m2",
+    "size": "medium",
+    "anchor": [
+     2,
+     1,
+     2
+    ],
+    "crown": 3.3,
+    "base": 0.5,
+    "height": 4,
+    "depth": 1
+   },
+   {
+    "template": "fantasymapgenerator:treegen/broom/broom_m3",
+    "size": "medium",
+    "anchor": [
+     2,
+     2,
+     2
+    ],
+    "crown": 2.7,
+    "base": 1.5,
+    "height": 4,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/broom/broom_m4",
+    "size": "medium",
+    "anchor": [
+     3,
+     2,
+     2
+    ],
+    "crown": 3.5,
+    "base": 1.5,
+    "height": 3,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/broom/broom_m5",
+    "size": "medium",
+    "anchor": [
+     2,
+     1,
+     2
+    ],
+    "crown": 2.7,
+    "base": 1.5,
+    "height": 4,
+    "depth": 1
+   },
+   {
+    "template": "fantasymapgenerator:treegen/broom/broom_m6",
+    "size": "medium",
+    "anchor": [
+     2,
+     1,
+     1
+    ],
+    "crown": 2.7,
+    "base": 0.5,
+    "height": 3,
+    "depth": 1
+   },
+   {
+    "template": "fantasymapgenerator:treegen/broom/broom_m7",
+    "size": "medium",
+    "anchor": [
+     2,
+     2,
+     2
+    ],
+    "crown": 3.7,
+    "base": 1.5,
+    "height": 4,
+    "depth": 2
+   },
+   {
+    "template": "fantasymapgenerator:treegen/broom/broom_m8",
+    "size": "medium",
+    "anchor": [
+     2,
+     1,
+     2
+    ],
+    "crown": 3.3,
+    "base": 1.5,
+    "height": 4,
+    "depth": 1
+   },
+   {
+    "template": "fantasymapgenerator:treegen/broom/broom_l1",
+    "size": "large",
+    "anchor": [
+     2,
+     1,
+     2
+    ],
+    "crown": 2.7,
+    "base": 0.5,
+    "height": 4,
+    "depth": 1
+   },
+   {
+    "template": "fantasymapgenerator:treegen/broom/broom_l2",
+    "size": "large",
+    "anchor": [
+     3,
+     1,
+     3
+    ],
+    "crown": 4.1,
+    "base": 0.5,
+    "height": 4,
+    "depth": 1
+   },
+   {
+    "template": "fantasymapgenerator:treegen/broom/broom_l3",
+    "size": "large",
+    "anchor": [
+     3,
+     1,
+     2
+    ],
+    "crown": 3.7,
+    "base": 1.5,
+    "height": 5,
+    "depth": 1
+   },
+   {
+    "template": "fantasymapgenerator:treegen/broom/broom_l4",
+    "size": "large",
+    "anchor": [
+     2,
+     1,
+     2
+    ],
+    "crown": 4.1,
+    "base": 1.5,
+    "height": 5,
+    "depth": 1
+   },
+   {
+    "template": "fantasymapgenerator:treegen/broom/broom_l5",
+    "size": "large",
+    "anchor": [
+     2,
+     1,
+     2
+    ],
+    "crown": 3.3,
+    "base": 1.5,
+    "height": 4,
+    "depth": 1
+   },
+   {
+    "template": "fantasymapgenerator:treegen/broom/broom_l6",
+    "size": "large",
+    "anchor": [
+     1,
+     1,
+     2
+    ],
+    "crown": 2.7,
+    "base": 0.5,
+    "height": 3,
+    "depth": 1
+   },
+   {
+    "template": "fantasymapgenerator:treegen/broom/broom_l7",
+    "size": "large",
+    "anchor": [
+     2,
+     1,
+     2
+    ],
+    "crown": 3.3,
+    "base": 1.5,
+    "height": 5,
+    "depth": 1
+   },
+   {
+    "template": "fantasymapgenerator:treegen/broom/broom_l8",
+    "size": "large",
+    "anchor": [
+     3,
+     1,
+     2
+    ],
+    "crown": 3.7,
+    "base": 0.5,
+    "height": 4,
+    "depth": 1
+   },
+   {
+    "template": "fantasymapgenerator:treegen/broom/broom_f1",
+    "size": "forest",
+    "anchor": [
+     2,
+     1,
+     2
+    ],
+    "crown": 2.7,
+    "base": 0.5,
+    "height": 4,
+    "depth": 1
+   },
+   {
+    "template": "fantasymapgenerator:treegen/broom/broom_f2",
+    "size": "forest",
+    "anchor": [
+     3,
+     1,
+     3
+    ],
+    "crown": 4.1,
+    "base": 0.5,
+    "height": 4,
+    "depth": 1
+   },
+   {
+    "template": "fantasymapgenerator:treegen/broom/broom_f3",
+    "size": "forest",
+    "anchor": [
+     3,
+     1,
+     2
+    ],
+    "crown": 3.7,
+    "base": 1.5,
+    "height": 5,
+    "depth": 1
+   },
+   {
+    "template": "fantasymapgenerator:treegen/broom/broom_f4",
+    "size": "forest",
+    "anchor": [
+     2,
+     1,
+     2
+    ],
+    "crown": 4.1,
+    "base": 1.5,
+    "height": 5,
+    "depth": 1
+   },
+   {
+    "template": "fantasymapgenerator:treegen/broom/broom_f5",
+    "size": "forest",
+    "anchor": [
+     2,
+     1,
+     2
+    ],
+    "crown": 3.3,
+    "base": 1.5,
+    "height": 4,
+    "depth": 1
+   },
+   {
+    "template": "fantasymapgenerator:treegen/broom/broom_f6",
+    "size": "forest",
+    "anchor": [
+     1,
+     1,
+     2
+    ],
+    "crown": 2.7,
+    "base": 0.5,
+    "height": 3,
+    "depth": 1
+   },
+   {
+    "template": "fantasymapgenerator:treegen/broom/broom_f7",
+    "size": "forest",
+    "anchor": [
+     2,
+     1,
+     2
+    ],
+    "crown": 3.3,
+    "base": 1.5,
+    "height": 5,
+    "depth": 1
+   },
+   {
+    "template": "fantasymapgenerator:treegen/broom/broom_f8",
+    "size": "forest",
+    "anchor": [
+     3,
+     1,
+     2
+    ],
+    "crown": 3.7,
+    "base": 0.5,
+    "height": 4,
+    "depth": 1
+   }
+  ]
+ }
+}

@@ -1,0 +1,31 @@
+{
+ "type": "fantasymapgenerator:treegen_mix",
+ "config": {
+  "layer": "dead",
+  "spacing": 0.6,
+  "attempts": 5,
+  "slope": 3,
+  "gradient": 1.7,
+  "entries": [
+   {
+    "preset": "fantasymapgenerator:treegen/preset/dead_palm",
+    "weight": 1.0,
+    "sizes": {
+     "tiny": 0.5,
+     "small": 1.0,
+     "medium": 2.0,
+     "large": 2.0,
+     "forest": 1.0
+    },
+    "ground": [
+     "sand"
+    ],
+    "near_sea": 10
+   }
+  ],
+  "hosts": [
+   "fantasymapgenerator:conquest/tropical_rainforest",
+   "fantasymapgenerator:conquest/tropical_seasonal_forest"
+  ]
+ }
+}

@@ -186,7 +186,11 @@
       "minecraft:spring_lava"
     ],
     [
-      "minecraft:glow_lichen"
+      "minecraft:glow_lichen",
+      "fantasymapgenerator:treegen/mixed_conifer_broadleaf/trees",
+      "fantasymapgenerator:treegen/mixed_conifer_broadleaf/dead",
+      "fantasymapgenerator:treegen/mixed_conifer_broadleaf/logs",
+      "fantasymapgenerator:treegen/mixed_conifer_broadleaf/shrubs"
     ],
     []
   ]

@@ -254,8 +254,11 @@ public final class FmgBake {
             md.update(mapJsonBytes(mapInfo));
             md.update(Double.toString(mapInfo.scale()).getBytes(StandardCharsets.UTF_8));
             md.update(mapInfo.profile().getBytes(StandardCharsets.UTF_8));
-            md.update(GSON.toJson(com.example.profile.FmgProfiles.get(mapInfo.profile()))
-                    .getBytes(StandardCharsets.UTF_8));
+            // structure stand-ins are read at structure placement, never baked
+            com.google.gson.JsonObject profileJson = GSON.toJsonTree(
+                    com.example.profile.FmgProfiles.get(mapInfo.profile())).getAsJsonObject();
+            profileJson.getAsJsonObject("biomes").remove("structureStandIns");
+            md.update(GSON.toJson(profileJson).getBytes(StandardCharsets.UTF_8));
             md.update(GSON.toJson(HeightmapPostConfig.get()).getBytes(StandardCharsets.UTF_8));
             // the terrain bake also depends on the world's vertical range and detail settings
             md.update((mapInfo.terrain() + "|" + mapInfo.minY() + "|" + mapInfo.maxY() + "|" + mapInfo.seaLevel()

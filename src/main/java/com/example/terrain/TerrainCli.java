@@ -25,7 +25,7 @@ import com.google.gson.JsonObject;
  * .npy rasters that refinemap/render3d.py and diag.py can preview:
  *
  * <pre>
- *   bake.cmd "run/Encia Full.json" out/encia [--scale 12] [--max-y 768] [--seed 1]
+ *   terrain.cmd "../maps/Encia Full.json" ../../refinemap/outj/Encia [--scale 12] [--max-y 768] [--seed 1]
  * </pre>
  */
 public final class TerrainCli {

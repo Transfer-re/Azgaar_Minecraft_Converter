@@ -174,7 +174,11 @@
       "minecraft:spring_lava"
     ],
     [
-      "minecraft:glow_lichen"
+      "minecraft:glow_lichen",
+      "fantasymapgenerator:treegen/savanna/trees",
+      "fantasymapgenerator:treegen/savanna/dead",
+      "fantasymapgenerator:treegen/savanna/logs",
+      "fantasymapgenerator:treegen/savanna/shrubs"
     ],
     []
   ]

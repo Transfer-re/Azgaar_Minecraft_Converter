@@ -1,0 +1,47 @@
+{
+ "type": "fantasymapgenerator:treegen_mix",
+ "config": {
+  "layer": "trees",
+  "spacing": 0.9,
+  "attempts": 5,
+  "slope": 3,
+  "gradient": 1.7,
+  "entries": [
+   {
+    "preset": "fantasymapgenerator:treegen/preset/crag_pine",
+    "weight": 1.0,
+    "sizes": {
+     "tiny": 2.0,
+     "small": 1.0
+    },
+    "ground": [
+     "grass",
+     "floor",
+     "soil",
+     "moss",
+     "wet",
+     "sand",
+     "gravel",
+     "rock"
+    ]
+   },
+   {
+    "preset": "fantasymapgenerator:treegen/preset/swiss_pine",
+    "weight": 1.0,
+    "sizes": {
+     "tiny": 2.0,
+     "small": 1.0
+    },
+    "ground": [
+     "grass",
+     "floor",
+     "soil",
+     "moss",
+     "wet",
+     "gravel",
+     "rock"
+    ]
+   }
+  ]
+ }
+}

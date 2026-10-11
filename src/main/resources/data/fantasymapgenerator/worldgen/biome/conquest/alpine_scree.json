@@ -162,7 +162,10 @@
       "minecraft:spring_lava"
     ],
     [
-      "minecraft:glow_lichen"
+      "minecraft:glow_lichen",
+      "fantasymapgenerator:treegen/alpine_scree/trees",
+      "fantasymapgenerator:treegen/alpine_scree/dead",
+      "fantasymapgenerator:treegen/alpine_scree/shrubs"
     ],
     []
   ]

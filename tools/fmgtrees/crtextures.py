@@ -108,7 +108,8 @@ def _split(rid, default_ns="minecraft"):
 def _parse_variant_key(key):
     if not key:
         return {}
-    return dict(kv.split("=", 1) for kv in key.split(","))
+    # a few CR blockstates have stray separators ("facing=north,"), skip those parts
+    return dict(kv.split("=", 1) for kv in key.split(",") if "=" in kv)
 
 
 def _when_matches(when, props):

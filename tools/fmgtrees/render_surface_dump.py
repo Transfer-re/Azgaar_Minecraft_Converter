@@ -2,7 +2,7 @@
 Draw a surface dump from `surface.cmd` (com.example.surface.SurfaceCli) with the
 real Conquest / ACRP textures: a top-down map and a cross-section.
 
-    python tools/fmgtrees/render_surface_dump.py run/surface/encia.json [--px 8] [--row N] [--cr]
+    python tools/fmgtrees/render_surface_dump.py ../tool-output/surface/encia.json [--px 8] [--row N] [--cr]
 
 Writes <dump>_top.png and <dump>_section.png next to the dump. The dump is the
 game's own column decisions (same Java code), so this is what the ground would

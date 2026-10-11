@@ -186,7 +186,11 @@
       "minecraft:spring_lava"
     ],
     [
-      "minecraft:glow_lichen"
+      "minecraft:glow_lichen",
+      "fantasymapgenerator:treegen/autumn_larch_taiga/trees",
+      "fantasymapgenerator:treegen/autumn_larch_taiga/dead",
+      "fantasymapgenerator:treegen/autumn_larch_taiga/logs",
+      "fantasymapgenerator:treegen/autumn_larch_taiga/shrubs"
     ],
     []
   ]

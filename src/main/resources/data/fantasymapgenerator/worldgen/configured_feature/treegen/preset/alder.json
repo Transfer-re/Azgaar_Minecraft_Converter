@@ -1,0 +1,536 @@
+{
+ "type": "fantasymapgenerator:treegen_object",
+ "config": {
+  "preset": "alder",
+  "layer": "trees",
+  "ground": [
+   "grass",
+   "floor",
+   "soil",
+   "moss",
+   "wet"
+  ],
+  "objects": [
+   {
+    "template": "fantasymapgenerator:treegen/alder/alder_t1",
+    "size": "tiny",
+    "anchor": [
+     1,
+     1,
+     2
+    ],
+    "crown": 2.7,
+    "base": 0.5,
+    "height": 6,
+    "depth": 1
+   },
+   {
+    "template": "fantasymapgenerator:treegen/alder/alder_t2",
+    "size": "tiny",
+    "anchor": [
+     2,
+     1,
+     1
+    ],
+    "crown": 2.7,
+    "base": 0.5,
+    "height": 7,
+    "depth": 1
+   },
+   {
+    "template": "fantasymapgenerator:treegen/alder/alder_t3",
+    "size": "tiny",
+    "anchor": [
+     2,
+     1,
+     2
+    ],
+    "crown": 3.3,
+    "base": 0.5,
+    "height": 8,
+    "depth": 1
+   },
+   {
+    "template": "fantasymapgenerator:treegen/alder/alder_t4",
+    "size": "tiny",
+    "anchor": [
+     3,
+     1,
+     2
+    ],
+    "crown": 3.7,
+    "base": 0.5,
+    "height": 7,
+    "depth": 1
+   },
+   {
+    "template": "fantasymapgenerator:treegen/alder/alder_t5",
+    "size": "tiny",
+    "anchor": [
+     2,
+     1,
+     2
+    ],
+    "crown": 2.7,
+    "base": 0.5,
+    "height": 8,
+    "depth": 1
+   },
+   {
+    "template": "fantasymapgenerator:treegen/alder/alder_t6",
+    "size": "tiny",
+    "anchor": [
+     1,
+     1,
+     2
+    ],
+    "crown": 2.7,
+    "base": 0.5,
+    "height": 5,
+    "depth": 1
+   },
+   {
+    "template": "fantasymapgenerator:treegen/alder/alder_t7",
+    "size": "tiny",
+    "anchor": [
+     1,
+     1,
+     2
+    ],
+    "crown": 2.7,
+    "base": 0.5,
+    "height": 7,
+    "depth": 1
+   },
+   {
+    "template": "fantasymapgenerator:treegen/alder/alder_t8",
+    "size": "tiny",
+    "anchor": [
+     2,
+     1,
+     1
+    ],
+    "crown": 2.7,
+    "base": 0.5,
+    "height": 7,
+    "depth": 1
+   },
+   {
+    "template": "fantasymapgenerator:treegen/alder/alder_s1",
+    "size": "small",
+    "anchor": [
+     2,
+     1,
+     1
+    ],
+    "crown": 2.7,
+    "base": 0.5,
+    "height": 9,
+    "depth": 1
+   },
+   {
+    "template": "fantasymapgenerator:treegen/alder/alder_s2",
+    "size": "small",
+    "anchor": [
+     2,
+     1,
+     3
+    ],
+    "crown": 4.1,
+    "base": 0.5,
+    "height": 10,
+    "depth": 1
+   },
+   {
+    "template": "fantasymapgenerator:treegen/alder/alder_s3",
+    "size": "small",
+    "anchor": [
+     3,
+     1,
+     3
+    ],
+    "crown": 4.1,
+    "base": 0.5,
+    "height": 10,
+    "depth": 1
+   },
+   {
+    "template": "fantasymapgenerator:treegen/alder/alder_s4",
+    "size": "small",
+    "anchor": [
+     3,
+     1,
+     2
+    ],
+    "crown": 4.7,
+    "base": 0.5,
+    "height": 9,
+    "depth": 1
+   },
+   {
+    "template": "fantasymapgenerator:treegen/alder/alder_s5",
+    "size": "small",
+    "anchor": [
+     2,
+     1,
+     2
+    ],
+    "crown": 3.3,
+    "base": 0.5,
+    "height": 8,
+    "depth": 1
+   },
+   {
+    "template": "fantasymapgenerator:treegen/alder/alder_s6",
+    "size": "small",
+    "anchor": [
+     2,
+     1,
+     2
+    ],
+    "crown": 2.7,
+    "base": 0.5,
+    "height": 8,
+    "depth": 1
+   },
+   {
+    "template": "fantasymapgenerator:treegen/alder/alder_s7",
+    "size": "small",
+    "anchor": [
+     2,
+     1,
+     2
+    ],
+    "crown": 4.1,
+    "base": 0.5,
+    "height": 11,
+    "depth": 1
+   },
+   {
+    "template": "fantasymapgenerator:treegen/alder/alder_s8",
+    "size": "small",
+    "anchor": [
+     2,
+     1,
+     2
+    ],
+    "crown": 2.7,
+    "base": 0.5,
+    "height": 8,
+    "depth": 1
+   },
+   {
+    "template": "fantasymapgenerator:treegen/alder/alder_m1",
+    "size": "medium",
+    "anchor": [
+     3,
+     1,
+     3
+    ],
+    "crown": 4.1,
+    "base": 0.5,
+    "height": 13,
+    "depth": 1
+   },
+   {
+    "template": "fantasymapgenerator:treegen/alder/alder_m2",
+    "size": "medium",
+    "anchor": [
+     4,
+     1,
+     4
+    ],
+    "crown": 5.5,
+    "base": 0.5,
+    "height": 15,
+    "depth": 1
+   },
+   {
+    "template": "fantasymapgenerator:treegen/alder/alder_m3",
+    "size": "medium",
+    "anchor": [
+     5,
+     1,
+     4
+    ],
+    "crown": 5.6,
+    "base": 0.5,
+    "height": 15,
+    "depth": 1
+   },
+   {
+    "template": "fantasymapgenerator:treegen/alder/alder_m4",
+    "size": "medium",
+    "anchor": [
+     4,
+     1,
+     3
+    ],
+    "crown": 5.6,
+    "base": 0.5,
+    "height": 14,
+    "depth": 1
+   },
+   {
+    "template": "fantasymapgenerator:treegen/alder/alder_m5",
+    "size": "medium",
+    "anchor": [
+     4,
+     1,
+     3
+    ],
+    "crown": 5.0,
+    "base": 0.5,
+    "height": 14,
+    "depth": 1
+   },
+   {
+    "template": "fantasymapgenerator:treegen/alder/alder_m6",
+    "size": "medium",
+    "anchor": [
+     3,
+     1,
+     3
+    ],
+    "crown": 4.7,
+    "base": 0.5,
+    "height": 14,
+    "depth": 1
+   },
+   {
+    "template": "fantasymapgenerator:treegen/alder/alder_m7",
+    "size": "medium",
+    "anchor": [
+     3,
+     1,
+     4
+    ],
+    "crown": 5.5,
+    "base": 0.5,
+    "height": 15,
+    "depth": 1
+   },
+   {
+    "template": "fantasymapgenerator:treegen/alder/alder_m8",
+    "size": "medium",
+    "anchor": [
+     4,
+     1,
+     2
+    ],
+    "crown": 4.6,
+    "base": 0.5,
+    "height": 14,
+    "depth": 1
+   },
+   {
+    "template": "fantasymapgenerator:treegen/alder/alder_l1",
+    "size": "large",
+    "anchor": [
+     4,
+     1,
+     3
+    ],
+    "crown": 5.0,
+    "base": 0.5,
+    "height": 17,
+    "depth": 1
+   },
+   {
+    "template": "fantasymapgenerator:treegen/alder/alder_l2",
+    "size": "large",
+    "anchor": [
+     5,
+     1,
+     5
+    ],
+    "crown": 6.9,
+    "base": 0.5,
+    "height": 19,
+    "depth": 1
+   },
+   {
+    "template": "fantasymapgenerator:treegen/alder/alder_l3",
+    "size": "large",
+    "anchor": [
+     5,
+     1,
+     5
+    ],
+    "crown": 6.9,
+    "base": 0.5,
+    "height": 19,
+    "depth": 1
+   },
+   {
+    "template": "fantasymapgenerator:treegen/alder/alder_l4",
+    "size": "large",
+    "anchor": [
+     5,
+     1,
+     5
+    ],
+    "crown": 6.9,
+    "base": 0.5,
+    "height": 18,
+    "depth": 1
+   },
+   {
+    "template": "fantasymapgenerator:treegen/alder/alder_l5",
+    "size": "large",
+    "anchor": [
+     5,
+     1,
+     4
+    ],
+    "crown": 6.5,
+    "base": 0.5,
+    "height": 19,
+    "depth": 1
+   },
+   {
+    "template": "fantasymapgenerator:treegen/alder/alder_l6",
+    "size": "large",
+    "anchor": [
+     5,
+     1,
+     5
+    ],
+    "crown": 6.2,
+    "base": 0.5,
+    "height": 17,
+    "depth": 1
+   },
+   {
+    "template": "fantasymapgenerator:treegen/alder/alder_l7",
+    "size": "large",
+    "anchor": [
+     5,
+     1,
+     5
+    ],
+    "crown": 6.8,
+    "base": 0.5,
+    "height": 19,
+    "depth": 1
+   },
+   {
+    "template": "fantasymapgenerator:treegen/alder/alder_l8",
+    "size": "large",
+    "anchor": [
+     4,
+     1,
+     4
+    ],
+    "crown": 5.5,
+    "base": 0.5,
+    "height": 19,
+    "depth": 1
+   },
+   {
+    "template": "fantasymapgenerator:treegen/alder/alder_f1",
+    "size": "forest",
+    "anchor": [
+     5,
+     1,
+     5
+    ],
+    "crown": 5.9,
+    "base": 0.5,
+    "height": 21,
+    "depth": 1
+   },
+   {
+    "template": "fantasymapgenerator:treegen/alder/alder_f2",
+    "size": "forest",
+    "anchor": [
+     6,
+     1,
+     7
+    ],
+    "crown": 7.8,
+    "base": 0.5,
+    "height": 24,
+    "depth": 1
+   },
+   {
+    "template": "fantasymapgenerator:treegen/alder/alder_f3",
+    "size": "forest",
+    "anchor": [
+     7,
+     1,
+     7
+    ],
+    "crown": 7.7,
+    "base": 0.5,
+    "height": 24,
+    "depth": 1
+   },
+   {
+    "template": "fantasymapgenerator:treegen/alder/alder_f4",
+    "size": "forest",
+    "anchor": [
+     7,
+     1,
+     6
+    ],
+    "crown": 7.6,
+    "base": 0.5,
+    "height": 23,
+    "depth": 1
+   },
+   {
+    "template": "fantasymapgenerator:treegen/alder/alder_f5",
+    "size": "forest",
+    "anchor": [
+     6,
+     1,
+     5
+    ],
+    "crown": 6.6,
+    "base": 0.5,
+    "height": 23,
+    "depth": 1
+   },
+   {
+    "template": "fantasymapgenerator:treegen/alder/alder_f6",
+    "size": "forest",
+    "anchor": [
+     5,
+     1,
+     6
+    ],
+    "crown": 7.2,
+    "base": 0.5,
+    "height": 20,
+    "depth": 1
+   },
+   {
+    "template": "fantasymapgenerator:treegen/alder/alder_f7",
+    "size": "forest",
+    "anchor": [
+     6,
+     1,
+     7
+    ],
+    "crown": 7.6,
+    "base": 0.5,
+    "height": 23,
+    "depth": 1
+   },
+   {
+    "template": "fantasymapgenerator:treegen/alder/alder_f8",
+    "size": "forest",
+    "anchor": [
+     6,
+     1,
+     5
+    ],
+    "crown": 6.9,
+    "base": 0.5,
+    "height": 22,
+    "depth": 1
+   }
+  ]
+ }
+}

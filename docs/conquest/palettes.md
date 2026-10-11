@@ -10,11 +10,11 @@ have a layer form (the skin you see) and a full form (what fills beneath).
 |---|---|
 | Source of truth | `tools/fmgtrees/palettes.py` (hand edits go here) |
 | Written into | `docs/conquest/biomes/*.json` as `palette`, by `make_biomes.py` |
-| Review page + textures | `python -m fmgtrees.palette_preview` → `run/conquest_palettes/` |
+| Review page + textures | `python -m fmgtrees.palette_preview` → `../tool-output/conquest_palettes/` |
 | Texture resolver | `tools/fmgtrees/crtextures.py` (pack stack, models, Continuity, Polytone) |
 
-`run/conquest_palettes/` is gitignored on purpose: everything in it is Conquest
-and ACRP artwork. It holds `index.html` (open it in a browser),
+`tool-output/conquest_palettes/` sits next to the repo, outside git, on purpose:
+everything in it is Conquest and ACRP artwork. It holds `index.html` (open it in a browser),
 `textures/<biome>/<material>.png` (4×4-block tops in that biome's tints) and
 `textures/_catalog/`.
 
@@ -25,7 +25,8 @@ branch and tested on a 1.20.1 dev server with Conquest Reforged 1.7.0 installed:
 layer counts spread evenly over 1-8.**
 
 To run it in development, put the Conquest Reforged Fabric jar in
-`run-1.20.1/mods/` (this branch's dev run folder); Loom remaps it at launch.
+`../runs/fabric-1.20.1/mods/` (this branch's dev run folder, next to the repo);
+Loom remaps it at launch.
 
 
 ## 1. Layer forms in Conquest
@@ -117,6 +118,17 @@ JavaScript (`evaluate()` in `palette_preview.html`) is the reference.
 
 Seeds are per biome (a hash of the biome id) so neighbouring biomes do not share
 patch boundaries.
+
+**Which palette a column uses** comes before all of this. It is the land biome
+at the column, looked up with the profile's `biomeEdgeWarp` (so borders wander
+instead of following the map's straight cell edges), and then blended across
+borders by `SurfaceBlend` with radius `biomeEdgeBlend` (16 in the Conquest
+profile). Biomes are sampled on a 4-block grid; a column counts the biomes
+within the radius and draws its palette in that proportion, in ~3.5-block
+clumps. At a border the mix is about half and half, and the neighbour's share
+thins out to nothing over the radius, so glacier snow breaks up into patches
+instead of stopping on a line. Biome ids and tints are not blended; the
+client's biome-blend setting already smooths grass colour.
 
 
 ## 4. Tints, and the ACRP problem
@@ -214,7 +226,7 @@ they stay hard. That is one more reason the temperate coast ramps use plain
 4. **Snow as a skin vs snow on top.** Glacier and alpine palettes use
    `minecraft:snow` as the surface. Seasonal snow on other biomes would be a
    separate overlay pass, not a palette material.
-5. **Species-matched litter.** The tree plan (PLAN.md) puts
+5. **Species-matched litter.** The biome designs (`make_biomes.py`) put
    `oak_ground_leaves` etc. in `groundCover`. Those are thin carpets placed on
    top, so they combine with these palettes rather than replacing them.
 
@@ -226,11 +238,11 @@ they stay hard. That is one more reason the temperate coast ramps use plain
 | Profile `conquest` (rev 2): pools over the 29 biomes, `surfacePalettes`, `biomeEdgeWarp` 18 | `FmgContentProfile.conquest()` |
 | Offered only with the `conquest` mod loaded (`-Dfmg.allProfiles=true` to test without) | `FmgProfiles.available()` |
 | Old on-disk `conquest.json` replaced, backup kept as `.v<N>.bak` | `FmgProfiles.writeIfOutdated` |
-| 29 biomes (tints, climate, no vegetation) | `data/fantasymapgenerator/worldgen/biome/conquest/` |
+| 29 biomes (tints, climate, no vegetation features) | `data/fantasymapgenerator/worldgen/biome/conquest/` |
 | Runtime palettes | `fantasymapgenerator/surface/conquest.json` (config override: `config/fantasymapgenerator/surface/`) |
 | Continuous height next to the integer one | `FMGHeightSampler.sampleHeightExact`, `ChunkGrid.exact` |
 | The surface pass | `worldgen/LayeredSurface` (runs after vanilla surface rules, before rivers/roads) |
-| Minecraft-free core, shared with the harness | `surface/SurfaceSet`, `SurfaceNoise`, `SurfaceVars` |
+| Minecraft-free core, shared with the harness | `surface/SurfaceSet`, `SurfaceNoise`, `SurfaceVars`, `SurfaceBlend`, `SurfaceCover` |
 | Harness on real terrain | `surface.cmd <bake> <out.json> --center X Z` then `tools/fmgtrees/render_surface_dump.py` |
 
 Regenerate the runtime files after editing `palettes.py`:
@@ -248,3 +260,51 @@ Behaviour worth knowing:
   the 1 in 8 columns whose layer is full-height.
 - A world opened without Conquest generates with vanilla stand-ins, full blocks
   only (logged once).
+
+
+## 9. Ground cover
+
+Grass, flowers, ferns, bushes, leaf litter, rocks, cones and mushrooms. Trees
+are a later step. The lists are each biome's `groundCover` and `props` in
+`make_biomes.py`; `make_datapack.py` turns them into a `cover` section on the
+palette (`plants`, `props`, `patches`), with the densities from its `GROUND`
+table and a placement *kind* per block, read off Conquest's block classes:
+
+| kind | blocks | placed |
+|---|---|---|
+| `plant` | Bush family (shrubs, dense plants, reeds), berry bushes, ground leaves / needles, `*_rocks`, lichens, `moss_on_the_ground` | on top of the layer. The block's own `layers` is set to the layer under it, like Conquest's own placement, so the model sinks onto the ground. Lichens and ground moss get Conquest's offset from the block below instead. |
+| `tall` | `large_fern` | two blocks, `half=lower/upper` |
+| `sunk` | `hawthorn_bush` (a leaves block, no offset) | replaces the layer block. A bush sunk up to 7/8 into the ground looks fine; one floating over a part layer does not. |
+| `loose` | `pine_cones`, `spruce_cones`, `tumbleweed` (no offset) | on a full layer, or in place of a layer of 1-2 eighths; skipped elsewhere |
+| `patch` | full blocks: forest floors, `taiga_grass`, `smooth_pebbles`, sphagnum blocks, `burnt_soil`, dirty ice, boulders | swaps the ground material in clumps (warped cells ~4.5 blocks) through the block's `_layer` / `_slab` form. Boulders stand 1-5 eighths proud, so boulder fields are lumpy. Only on sub-biome ground, never over a slope / shore / altitude band. |
+| skip | `hanging_moss`, `moss_vines`, `duckweed` | not yet: they hang from trees or float on water |
+
+Per column, props are rolled first (rarer), then plants:
+
+- **Plants**: `plantDensity` x ground factor (turf and forest floor 1, moss and
+  wet 0.9, soil 0.6, gravel 0.35, sand and rock 0.3, ice and snow 0) x
+  steepness (none from slope 1.4) x a thickness noise over ~13 blocks (glades
+  to thickets, 0.25-1.75). Species come in clumps (warped cells ~2.6 blocks)
+  with 20% loose speckle.
+- **Props**: `propDensity` x ground factor (rock 1.6, gravel 1.4, turf/soil 1,
+  sand 0.6, wet 0.4, ice 0) x 1-2.2 with slope x a field noise over ~17 blocks,
+  so rocks gather in fields and some stretches have none. Species by cells
+  ~9 blocks, so a field is mostly one rock type.
+- The rest of the state comes from the column's hash: berry-bush `age`,
+  model `random`, rock `density` (mostly 1-2, now and then a heap of 4).
+  Everything is placed dry, flat and unstacked; leaves are persistent.
+- `COVER_SCALE` (0.7) in `make_datapack.py` scales every biome's plant and
+  prop density: the first pass was "a little much" (user, 2026-10-05).
+  Patches are ground, not decoration, and keep theirs.
+
+Conquest plants only check their ground during world generation. In a live
+world they stay wherever they are, so neighbour updates never pop them.
+Without Conquest installed the cover is skipped: the palettes' stand-ins are
+ground only.
+
+**Carvers.** Vanilla's cave and canyon carvers run after this pass and cannot
+cut Conquest's layer blocks, so where one comes up under the surface the layer,
+and the plant on it, was left hanging over the hole. `LayeredSurface.afterCarve`
+runs right after the carvers: up to 2 blocks of air over solid ground are filled
+back with the palette's soil; over a bigger opening the layer and what stands on
+it go, so the hole reads as an ordinary cave mouth. Under water the bed stays.

@@ -168,7 +168,13 @@
       "minecraft:spring_lava"
     ],
     [
-      "minecraft:glow_lichen"
+      "minecraft:glow_lichen",
+      "fantasymapgenerator:treegen/tropical_rainforest/trees",
+      "fantasymapgenerator:treegen/tropical_rainforest/dead",
+      "fantasymapgenerator:treegen/tropical_rainforest/logs",
+      "fantasymapgenerator:treegen/tropical_rainforest/shrubs",
+      "fantasymapgenerator:treegen/tropical_coast/trees",
+      "fantasymapgenerator:treegen/tropical_coast/dead"
     ],
     []
   ]

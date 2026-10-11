@@ -156,7 +156,11 @@
       "minecraft:spring_lava"
     ],
     [
-      "minecraft:glow_lichen"
+      "minecraft:glow_lichen",
+      "fantasymapgenerator:treegen/hot_desert/trees",
+      "fantasymapgenerator:treegen/hot_desert/dead",
+      "fantasymapgenerator:treegen/hot_desert/logs",
+      "fantasymapgenerator:treegen/hot_desert/shrubs"
     ],
     []
   ]

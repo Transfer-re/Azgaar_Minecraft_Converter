@@ -22,6 +22,20 @@ This is an **HD/partial-load** FMG view so you can zoom in and see the paths + b
 
 ![FMG map overview (zoomable)](images/fmg__map.png)
 
+### Generated world (Conquest Reforged)
+
+The full Granesia map generated as a 27,000 x 14,000 block world (about 1.5 million chunks,
+pregenerated with Chunky) and rendered with [uNmINeD](https://unmined.net/). uNmINeD
+does not know Conquest blocks; `tools/fmgtrees/unmined_config.py` writes the uNmINeD
+config files that give every Conquest block its in-game colour.
+
+![Granesia, the whole world (1 pixel = 8 blocks)](images/granesia_world_map.jpg)
+
+[Full resolution, 1 pixel = 4 blocks (6824 x 3588, 14 MB)](images/granesia_world_map_full.jpg)
+
+![Glaciated mountains meeting forest and a river (1 pixel = 2 blocks)](images/granesia_mountains.jpg)
+![Northern coast with roads, forest and frozen ocean (1 pixel = 2 blocks)](images/granesia_coast.jpg)
+
 ### In-game screenshots
 
 ![In-game screenshot](images/2026-01-15_13.45.00.png)
@@ -100,6 +114,7 @@ Current functionality in this template:
 - **FMG-backed terrain height**: surface elevation is projected from the FMG export instead of vanilla noise.
 - **FMG-backed biome selection**: surface biomes are chosen from FMG map data.
 - **Burg-based villages**: a custom structure places jigsaw villages at FMG **burg** locations (with a flatness check, this does mean some burgs do not spawn).
+- **Structures in custom biomes**: each custom biome (the Conquest set) names the vanilla biomes it stands in for (`biomes.structureStandIns` in `config/fantasymapgenerator/profiles/conquest.json`), so vanilla structures and structure mods that target vanilla biomes also generate in it.
 - **Region title popups**: when a player crosses into a different **state/province**, the mod shows a title + subtitle.
 - **Configurable map path override** via `config/fantasymapgenerator/config.json`.
 
@@ -124,11 +139,11 @@ Missing functionality:
 
 ## Credits
 
-The Conquest Reforged content variant is built on other people's work. **None of
-it is redistributed in this repository** -- the converted trees are written to
-`run/config/fantasymapgenerator/trees/`, which is gitignored, and to the local
-Axiom blueprint folder. Nothing third-party ends up in the jar. If you want any
-of these assets, get them from the original author.
+The Conquest Reforged content variant is built on other people's work. Worldgen
+now places this project's own trees, made with TreeGenerator; earlier versions
+used the tree packs below, converted locally to Conquest blocks. **None of them
+is redistributed in this repository**, and nothing third-party ends up in the
+jar. If you want any of these assets, get them from the original author.
 
 ### Tree models
 
@@ -148,7 +163,7 @@ in full:
 >
 > -- quitefrank_ly
 
-That is why the converted trees stay out of `src/main/resources` and out of git.
+That is why the converted trees never went into `src/main/resources` or git.
 The same courtesy is extended to the other three packs.
 
 ### Blocks and textures
@@ -163,8 +178,7 @@ The same courtesy is extended to the other three packs.
 - **[Azgaar's Fantasy Map Generator](https://azgaar.github.io/Fantasy-Map-Generator/)**
   by Azgaar -- the map format this mod reads, and the reason it exists.
 
-The conversion tooling in `tools/fmgtrees/` is part of this repository; the
-artistry in the models is entirely the authors' above.
+The artistry in those tree models is entirely the authors' above.
 
 
 ## License

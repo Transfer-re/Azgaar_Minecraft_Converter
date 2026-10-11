@@ -241,6 +241,14 @@ public final class ImageMapChunkGenerator extends ChunkGenerator {
         // Our height cap density function keeps the surface locked to the FMG heightmap,
         // but carving can still cut into that solid volume to form caves.
         delegate.carve(chunkRegion, seed, noiseConfig, biomeAccess, structureAccessor, chunk, carverStep);
+
+        // carvers cannot cut the layered surface; tidy what they left hanging
+        if (carverStep == net.minecraft.world.gen.GenerationStep.Carver.AIR) {
+            LayeredSurface.Context layered = layeredContext(chunk.getPos());
+            if (layered != null) {
+                LayeredSurface.afterCarve(chunk, layered);
+            }
+        }
     }
 
     @Override
@@ -283,9 +291,27 @@ public final class ImageMapChunkGenerator extends ChunkGenerator {
         return delegate.getMinimumY();
     }
 
+    /**
+     * First free Y above the column, by the heightmap's own rule: structures
+     * ask this before the chunk exists. Water (the sea, rivers and lakes) counts
+     * for the types vanilla counts it for -- WORLD_SURFACE_WG, MOTION_BLOCKING --
+     * so a jigsaw village lays its streets and houses on the water like a
+     * vanilla one instead of on the bed; OCEAN_FLOOR_WG still gets the bed.
+     * A bridge deck is solid for every type.
+     */
     @Override
     public int getHeight(int x, int z, Heightmap.Type heightmap, HeightLimitView world, NoiseConfig noiseConfig) {
-        return columnCache.get().getHeight(x, z);
+        ChunkColumnCache cache = columnCache.get();
+        int height = cache.getHeight(x, z);
+        int deckY = cache.getBridgeDeckY(x, z);
+        if (deckY >= 0) {
+            height = Math.max(height, deckY + 1);
+        }
+        if (heightmap.getBlockPredicate().test(Blocks.WATER.getDefaultState())) {
+            // aquifers are off, so everything below sea level is water
+            height = Math.max(height, Math.max(mapInfo.seaLevel(), cache.getRiverWaterY(x, z) + 1));
+        }
+        return height;
     }
 
     @Override
@@ -611,7 +637,8 @@ public final class ImageMapChunkGenerator extends ChunkGenerator {
         int seed = mapInfo.fmgExport() == null ? 0 : mapInfo.fmgExport().hashCode();
         return new LayeredSurface.Context(set, cols, biomes, data::sampleHeightExactY,
                 rivers == null ? List.of() : rivers.collectNear(cp.x, cp.z), terrain,
-                mapInfo.seaLevel(), getMinimumY(), getMinimumY() + getWorldHeight(), top, seed);
+                mapInfo.seaLevel(), getMinimumY(), getMinimumY() + getWorldHeight(), top, seed,
+                profile.biomeEdgeBlend);
     }
 
     private BlockState riverBedBlock(com.example.profile.FmgContentProfile profile,

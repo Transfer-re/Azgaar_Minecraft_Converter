@@ -1,0 +1,54 @@
+{
+ "type": "fantasymapgenerator:treegen_mix",
+ "config": {
+  "layer": "shrubs",
+  "spacing": 0.7,
+  "attempts": 5,
+  "slope": 2,
+  "gradient": 1.4,
+  "entries": [
+   {
+    "preset": "fantasymapgenerator:treegen/preset/willow_scrub",
+    "weight": 1.0,
+    "sizes": {
+     "tiny": 1.0,
+     "small": 2.0,
+     "medium": 3.0,
+     "large": 2.0,
+     "forest": 1.0
+    },
+    "ground": [
+     "grass",
+     "floor",
+     "soil",
+     "moss",
+     "wet",
+     "gravel",
+     "rock"
+    ],
+    "near_water": 10
+   },
+   {
+    "preset": "fantasymapgenerator:treegen/preset/goat_willow",
+    "weight": 1.0,
+    "sizes": {
+     "tiny": 1.0,
+     "small": 2.0,
+     "medium": 3.0,
+     "large": 2.0,
+     "forest": 1.0
+    },
+    "ground": [
+     "grass",
+     "floor",
+     "soil",
+     "moss",
+     "wet",
+     "gravel",
+     "rock"
+    ],
+    "near_water": 10
+   }
+  ]
+ }
+}

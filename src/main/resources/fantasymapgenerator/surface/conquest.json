@@ -577,6 +577,21 @@
    "layer": "conquest:gravel_layer",
    "full": "minecraft:gravel",
    "group": "gravel"
+  },
+  "mossy_light_limestone_boulders": {
+   "layer": "conquest:mossy_light_limestone_boulders_slab",
+   "full": "conquest:mossy_light_limestone_boulders",
+   "group": "rock"
+  },
+  "light_limestone_boulders": {
+   "layer": "conquest:light_limestone_boulders_slab",
+   "full": "conquest:light_limestone_boulders",
+   "group": "rock"
+  },
+  "snow_covered_icy_limestone": {
+   "layer": "conquest:snow_covered_icy_limestone_slab",
+   "full": "conquest:snow_covered_icy_limestone",
+   "group": "ice"
   }
  },
  "palettes": {
@@ -753,6 +768,66 @@
       }
      }
     ]
+   },
+   "cover": {
+    "plantDensity": 0.35,
+    "plants": [
+     {
+      "block": "conquest:oak_ground_leaves",
+      "weight": 30,
+      "kind": "plant"
+     },
+     {
+      "block": "conquest:lush_grass",
+      "weight": 25,
+      "kind": "plant"
+     },
+     {
+      "block": "conquest:bracken",
+      "weight": 15,
+      "kind": "plant"
+     },
+     {
+      "block": "conquest:hawthorn_bush",
+      "weight": 8,
+      "kind": "sunk"
+     },
+     {
+      "block": "conquest:blackberry_bush",
+      "weight": 7,
+      "kind": "plant"
+     },
+     {
+      "block": "conquest:thick_fern",
+      "weight": 8,
+      "kind": "plant"
+     },
+     {
+      "block": "conquest:wild_daisy",
+      "weight": 4,
+      "kind": "plant"
+     },
+     {
+      "block": "conquest:lily_of_the_valley",
+      "weight": 3,
+      "kind": "plant"
+     }
+    ],
+    "propDensity": 0.007,
+    "props": [
+     {
+      "block": "conquest:morel_mushrooms",
+      "weight": 2,
+      "kind": "plant"
+     },
+     {
+      "block": "conquest:mudstone_rocks",
+      "weight": 2,
+      "kind": "plant"
+     }
+    ],
+    "patchDensity": 0.0,
+    "patches": []
    }
   },
   "beech_forest": {
@@ -926,6 +1001,51 @@
       }
      }
     ]
+   },
+   "cover": {
+    "plantDensity": 0.315,
+    "plants": [
+     {
+      "block": "conquest:beech_tree_ground_leaves",
+      "weight": 55,
+      "kind": "plant"
+     },
+     {
+      "block": "conquest:lush_grass",
+      "weight": 15,
+      "kind": "plant"
+     },
+     {
+      "block": "conquest:harts_tongue_fern",
+      "weight": 10,
+      "kind": "plant"
+     },
+     {
+      "block": "conquest:thick_fern",
+      "weight": 8,
+      "kind": "plant"
+     },
+     {
+      "block": "conquest:bracken",
+      "weight": 7,
+      "kind": "plant"
+     },
+     {
+      "block": "conquest:morel_mushrooms",
+      "weight": 5,
+      "kind": "plant"
+     }
+    ],
+    "propDensity": 0.0056,
+    "props": [
+     {
+      "block": "conquest:moss_on_the_ground",
+      "weight": 4,
+      "kind": "plant"
+     }
+    ],
+    "patchDensity": 0.0,
+    "patches": []
    }
   },
   "mixed_broadleaf_forest": {
@@ -1102,6 +1222,60 @@
       }
      }
     ]
+   },
+   "cover": {
+    "plantDensity": 0.364,
+    "plants": [
+     {
+      "block": "conquest:lush_grass",
+      "weight": 25,
+      "kind": "plant"
+     },
+     {
+      "block": "conquest:oak_ground_leaves",
+      "weight": 15,
+      "kind": "plant"
+     },
+     {
+      "block": "conquest:beech_tree_ground_leaves",
+      "weight": 15,
+      "kind": "plant"
+     },
+     {
+      "block": "conquest:bracken",
+      "weight": 12,
+      "kind": "plant"
+     },
+     {
+      "block": "conquest:thick_fern",
+      "weight": 10,
+      "kind": "plant"
+     },
+     {
+      "block": "conquest:hawthorn_bush",
+      "weight": 7,
+      "kind": "sunk"
+     },
+     {
+      "block": "conquest:raspberry_bush",
+      "weight": 6,
+      "kind": "plant"
+     },
+     {
+      "block": "conquest:red_clover_flowers",
+      "weight": 6,
+      "kind": "plant"
+     },
+     {
+      "block": "conquest:cornflower",
+      "weight": 4,
+      "kind": "plant"
+     }
+    ],
+    "propDensity": 0.0056,
+    "props": [],
+    "patchDensity": 0.0,
+    "patches": []
    }
   },
   "autumn_broadleaf_forest": {
@@ -1276,6 +1450,55 @@
       }
      }
     ]
+   },
+   "cover": {
+    "plantDensity": 0.385,
+    "plants": [
+     {
+      "block": "conquest:autumnal_oak_ground_leaves",
+      "weight": 22,
+      "kind": "plant"
+     },
+     {
+      "block": "conquest:autumnal_beech_tree_ground_leaves",
+      "weight": 20,
+      "kind": "plant"
+     },
+     {
+      "block": "conquest:autumnal_maple_ground_leaves",
+      "weight": 18,
+      "kind": "plant"
+     },
+     {
+      "block": "conquest:dead_grass",
+      "weight": 12,
+      "kind": "plant"
+     },
+     {
+      "block": "conquest:autumnal_bracken",
+      "weight": 12,
+      "kind": "plant"
+     },
+     {
+      "block": "conquest:dark_autumnal_bracken",
+      "weight": 8,
+      "kind": "plant"
+     },
+     {
+      "block": "conquest:brittlegill_mushrooms",
+      "weight": 5,
+      "kind": "plant"
+     },
+     {
+      "block": "conquest:morel_mushrooms",
+      "weight": 3,
+      "kind": "plant"
+     }
+    ],
+    "propDensity": 0.0056,
+    "props": [],
+    "patchDensity": 0.0,
+    "patches": []
    }
   },
   "aspen_grove": {
@@ -1440,6 +1663,50 @@
       }
      }
     ]
+   },
+   "cover": {
+    "plantDensity": 0.42,
+    "plants": [
+     {
+      "block": "conquest:lush_grass",
+      "weight": 35,
+      "kind": "plant"
+     },
+     {
+      "block": "conquest:aspen_ground_leaves",
+      "weight": 20,
+      "kind": "plant"
+     },
+     {
+      "block": "conquest:bracken",
+      "weight": 15,
+      "kind": "plant"
+     },
+     {
+      "block": "conquest:wavy_hair_grass",
+      "weight": 10,
+      "kind": "plant"
+     },
+     {
+      "block": "conquest:raspberry_bush",
+      "weight": 8,
+      "kind": "plant"
+     },
+     {
+      "block": "conquest:rosebay_willowherb",
+      "weight": 7,
+      "kind": "plant"
+     },
+     {
+      "block": "conquest:wild_daisy",
+      "weight": 5,
+      "kind": "plant"
+     }
+    ],
+    "propDensity": 0.0042,
+    "props": [],
+    "patchDensity": 0.0,
+    "patches": []
    }
   },
   "birch_wood": {
@@ -1615,6 +1882,66 @@
       }
      }
     ]
+   },
+   "cover": {
+    "plantDensity": 0.385,
+    "plants": [
+     {
+      "block": "conquest:birch_ground_leaves",
+      "weight": 26,
+      "kind": "plant"
+     },
+     {
+      "block": "conquest:lush_grass",
+      "weight": 22,
+      "kind": "plant"
+     },
+     {
+      "block": "conquest:wavy_hair_grass",
+      "weight": 14,
+      "kind": "plant"
+     },
+     {
+      "block": "conquest:bracken",
+      "weight": 12,
+      "kind": "plant"
+     },
+     {
+      "block": "conquest:thick_fern",
+      "weight": 9,
+      "kind": "plant"
+     },
+     {
+      "block": "conquest:bilberry_bush",
+      "weight": 7,
+      "kind": "plant"
+     },
+     {
+      "block": "conquest:rosebay_willowherb",
+      "weight": 6,
+      "kind": "plant"
+     },
+     {
+      "block": "conquest:wild_daisy",
+      "weight": 4,
+      "kind": "plant"
+     }
+    ],
+    "propDensity": 0.007,
+    "props": [
+     {
+      "block": "conquest:brittlegill_mushrooms",
+      "weight": 4,
+      "kind": "plant"
+     },
+     {
+      "block": "conquest:granite_rocks",
+      "weight": 3,
+      "kind": "plant"
+     }
+    ],
+    "patchDensity": 0.0,
+    "patches": []
    }
   },
   "mixed_conifer_broadleaf": {
@@ -1790,6 +2117,51 @@
       }
      }
     ]
+   },
+   "cover": {
+    "plantDensity": 0.35,
+    "plants": [
+     {
+      "block": "conquest:lush_grass",
+      "weight": 22,
+      "kind": "plant"
+     },
+     {
+      "block": "conquest:bracken",
+      "weight": 16,
+      "kind": "plant"
+     },
+     {
+      "block": "conquest:bilberry_bush",
+      "weight": 12,
+      "kind": "plant"
+     },
+     {
+      "block": "conquest:thick_fern",
+      "weight": 10,
+      "kind": "plant"
+     },
+     {
+      "block": "conquest:oak_ground_leaves",
+      "weight": 10,
+      "kind": "plant"
+     },
+     {
+      "block": "conquest:wavy_hair_grass",
+      "weight": 10,
+      "kind": "plant"
+     }
+    ],
+    "propDensity": 0.007,
+    "props": [],
+    "patchDensity": 0.14,
+    "patches": [
+     {
+      "material": "taiga_grass",
+      "weight": 20,
+      "raise": 0
+     }
+    ]
    }
   },
   "spruce_taiga": {
@@ -1963,6 +2335,77 @@
       }
      }
     ]
+   },
+   "cover": {
+    "plantDensity": 0.315,
+    "plants": [
+     {
+      "block": "conquest:dark_spruce_ground_needles",
+      "weight": 24,
+      "kind": "plant"
+     },
+     {
+      "block": "conquest:bilberry_bush",
+      "weight": 14,
+      "kind": "plant"
+     },
+     {
+      "block": "conquest:lingonberry_bush",
+      "weight": 9,
+      "kind": "plant"
+     },
+     {
+      "block": "conquest:reindeer_lichen",
+      "weight": 8,
+      "kind": "plant"
+     },
+     {
+      "block": "conquest:thick_fern",
+      "weight": 7,
+      "kind": "plant"
+     },
+     {
+      "block": "conquest:brittlegill_mushrooms",
+      "weight": 3,
+      "kind": "plant"
+     },
+     {
+      "block": "conquest:melancholy_thistle",
+      "weight": 3,
+      "kind": "plant"
+     }
+    ],
+    "propDensity": 0.0126,
+    "props": [
+     {
+      "block": "conquest:granite_rocks",
+      "weight": 4,
+      "kind": "plant"
+     },
+     {
+      "block": "conquest:slate_rocks",
+      "weight": 2,
+      "kind": "plant"
+     },
+     {
+      "block": "conquest:spruce_cones",
+      "weight": 3,
+      "kind": "loose"
+     }
+    ],
+    "patchDensity": 0.12,
+    "patches": [
+     {
+      "material": "taiga_grass",
+      "weight": 22,
+      "raise": 0
+     },
+     {
+      "material": "fir_forest_floor",
+      "weight": 10,
+      "raise": 0
+     }
+    ]
    }
   },
   "old_growth_spruce": {
@@ -2109,6 +2552,56 @@
        "gray_gravel": 50,
        "dark_silt": 50
       }
+     }
+    ]
+   },
+   "cover": {
+    "plantDensity": 0.35,
+    "plants": [
+     {
+      "block": "conquest:moss_on_the_ground",
+      "weight": 30,
+      "kind": "plant"
+     },
+     {
+      "block": "conquest:bilberry_bush",
+      "weight": 15,
+      "kind": "plant"
+     },
+     {
+      "block": "conquest:thick_fern",
+      "weight": 12,
+      "kind": "plant"
+     },
+     {
+      "block": "conquest:harts_tongue_fern",
+      "weight": 10,
+      "kind": "plant"
+     },
+     {
+      "block": "conquest:morel_mushrooms",
+      "weight": 7,
+      "kind": "plant"
+     },
+     {
+      "block": "conquest:brittlegill_mushrooms",
+      "weight": 6,
+      "kind": "plant"
+     }
+    ],
+    "propDensity": 0.007,
+    "props": [],
+    "patchDensity": 0.05,
+    "patches": [
+     {
+      "material": "taiga_grass",
+      "weight": 20,
+      "raise": 0
+     },
+     {
+      "material": "mossy_light_limestone_boulders",
+      "weight": 3,
+      "raise": 3
      }
     ]
    }
@@ -2271,6 +2764,67 @@
        "gray_gravel": 50,
        "dark_silt": 50
       }
+     }
+    ]
+   },
+   "cover": {
+    "plantDensity": 0.315,
+    "plants": [
+     {
+      "block": "conquest:pine_ground_needles",
+      "weight": 26,
+      "kind": "plant"
+     },
+     {
+      "block": "conquest:heather",
+      "weight": 15,
+      "kind": "plant"
+     },
+     {
+      "block": "conquest:lingonberry_bush",
+      "weight": 12,
+      "kind": "plant"
+     },
+     {
+      "block": "conquest:reindeer_lichen",
+      "weight": 11,
+      "kind": "plant"
+     },
+     {
+      "block": "conquest:wavy_hair_grass",
+      "weight": 9,
+      "kind": "plant"
+     },
+     {
+      "block": "conquest:bracken",
+      "weight": 7,
+      "kind": "plant"
+     }
+    ],
+    "propDensity": 0.014,
+    "props": [
+     {
+      "block": "conquest:granite_rocks",
+      "weight": 5,
+      "kind": "plant"
+     },
+     {
+      "block": "conquest:pine_cones",
+      "weight": 4,
+      "kind": "loose"
+     }
+    ],
+    "patchDensity": 0.06,
+    "patches": [
+     {
+      "material": "taiga_grass",
+      "weight": 20,
+      "raise": 0
+     },
+     {
+      "material": "smooth_pebbles",
+      "weight": 3,
+      "raise": 0
      }
     ]
    }
@@ -2447,6 +3001,67 @@
       }
      }
     ]
+   },
+   "cover": {
+    "plantDensity": 0.315,
+    "plants": [
+     {
+      "block": "conquest:larch_ground_needles",
+      "weight": 24,
+      "kind": "plant"
+     },
+     {
+      "block": "conquest:bilberry_bush",
+      "weight": 15,
+      "kind": "plant"
+     },
+     {
+      "block": "conquest:reindeer_lichen",
+      "weight": 13,
+      "kind": "plant"
+     },
+     {
+      "block": "conquest:heather",
+      "weight": 11,
+      "kind": "plant"
+     },
+     {
+      "block": "conquest:cotton_grass",
+      "weight": 8,
+      "kind": "plant"
+     },
+     {
+      "block": "conquest:alpine_sow_thistle",
+      "weight": 4,
+      "kind": "plant"
+     },
+     {
+      "block": "conquest:melancholy_thistle",
+      "weight": 3,
+      "kind": "plant"
+     }
+    ],
+    "propDensity": 0.014,
+    "props": [
+     {
+      "block": "conquest:slate_rocks",
+      "weight": 6,
+      "kind": "plant"
+     },
+     {
+      "block": "conquest:granite_rocks",
+      "weight": 4,
+      "kind": "plant"
+     }
+    ],
+    "patchDensity": 0.0,
+    "patches": [
+     {
+      "material": "taiga_grass",
+      "weight": 22,
+      "raise": 0
+     }
+    ]
    }
   },
   "autumn_larch_taiga": {
@@ -2607,6 +3222,57 @@
       }
      }
     ]
+   },
+   "cover": {
+    "plantDensity": 0.336,
+    "plants": [
+     {
+      "block": "conquest:orange_autumnal_larch_ground_needles",
+      "weight": 22,
+      "kind": "plant"
+     },
+     {
+      "block": "conquest:yellow_autumnal_larch_ground_needles",
+      "weight": 18,
+      "kind": "plant"
+     },
+     {
+      "block": "conquest:dead_grass",
+      "weight": 16,
+      "kind": "plant"
+     },
+     {
+      "block": "conquest:bilberry_bush",
+      "weight": 12,
+      "kind": "plant"
+     },
+     {
+      "block": "conquest:reindeer_lichen",
+      "weight": 10,
+      "kind": "plant"
+     },
+     {
+      "block": "conquest:autumnal_bracken",
+      "weight": 9,
+      "kind": "plant"
+     }
+    ],
+    "propDensity": 0.0105,
+    "props": [
+     {
+      "block": "conquest:slate_rocks",
+      "weight": 6,
+      "kind": "plant"
+     }
+    ],
+    "patchDensity": 0.0,
+    "patches": [
+     {
+      "material": "taiga_grass",
+      "weight": 13,
+      "raise": 0
+     }
+    ]
    }
   },
   "dead_taiga": {
@@ -2763,6 +3429,51 @@
        "gray_gravel": 50,
        "dark_silt": 50
       }
+     }
+    ]
+   },
+   "cover": {
+    "plantDensity": 0.245,
+    "plants": [
+     {
+      "block": "conquest:dead_grass",
+      "weight": 30,
+      "kind": "plant"
+     },
+     {
+      "block": "conquest:dead_pine_ground_needles",
+      "weight": 18,
+      "kind": "plant"
+     },
+     {
+      "block": "conquest:dead_shrubs",
+      "weight": 18,
+      "kind": "plant"
+     },
+     {
+      "block": "conquest:dead_bracken",
+      "weight": 14,
+      "kind": "plant"
+     },
+     {
+      "block": "conquest:rosebay_willowherb",
+      "weight": 12,
+      "kind": "plant"
+     },
+     {
+      "block": "conquest:reindeer_lichen",
+      "weight": 8,
+      "kind": "plant"
+     }
+    ],
+    "propDensity": 0.0,
+    "props": [],
+    "patchDensity": 0.14,
+    "patches": [
+     {
+      "material": "burnt_soil",
+      "weight": 6,
+      "raise": 0
      }
     ]
    }
@@ -2939,6 +3650,66 @@
       }
      }
     ]
+   },
+   "cover": {
+    "plantDensity": 0.42,
+    "plants": [
+     {
+      "block": "conquest:moss_on_the_ground",
+      "weight": 26,
+      "kind": "plant"
+     },
+     {
+      "block": "conquest:thick_fern",
+      "weight": 14,
+      "kind": "plant"
+     },
+     {
+      "block": "conquest:harts_tongue_fern",
+      "weight": 11,
+      "kind": "plant"
+     },
+     {
+      "block": "conquest:large_fern",
+      "weight": 9,
+      "kind": "tall"
+     },
+     {
+      "block": "conquest:lush_grass",
+      "weight": 6,
+      "kind": "plant"
+     },
+     {
+      "block": "conquest:brittlegill_mushrooms",
+      "weight": 5,
+      "kind": "plant"
+     },
+     {
+      "block": "conquest:morel_mushrooms",
+      "weight": 5,
+      "kind": "plant"
+     }
+    ],
+    "propDensity": 0.0,
+    "props": [],
+    "patchDensity": 0.22,
+    "patches": [
+     {
+      "material": "mossy_fir_forest_floor",
+      "weight": 14,
+      "raise": 0
+     },
+     {
+      "material": "overgrown_fir_forest_floor",
+      "weight": 10,
+      "raise": 0
+     },
+     {
+      "material": "mossy_light_limestone_boulders",
+      "weight": 5,
+      "raise": 3
+     }
+    ]
    }
   },
   "meadow": {
@@ -3110,6 +3881,55 @@
       }
      }
     ]
+   },
+   "cover": {
+    "plantDensity": 0.546,
+    "plants": [
+     {
+      "block": "conquest:common_meadow_grass",
+      "weight": 28,
+      "kind": "plant"
+     },
+     {
+      "block": "conquest:timothy_grass",
+      "weight": 20,
+      "kind": "plant"
+     },
+     {
+      "block": "conquest:kentucky_bluegrass",
+      "weight": 14,
+      "kind": "plant"
+     },
+     {
+      "block": "conquest:red_clover_flowers",
+      "weight": 10,
+      "kind": "plant"
+     },
+     {
+      "block": "conquest:oxeye_daisy",
+      "weight": 8,
+      "kind": "plant"
+     },
+     {
+      "block": "conquest:cornflower",
+      "weight": 7,
+      "kind": "plant"
+     },
+     {
+      "block": "conquest:wild_daisy",
+      "weight": 7,
+      "kind": "plant"
+     },
+     {
+      "block": "conquest:poppy",
+      "weight": 6,
+      "kind": "plant"
+     }
+    ],
+    "propDensity": 0.0021,
+    "props": [],
+    "patchDensity": 0.0,
+    "patches": []
    }
   },
   "moorland": {
@@ -3264,6 +4084,66 @@
       }
      }
     ]
+   },
+   "cover": {
+    "plantDensity": 0.455,
+    "plants": [
+     {
+      "block": "conquest:heather",
+      "weight": 34,
+      "kind": "plant"
+     },
+     {
+      "block": "conquest:purple_moor_grass",
+      "weight": 24,
+      "kind": "plant"
+     },
+     {
+      "block": "conquest:cross_leaved_heath",
+      "weight": 12,
+      "kind": "plant"
+     },
+     {
+      "block": "conquest:broom_bush",
+      "weight": 8,
+      "kind": "plant"
+     },
+     {
+      "block": "conquest:bilberry_bush",
+      "weight": 8,
+      "kind": "plant"
+     },
+     {
+      "block": "conquest:cotton_grass",
+      "weight": 7,
+      "kind": "plant"
+     },
+     {
+      "block": "conquest:moorland_spotted_orchid",
+      "weight": 4,
+      "kind": "plant"
+     },
+     {
+      "block": "conquest:melancholy_thistle",
+      "weight": 3,
+      "kind": "plant"
+     }
+    ],
+    "propDensity": 0.0105,
+    "props": [
+     {
+      "block": "conquest:granite_rocks",
+      "weight": 6,
+      "kind": "plant"
+     },
+     {
+      "block": "conquest:slate_rocks",
+      "weight": 4,
+      "kind": "plant"
+     }
+    ],
+    "patchDensity": 0.0,
+    "patches": []
    }
   },
   "downland": {
@@ -3433,6 +4313,62 @@
        "mud": 60,
        "dark_silt": 40
       }
+     }
+    ]
+   },
+   "cover": {
+    "plantDensity": 0.385,
+    "plants": [
+     {
+      "block": "conquest:sweet_grass",
+      "weight": 30,
+      "kind": "plant"
+     },
+     {
+      "block": "conquest:thyme",
+      "weight": 18,
+      "kind": "plant"
+     },
+     {
+      "block": "conquest:rock_rose",
+      "weight": 14,
+      "kind": "plant"
+     },
+     {
+      "block": "conquest:wild_daisy",
+      "weight": 12,
+      "kind": "plant"
+     },
+     {
+      "block": "conquest:oxeye_daisy",
+      "weight": 10,
+      "kind": "plant"
+     },
+     {
+      "block": "conquest:hawthorn_bush",
+      "weight": 8,
+      "kind": "sunk"
+     },
+     {
+      "block": "conquest:black_knapweed",
+      "weight": 8,
+      "kind": "plant"
+     }
+    ],
+    "propDensity": 0.014,
+    "props": [
+     {
+      "block": "conquest:limestone_rocks",
+      "weight": 10,
+      "kind": "plant"
+     }
+    ],
+    "patchDensity": 0.05,
+    "patches": [
+     {
+      "material": "light_limestone_boulders",
+      "weight": 4,
+      "raise": 3
      }
     ]
    }
@@ -3609,6 +4545,56 @@
       }
      }
     ]
+   },
+   "cover": {
+    "plantDensity": 0.315,
+    "plants": [
+     {
+      "block": "conquest:bilberry_bush",
+      "weight": 24,
+      "kind": "plant"
+     },
+     {
+      "block": "conquest:lingonberry_bush",
+      "weight": 20,
+      "kind": "plant"
+     },
+     {
+      "block": "conquest:bog_blueberry_bush",
+      "weight": 16,
+      "kind": "plant"
+     },
+     {
+      "block": "conquest:reindeer_lichen",
+      "weight": 16,
+      "kind": "plant"
+     },
+     {
+      "block": "conquest:cotton_grass",
+      "weight": 12,
+      "kind": "plant"
+     },
+     {
+      "block": "conquest:dead_grass",
+      "weight": 12,
+      "kind": "plant"
+     }
+    ],
+    "propDensity": 0.021,
+    "props": [
+     {
+      "block": "conquest:granite_rocks",
+      "weight": 8,
+      "kind": "plant"
+     },
+     {
+      "block": "conquest:slate_rocks",
+      "weight": 5,
+      "kind": "plant"
+     }
+    ],
+    "patchDensity": 0.0,
+    "patches": []
    }
   },
   "lichen_tundra": {
@@ -3766,6 +4752,57 @@
       }
      }
     ]
+   },
+   "cover": {
+    "plantDensity": 0.266,
+    "plants": [
+     {
+      "block": "conquest:reindeer_lichen",
+      "weight": 38,
+      "kind": "plant"
+     },
+     {
+      "block": "conquest:wolf_lichen",
+      "weight": 18,
+      "kind": "plant"
+     },
+     {
+      "block": "conquest:elegant_sunburst_lichen",
+      "weight": 12,
+      "kind": "plant"
+     },
+     {
+      "block": "conquest:cotton_grass",
+      "weight": 14,
+      "kind": "plant"
+     },
+     {
+      "block": "conquest:dead_grass",
+      "weight": 18,
+      "kind": "plant"
+     }
+    ],
+    "propDensity": 0.028,
+    "props": [
+     {
+      "block": "conquest:granite_rocks",
+      "weight": 12,
+      "kind": "plant"
+     },
+     {
+      "block": "conquest:slate_rocks",
+      "weight": 8,
+      "kind": "plant"
+     }
+    ],
+    "patchDensity": 0.06,
+    "patches": [
+     {
+      "material": "smooth_pebbles",
+      "weight": 5,
+      "raise": 0
+     }
+    ]
    }
   },
   "alpine_scree": {
@@ -3910,6 +4947,62 @@
       }
      }
     ]
+   },
+   "cover": {
+    "plantDensity": 0.098,
+    "plants": [
+     {
+      "block": "conquest:alpine_sow_thistle",
+      "weight": 20,
+      "kind": "plant"
+     },
+     {
+      "block": "conquest:reindeer_lichen",
+      "weight": 25,
+      "kind": "plant"
+     },
+     {
+      "block": "conquest:dead_grass",
+      "weight": 20,
+      "kind": "plant"
+     },
+     {
+      "block": "conquest:cotton_grass",
+      "weight": 15,
+      "kind": "plant"
+     },
+     {
+      "block": "conquest:wolf_lichen",
+      "weight": 20,
+      "kind": "plant"
+     }
+    ],
+    "propDensity": 0.056,
+    "props": [
+     {
+      "block": "conquest:granite_rocks",
+      "weight": 20,
+      "kind": "plant"
+     },
+     {
+      "block": "conquest:slate_rocks",
+      "weight": 14,
+      "kind": "plant"
+     },
+     {
+      "block": "conquest:andesite_rocks",
+      "weight": 10,
+      "kind": "plant"
+     }
+    ],
+    "patchDensity": 0.08,
+    "patches": [
+     {
+      "material": "smooth_pebbles",
+      "weight": 8,
+      "raise": 0
+     }
+    ]
    }
   },
   "glacier": {
@@ -4009,6 +5102,25 @@
        "glacier_ice": 60,
        "gray_gravel": 40
       }
+     }
+    ]
+   },
+   "cover": {
+    "plantDensity": 0.0,
+    "plants": [],
+    "propDensity": 0.0,
+    "props": [],
+    "patchDensity": 0.14,
+    "patches": [
+     {
+      "material": "dirty_glacier_ice",
+      "weight": 20,
+      "raise": 0
+     },
+     {
+      "material": "snow_covered_icy_limestone",
+      "weight": 10,
+      "raise": 0
      }
     ]
    }
@@ -4156,6 +5268,61 @@
       }
      }
     ]
+   },
+   "cover": {
+    "plantDensity": 0.35,
+    "plants": [
+     {
+      "block": "conquest:green_sphagnum_moss",
+      "weight": 24,
+      "kind": "plant"
+     },
+     {
+      "block": "conquest:dark_green_sphagnum_moss",
+      "weight": 16,
+      "kind": "plant"
+     },
+     {
+      "block": "conquest:cotton_grass",
+      "weight": 20,
+      "kind": "plant"
+     },
+     {
+      "block": "conquest:bog_blueberry_bush",
+      "weight": 14,
+      "kind": "plant"
+     },
+     {
+      "block": "conquest:heather",
+      "weight": 10,
+      "kind": "plant"
+     },
+     {
+      "block": "conquest:dead_reeds",
+      "weight": 10,
+      "kind": "plant"
+     },
+     {
+      "block": "conquest:sedge",
+      "weight": 6,
+      "kind": "plant"
+     }
+    ],
+    "propDensity": 0.0,
+    "props": [],
+    "patchDensity": 0.2,
+    "patches": [
+     {
+      "material": "brown_sphagnum_moss_block",
+      "weight": 10,
+      "raise": 0
+     },
+     {
+      "material": "light_green_sphagnum_moss_block",
+      "weight": 10,
+      "raise": 0
+     }
+    ]
    }
   },
   "fen_reedbed": {
@@ -4300,6 +5467,50 @@
       }
      }
     ]
+   },
+   "cover": {
+    "plantDensity": 0.455,
+    "plants": [
+     {
+      "block": "conquest:greater_fen_sedge",
+      "weight": 24,
+      "kind": "plant"
+     },
+     {
+      "block": "conquest:bottle_sedge",
+      "weight": 18,
+      "kind": "plant"
+     },
+     {
+      "block": "conquest:rushes",
+      "weight": 16,
+      "kind": "plant"
+     },
+     {
+      "block": "conquest:cattails",
+      "weight": 14,
+      "kind": "plant"
+     },
+     {
+      "block": "conquest:sedge",
+      "weight": 12,
+      "kind": "plant"
+     },
+     {
+      "block": "conquest:dry_reeds",
+      "weight": 10,
+      "kind": "plant"
+     },
+     {
+      "block": "conquest:sea_arrowgrass",
+      "weight": 6,
+      "kind": "plant"
+     }
+    ],
+    "propDensity": 0.0,
+    "props": [],
+    "patchDensity": 0.0,
+    "patches": []
    }
   },
   "willow_carr": {
@@ -4445,6 +5656,30 @@
       }
      }
     ]
+   },
+   "cover": {
+    "plantDensity": 0.42,
+    "plants": [
+     {
+      "block": "conquest:rushes",
+      "weight": 30,
+      "kind": "plant"
+     },
+     {
+      "block": "conquest:sedge",
+      "weight": 25,
+      "kind": "plant"
+     },
+     {
+      "block": "conquest:cattails",
+      "weight": 20,
+      "kind": "plant"
+     }
+    ],
+    "propDensity": 0.0,
+    "props": [],
+    "patchDensity": 0.0,
+    "patches": []
    }
   },
   "cold_steppe": {
@@ -4602,6 +5837,57 @@
        "gray_gravel": 50,
        "dark_silt": 50
       }
+     }
+    ]
+   },
+   "cover": {
+    "plantDensity": 0.196,
+    "plants": [
+     {
+      "block": "conquest:dead_grass",
+      "weight": 40,
+      "kind": "plant"
+     },
+     {
+      "block": "conquest:dry_reeds",
+      "weight": 16,
+      "kind": "plant"
+     },
+     {
+      "block": "conquest:dead_shrubs",
+      "weight": 16,
+      "kind": "plant"
+     },
+     {
+      "block": "conquest:tumbleweed",
+      "weight": 12,
+      "kind": "loose"
+     },
+     {
+      "block": "conquest:desert_shrub",
+      "weight": 10,
+      "kind": "plant"
+     },
+     {
+      "block": "conquest:wavy_hair_grass",
+      "weight": 6,
+      "kind": "plant"
+     }
+    ],
+    "propDensity": 0.021,
+    "props": [
+     {
+      "block": "conquest:mudstone_rocks",
+      "weight": 10,
+      "kind": "plant"
+     }
+    ],
+    "patchDensity": 0.06,
+    "patches": [
+     {
+      "material": "smooth_pebbles",
+      "weight": 6,
+      "raise": 0
      }
     ]
    }
@@ -4772,6 +6058,30 @@
       }
      }
     ]
+   },
+   "cover": {
+    "plantDensity": 0.042,
+    "plants": [
+     {
+      "block": "conquest:desert_shrub",
+      "weight": 40,
+      "kind": "plant"
+     },
+     {
+      "block": "conquest:dead_shrubs",
+      "weight": 30,
+      "kind": "plant"
+     },
+     {
+      "block": "conquest:tumbleweed",
+      "weight": 30,
+      "kind": "loose"
+     }
+    ],
+    "propDensity": 0.0,
+    "props": [],
+    "patchDensity": 0.0,
+    "patches": []
    }
   },
   "savanna": {
@@ -4930,6 +6240,25 @@
       }
      }
     ]
+   },
+   "cover": {
+    "plantDensity": 0.245,
+    "plants": [
+     {
+      "block": "conquest:dead_grass",
+      "weight": 60,
+      "kind": "plant"
+     },
+     {
+      "block": "conquest:desert_shrub",
+      "weight": 40,
+      "kind": "plant"
+     }
+    ],
+    "propDensity": 0.0,
+    "props": [],
+    "patchDensity": 0.0,
+    "patches": []
    }
   },
   "tropical_seasonal_forest": {
@@ -5086,6 +6415,20 @@
       }
      }
     ]
+   },
+   "cover": {
+    "plantDensity": 0.385,
+    "plants": [
+     {
+      "block": "conquest:lush_grass",
+      "weight": 100,
+      "kind": "plant"
+     }
+    ],
+    "propDensity": 0.0,
+    "props": [],
+    "patchDensity": 0.0,
+    "patches": []
    }
   },
   "tropical_rainforest": {
@@ -5245,6 +6588,25 @@
       }
      }
     ]
+   },
+   "cover": {
+    "plantDensity": 0.42,
+    "plants": [
+     {
+      "block": "conquest:lush_grass",
+      "weight": 60,
+      "kind": "plant"
+     },
+     {
+      "block": "conquest:large_fern",
+      "weight": 40,
+      "kind": "tall"
+     }
+    ],
+    "propDensity": 0.0,
+    "props": [],
+    "patchDensity": 0.0,
+    "patches": []
    }
   },
   "sea_temperate": {

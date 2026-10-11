@@ -211,6 +211,9 @@ S("tan_sandstone", "rock")
 S("faded_tan_sandstone", "rock")
 S("brown_sandstone", "rock")
 S("red_sandstone", "rock")
+# Boulder fields: not in any palette's mix, only placed as ground-cover patches.
+S("light_limestone_boulders", "rock")
+S("mossy_light_limestone_boulders", "rock")
 
 # Snow and ice. (bright_glacier_ice_slab is a plain slab with no `layers`,
 # so it cannot be a skin.)
@@ -219,6 +222,7 @@ S("snowy_granite", "ice")
 S("icy_limestone", "ice")
 S("glacier_ice", "ice")
 S("dirty_glacier_ice", "ice")
+S("snow_covered_icy_limestone", "ice")
 
 
 # ---- shared ramps ------------------------------------------------------------
