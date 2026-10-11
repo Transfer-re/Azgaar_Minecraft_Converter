@@ -14,8 +14,10 @@ import com.example.worldmap.runtime.MapImageCache;
 import com.example.worldmap.runtime.MapImageData;
 import com.example.worldgen.ImageMapChunkGenerator;
 
-import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
-import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
+import net.minecraft.server.MinecraftServer;
+import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.event.entity.player.PlayerEvent;
+import net.neoforged.neoforge.event.tick.ServerTickEvent;
 import net.minecraft.network.packet.s2c.play.SubtitleS2CPacket;
 import net.minecraft.network.packet.s2c.play.TitleFadeS2CPacket;
 import net.minecraft.network.packet.s2c.play.TitleS2CPacket;
@@ -40,7 +42,8 @@ public final class PlayerRegionTracker {
     }
 
     public static void register() {
-        ServerTickEvents.END_SERVER_TICK.register(server -> {
+        NeoForge.EVENT_BUS.addListener(ServerTickEvent.Post.class, event -> {
+            MinecraftServer server = event.getServer();
             if (server.getTicks() % CHECK_INTERVAL_TICKS != 0) {
                 return;
             }
@@ -50,8 +53,8 @@ public final class PlayerRegionTracker {
             }
         });
 
-        ServerPlayConnectionEvents.DISCONNECT.register((handler, server) -> {
-            UUID id = handler.player.getUuid();
+        NeoForge.EVENT_BUS.addListener(PlayerEvent.PlayerLoggedOutEvent.class, event -> {
+            UUID id = event.getEntity().getUuid();
             LAST_STATE.remove(id);
             LAST_PROVINCE.remove(id);
         });
@@ -89,13 +92,13 @@ public final class PlayerRegionTracker {
         Text subtitle = buildProvinceSubtitle(province);
 
 
-        player.networkHandler.sendPacket(
+        player.networkHandler.send(
                 new TitleFadeS2CPacket(10, 80, 20)
         );
-        player.networkHandler.sendPacket(
+        player.networkHandler.send(
                 new TitleS2CPacket(title)
         );
-        player.networkHandler.sendPacket(
+        player.networkHandler.send(
                 new SubtitleS2CPacket(subtitle)
         );
     }

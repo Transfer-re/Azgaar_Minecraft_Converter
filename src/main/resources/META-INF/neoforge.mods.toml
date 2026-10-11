@@ -1,0 +1,31 @@
+modLoader = "javafml"
+loaderVersion = "[1,)"
+license = "CC0-1.0"
+
+[[mods]]
+modId = "fantasymapgenerator"
+version = "${version}"
+displayName = "FantasyMapGenerator"
+authors = "Me!"
+description = '''Generates the overworld from an Azgaar's Fantasy Map Generator JSON export.'''
+logoFile = "assets/fantasymapgenerator/icon.png"
+
+[[mixins]]
+config = "fantasymapgenerator.mixins.json"
+
+[[mixins]]
+config = "fantasymapgenerator.client.mixins.json"
+
+[[dependencies.fantasymapgenerator]]
+modId = "neoforge"
+type = "required"
+versionRange = "[21.1,)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.fantasymapgenerator]]
+modId = "minecraft"
+type = "required"
+versionRange = "[1.21.1,1.21.2)"
+ordering = "NONE"
+side = "BOTH"

@@ -2,7 +2,7 @@
 
 Turns a map from [Azgaar's Fantasy Map Generator](https://azgaar.github.io/Fantasy-Map-Generator/) (FMG) into a Minecraft overworld. The map's heights become the terrain, its biomes become Minecraft biomes, its rivers are carved into valleys, its roads are laid out with bridges, and its towns (burgs) become villages.
 
-**This branch: `fabric-1.21.1`**: Fabric, Minecraft 1.21.1, vanilla content.
+**This branch: `neoforge-1.21.1`**: NeoForge, Minecraft 1.21.1, vanilla content.
 
 | Branch | Minecraft | Loader | Content |
 |---|---|---|---|
@@ -51,7 +51,7 @@ An FMG map (zoomable), and two more map examples:
 
 ### 1. Install
 
-1. Install [Fabric Loader](https://fabricmc.net/use/installer/) (0.18.4 or newer) for Minecraft 1.21.1, and put [Fabric API](https://modrinth.com/mod/fabric-api) in `mods/`.
+1. Install [NeoForge](https://neoforged.net/) 21.1 for Minecraft 1.21.1 (tested with 21.1.259).
 2. Put the Fantasy Map Generator jar in `mods/`. There are no release downloads yet; see [Building from source](#building-from-source).
 3. [William Wythers' Overhauled Overworld](https://modrinth.com/mod/wwoo/) (WWOO) is recommended: it adds biome blending and sub-biomes that make the vanilla biomes look much better. It adds no blocks or items.
 
@@ -87,7 +87,7 @@ The centre of the map is at X 0, Z 0. Nether and End stay vanilla. Sea level is 
 
 A dedicated server has no Create World screen, so create the world in singleplayer first and move it over.
 
-1. Install the Fabric server for Minecraft 1.21.1 (the Fabric installer has a Server tab) with Fabric API, and put this mod in the server's `mods/`. Leave client-only mods off the server.
+1. Install the NeoForge 21.1 server for Minecraft 1.21.1 (the NeoForge installer has an "Install server" option), and put this mod in the server's `mods/`. Leave client-only mods off the server.
 2. In singleplayer, with the same mod versions, create the world as described above and wait until *Preparing Fantasy Map* has finished and you are in the world. Quit to the title screen.
 3. Copy these from `.minecraft/saves/<your world>/` into the server's world folder (`world/`, or whatever `level-name` in `server.properties` says):
    - `level.dat`: the world settings, including the map and its options
@@ -143,7 +143,8 @@ Changing `heightmap.json` or a profile makes worlds that use them prepare their 
 ## Building from source
 
 - Needs JDK 21. `gradlew build` writes the mod to `build/libs/fantasymapgenerator-1.0.0.jar`.
-- `gradlew runClient` and `gradlew runServer` start a development game. Their run folders are `../runs/fabric-1.21.1` and `../runs/fabric-1.21.1-server`, next to the repository rather than inside it.
+- `gradlew runClient` and `gradlew runServer` start a development game. Their run folders are `../runs/neoforge-1.21.1` and `../runs/neoforge-1.21.1-server`, next to the repository rather than inside it.
+- The source uses Yarn names like the Fabric branches; it is built with [Architectury Loom](https://github.com/architectury/architectury-loom). Only the loader glue (events, registration, networking) differs from `fabric-1.21.1`, so changes carry over by cherry-picking.
 
 ## Credits
 

@@ -15,7 +15,7 @@ import com.example.fmg.FMGMapData;
 import com.example.fmg.FMGMapLoader;
 import com.example.fmg.FMGRouteSampler;
 
-import net.fabricmc.loader.api.FabricLoader;
+import net.neoforged.fml.loading.FMLPaths;
 
 /**
  * Loads FMG JSON exports from disk and keeps them cached for sampling.
@@ -25,7 +25,7 @@ public final class FMGMapDataCache {
     private static final Logger LOGGER = LoggerFactory.getLogger("FMGMapDataCache");
     private static final Map<Path, FMGMapData> CACHE = new ConcurrentHashMap<>();
 
-    // Loaded lazily to avoid touching FabricLoader config dir too early.
+    // Loaded lazily to avoid touching the config dir too early.
     private static volatile FMGModConfig.Config CONFIG;
 
     private FMGMapDataCache() {
@@ -175,7 +175,7 @@ public final class FMGMapDataCache {
     private static Path resolve(String rawPath) {
         Path path = Path.of(rawPath.replace("\\", "/"));
         if (!path.isAbsolute()) {
-            Path gameDir = FabricLoader.getInstance().getGameDir();
+            Path gameDir = FMLPaths.GAMEDIR.get();
             path = gameDir.resolve(path);
         }
         return path.normalize();

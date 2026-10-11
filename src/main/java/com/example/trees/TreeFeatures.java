@@ -13,11 +13,12 @@ import com.example.surface.SurfaceSet;
 import com.example.worldgen.ImageMapChunkGenerator;
 import com.example.worldmap.runtime.MapImageCache;
 
-import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
-import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
-import net.fabricmc.loader.api.FabricLoader;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.Registry;
+import net.neoforged.fml.loading.FMLPaths;
+import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.event.OnDatapackSyncEvent;
+import net.neoforged.neoforge.event.RegisterCommandsEvent;
+import net.neoforged.neoforge.event.server.ServerStoppedEvent;
+import net.neoforged.neoforge.registries.RegisterEvent;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.server.command.ServerCommandSource;
@@ -56,12 +57,21 @@ public final class TreeFeatures {
     private TreeFeatures() {
     }
 
-    public static void register() {
-        Registry.register(Registries.FEATURE, Identifier.of(FantasyMapGenerator.MOD_ID, "treegen_object"), OBJECT);
-        Registry.register(Registries.FEATURE, Identifier.of(FantasyMapGenerator.MOD_ID, "treegen_mix"), MIX);
+    public static void registerFeatures(RegisterEvent event) {
+        event.register(RegistryKeys.FEATURE, helper -> {
+            helper.register(Identifier.of(FantasyMapGenerator.MOD_ID, "treegen_object"), OBJECT);
+            helper.register(Identifier.of(FantasyMapGenerator.MOD_ID, "treegen_mix"), MIX);
+        });
+    }
 
-        ServerLifecycleEvents.END_DATA_PACK_RELOAD.register((server, resources, ok) -> TreeShapes.clear());
-        ServerLifecycleEvents.SERVER_STOPPED.register(server -> {
+    public static void register() {
+        // no player = the sync after /reload
+        NeoForge.EVENT_BUS.addListener(OnDatapackSyncEvent.class, event -> {
+            if (event.getPlayer() == null) {
+                TreeShapes.clear();
+            }
+        });
+        NeoForge.EVENT_BUS.addListener(ServerStoppedEvent.class, event -> {
             logStats();
             names = null;
             TreeShapes.clear();
@@ -69,7 +79,7 @@ public final class TreeFeatures {
             PlacedObjects.clearAll();
         });
 
-        CommandRegistrationCallback.EVENT.register((dispatcher, access, env) -> dispatcher.register(
+        NeoForge.EVENT_BUS.addListener(RegisterCommandsEvent.class, event -> event.getDispatcher().register(
                 literal("fmg").then(literal("trees")
                         .requires(src -> src.hasPermissionLevel(2))
                         .then(literal("stats").executes(ctx -> stats(ctx.getSource())))
@@ -86,7 +96,7 @@ public final class TreeFeatures {
         if (context.getGenerator() instanceof ImageMapChunkGenerator fmg) {
             String palettes = MapImageCache.get(fmg.mapInfo()).profile().surfacePalettes;
             if (palettes != null) {
-                set = SurfaceSet.get(palettes, FabricLoader.getInstance().getConfigDir());
+                set = SurfaceSet.get(palettes, FMLPaths.CONFIGDIR.get());
             }
         }
         TreeGround ground = new TreeGround(set, context.getWorld().getBottomY());

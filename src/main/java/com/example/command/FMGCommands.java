@@ -20,7 +20,8 @@ import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 
-import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
+import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.event.RegisterCommandsEvent;
 import static net.minecraft.server.command.CommandManager.argument;
 import static net.minecraft.server.command.CommandManager.literal;
 import net.minecraft.registry.RegistryKeys;
@@ -35,8 +36,8 @@ import net.minecraft.world.biome.Biome;
 public class FMGCommands {
 
     public static void register() {
-        CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> {
-            registerCommands(dispatcher);
+        NeoForge.EVENT_BUS.addListener(RegisterCommandsEvent.class, event -> {
+            registerCommands(event.getDispatcher());
         });
     }
 
@@ -363,7 +364,7 @@ public class FMGCommands {
         var entries = registry.streamEntries().toList();
         context.getSource().sendFeedback(() -> Text.literal("§aFMG Map definitions: " + entries.size()), false);
         for (var holder : entries) {
-            var key = holder.getKey().map(k -> k.getValue().toString()).orElse("unknown");
+            var key = holder.registryKey().getValue().toString();
             MapInfo definition = holder.value();
             String line = "§7- " + key + " (§f" + definition.fmgExport() + "§7)";
             context.getSource().sendFeedback(() -> Text.literal(line), false);

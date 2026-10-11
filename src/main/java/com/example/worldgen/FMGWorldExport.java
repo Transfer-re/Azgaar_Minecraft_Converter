@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import net.fabricmc.loader.api.FabricLoader;
+import net.neoforged.fml.loading.FMLPaths;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtIo;
@@ -55,7 +55,7 @@ public final class FMGWorldExport {
 
         String safe = name.replaceAll("[^A-Za-z0-9._-]", "_");
         if (safe.isBlank()) throw new IllegalStateException("bad export name");
-        Path savesDir = FabricLoader.getInstance().getGameDir().resolve("saves");
+        Path savesDir = FMLPaths.GAMEDIR.get().resolve("saves");
         Path dest = savesDir.resolve(safe);
         if (Files.exists(dest)) {
             throw new IllegalStateException("saves/" + safe + " already exists");

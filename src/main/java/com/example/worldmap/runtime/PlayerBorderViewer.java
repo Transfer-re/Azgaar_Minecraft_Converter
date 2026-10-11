@@ -13,9 +13,11 @@ import com.example.fmg.FMGHeightSampler;
 import com.example.fmg.FMGMapData;
 import com.example.worldgen.ImageMapChunkGenerator;
 
-import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
-import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
-import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+import net.minecraft.server.MinecraftServer;
+import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.event.entity.player.PlayerEvent;
+import net.neoforged.neoforge.event.tick.ServerTickEvent;
+import net.neoforged.neoforge.network.PacketDistributor;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.world.gen.chunk.ChunkGenerator;
@@ -47,7 +49,8 @@ public final class PlayerBorderViewer {
     }
 
     public static void register() {
-        ServerTickEvents.END_SERVER_TICK.register(server -> {
+        NeoForge.EVENT_BUS.addListener(ServerTickEvent.Post.class, event -> {
+            MinecraftServer server = event.getServer();
             if (server.getTicks() % CHECK_INTERVAL_TICKS != 0) {
                 return;
             }
@@ -56,8 +59,8 @@ public final class PlayerBorderViewer {
             }
         });
 
-        ServerPlayConnectionEvents.DISCONNECT.register((handler, server) -> {
-            UUID id = handler.player.getUuid();
+        NeoForge.EVENT_BUS.addListener(PlayerEvent.PlayerLoggedOutEvent.class, event -> {
+            UUID id = event.getEntity().getUuid();
             MODES.remove(id);
             LAST_REGION_ID.remove(id);
             LAST_CENTER_XZ.remove(id);
@@ -187,10 +190,10 @@ public final class PlayerBorderViewer {
     }
 
     private static void sendDisabled(ServerPlayerEntity player) {
-        if (!ServerPlayNetworking.canSend(player, BorderDataPayload.ID)) {
+        if (!player.networkHandler.hasChannel(BorderDataPayload.ID)) {
             return;
         }
-        ServerPlayNetworking.send(player, new BorderDataPayload(false, 0, 0, 0xFFFFFF, "", new float[0], new float[0]));
+        PacketDistributor.sendToPlayer(player, new BorderDataPayload(false, 0, 0, 0xFFFFFF, "", new float[0], new float[0]));
     }
 
     private static void sendBorderData(
@@ -199,7 +202,7 @@ public final class PlayerBorderViewer {
             int regionId,
             FMGBorderPoints.Result result
     ) {
-        if (!ServerPlayNetworking.canSend(player, BorderDataPayload.ID)) {
+        if (!player.networkHandler.hasChannel(BorderDataPayload.ID)) {
             return;
         }
 
@@ -214,7 +217,7 @@ public final class PlayerBorderViewer {
             zs[i * 2 + 1] = (float) s.b().worldZ();
         }
 
-        ServerPlayNetworking.send(
+        PacketDistributor.sendToPlayer(
                 player,
                 new BorderDataPayload(true, mode.id, regionId, result.colorRgb(), result.name(), xs, zs)
         );

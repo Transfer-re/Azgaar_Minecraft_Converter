@@ -35,13 +35,13 @@ public final class TreeMixFeature extends Feature<TreeMixConfig> {
     public boolean generate(FeatureContext<TreeMixConfig> context) {
         long start = System.nanoTime();
         try {
-            return place(context);
+            return placeMix(context);
         } finally {
             TreePlacer.time(TreeFeatures.statsKey(context), System.nanoTime() - start);
         }
     }
 
-    private boolean place(FeatureContext<TreeMixConfig> context) {
+    private boolean placeMix(FeatureContext<TreeMixConfig> context) {
         TreeMixConfig cfg = context.getConfig();
         if (cfg.entries().isEmpty()) return false;
         TreePlacer.Ctx c = TreeFeatures.ctx(context);

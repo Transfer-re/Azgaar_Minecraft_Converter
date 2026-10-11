@@ -14,7 +14,8 @@ import com.example.fmg.FMGMapData;
 import com.example.worldmap.runtime.MapImageCache;
 import com.example.worldmap.runtime.MapImageData;
 
-import net.fabricmc.fabric.api.event.lifecycle.v1.ServerChunkEvents;
+import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.event.level.ChunkEvent;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.command.ServerCommandSource;
@@ -65,8 +66,9 @@ public final class BurgVillageSpawner {
     }
 
     public static void register() {
-        ServerChunkEvents.CHUNK_LOAD.register((world, chunk) -> {
-            if (!(world instanceof ServerWorld serverWorld)) {
+        NeoForge.EVENT_BUS.addListener(ChunkEvent.Load.class, event -> {
+            if (!(event.getLevel() instanceof ServerWorld serverWorld)
+                    || !(event.getChunk() instanceof WorldChunk chunk)) {
                 return;
             }
 

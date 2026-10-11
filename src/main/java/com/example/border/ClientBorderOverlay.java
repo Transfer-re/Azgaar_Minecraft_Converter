@@ -4,8 +4,6 @@ import org.joml.Matrix4f;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 
-import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
-import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.BufferBuilder;
 import net.minecraft.client.render.BufferRenderer;
@@ -17,6 +15,8 @@ import net.minecraft.client.render.VertexFormats;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.Heightmap;
+import net.neoforged.neoforge.client.event.RenderLevelStageEvent;
+import net.neoforged.neoforge.common.NeoForge;
 
 public final class ClientBorderOverlay {
 
@@ -38,25 +38,29 @@ public final class ClientBorderOverlay {
     private ClientBorderOverlay() {
     }
 
-    public static void registerClient() {
-        ClientPlayNetworking.registerGlobalReceiver(BorderDataPayload.ID, (payload, context) -> {
-            context.client().execute(() -> {
-                if (!payload.enabled()) {
-                    clear();
-                    return;
-                }
+    /** Border data from the server (registered in {@code FantasyMapGenerator}). */
+    public static void receive(BorderDataPayload payload) {
+        MinecraftClient.getInstance().execute(() -> {
+            if (!payload.enabled()) {
+                clear();
+                return;
+            }
 
-                enabled = true;
-                mode = BorderMode.fromId(payload.modeId());
-                regionId = payload.regionId();
-                colorRgb = payload.colorRgb();
-                name = payload.name();
-                xs = payload.xs();
-                zs = payload.zs();
-            });
+            enabled = true;
+            mode = BorderMode.fromId(payload.modeId());
+            regionId = payload.regionId();
+            colorRgb = payload.colorRgb();
+            name = payload.name();
+            xs = payload.xs();
+            zs = payload.zs();
         });
+    }
 
-        WorldRenderEvents.LAST.register(context -> {
+    public static void registerClient() {
+        NeoForge.EVENT_BUS.addListener(RenderLevelStageEvent.class, context -> {
+            if (context.getStage() != RenderLevelStageEvent.Stage.AFTER_LEVEL) {
+                return;
+            }
             float[] localXs = xs;
             float[] localZs = zs;
             int count = Math.min(localXs.length, localZs.length);
@@ -69,10 +73,12 @@ public final class ClientBorderOverlay {
                 return;
             }
 
-            Camera camera = context.camera();
+            Camera camera = context.getCamera();
             Vec3d camPos = camera.getPos();
 
-            MatrixStack matrices = context.matrixStack();
+            // world space relative to the camera, as Fabric's WorldRenderContext builds it
+            MatrixStack matrices = new MatrixStack();
+            matrices.multiplyPositionMatrix(context.getModelViewMatrix());
             matrices.push();
             matrices.translate(-camPos.x, -camPos.y, -camPos.z);
 

@@ -18,7 +18,7 @@ import com.example.fmg.FMGRiver;
 import com.example.worldmap.MapInfo;
 import com.example.worldmap.runtime.MapImageData;
 
-import net.fabricmc.loader.api.FabricLoader;
+import net.neoforged.fml.loading.FMLPaths;
 
 /**
  * Dumps the generator's raw FMG-projected heightfield (the height BEFORE any
@@ -40,7 +40,7 @@ public final class HeightmapExport {
     public static Path outputDir() {
         Path base;
         try {
-            base = FabricLoader.getInstance().getGameDir();
+            base = FMLPaths.GAMEDIR.get();
         } catch (Throwable t) {
             base = Path.of(".");
         }

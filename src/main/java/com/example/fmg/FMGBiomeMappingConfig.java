@@ -20,7 +20,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
-import net.fabricmc.loader.api.FabricLoader;
+import net.neoforged.fml.loading.FMLPaths;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.util.Identifier;
@@ -57,10 +57,10 @@ final class FMGBiomeMappingConfig {
 
         Path configPath;
         try {
-            configPath = FabricLoader.getInstance().getConfigDir().resolve(CONFIG_RELATIVE_PATH).normalize();
+            configPath = FMLPaths.CONFIGDIR.get().resolve(CONFIG_RELATIVE_PATH).normalize();
         } catch (Throwable t) {
             // In case this code is ever executed outside a Fabric runtime.
-            LOGGER.warn("FabricLoader config dir unavailable; using built-in biome mappings", t);
+            LOGGER.warn("config dir unavailable; using built-in biome mappings", t);
             return toRegistryKeys(defaults);
         }
 

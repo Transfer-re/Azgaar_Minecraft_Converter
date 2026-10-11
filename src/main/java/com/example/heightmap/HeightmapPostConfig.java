@@ -13,7 +13,7 @@ import org.slf4j.LoggerFactory;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import net.fabricmc.loader.api.FabricLoader;
+import net.neoforged.fml.loading.FMLPaths;
 
 /**
  * Tunables for the FMG generator's terrain post-processing:
@@ -201,7 +201,7 @@ public final class HeightmapPostConfig {
         HeightmapPostConfig defaults = new HeightmapPostConfig();
         Path path;
         try {
-            path = FabricLoader.getInstance().getConfigDir().resolve(RELATIVE_PATH).normalize();
+            path = FMLPaths.CONFIGDIR.get().resolve(RELATIVE_PATH).normalize();
         } catch (Throwable t) {
             LOGGER.warn("config dir unavailable; using built-in heightmap defaults", t);
             return defaults;
