@@ -3,6 +3,7 @@ package com.example.worldmap.runtime;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -62,7 +63,21 @@ public final class FMGMapDataCache {
         if (localCopy != null && Files.isRegularFile(source)) {
             try {
                 Files.createDirectories(fmgDir);
-                Files.copy(source, localCopy);
+                // copy under a temporary name and move it in whole: other threads
+                // (the bake signature, worldgen workers) take map.json as complete
+                // as soon as it exists
+                Path partial = Files.createTempFile(fmgDir, "map", ".json.part");
+                try {
+                    Files.copy(source, partial, StandardCopyOption.REPLACE_EXISTING);
+                    Files.move(partial, localCopy, StandardCopyOption.ATOMIC_MOVE);
+                } catch (IOException ex) {
+                    if (!Files.isRegularFile(localCopy)) {
+                        throw ex;
+                    }
+                    // another thread moved its identical copy in first
+                } finally {
+                    Files.deleteIfExists(partial);
+                }
                 LOGGER.info("Copied FMG export into world folder: {}", localCopy);
                 return localCopy.normalize();
             } catch (IOException ex) {
