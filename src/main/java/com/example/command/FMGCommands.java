@@ -17,6 +17,7 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.DoubleArgumentType;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
+import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
@@ -39,21 +40,16 @@ public class FMGCommands {
         });
     }
 
+    /**
+     * {@code /fmg town} (the settlement layout painter) is a work in progress:
+     * its code stays and compiles, but players can't run it until this is on.
+     */
+    private static final boolean TOWN_COMMAND = false;
+
     private static void registerCommands(CommandDispatcher<ServerCommandSource> dispatcher) {
-        dispatcher.register(literal("fmg")
+        LiteralArgumentBuilder<ServerCommandSource> fmg = literal("fmg")
             .then(literal("info")
                 .executes(FMGCommands::showInfo))
-            .then(literal("town")
-                .requires(src -> src.hasPermissionLevel(2))
-                .then(literal("legend")
-                    .executes(FMGCommands::townLegend))
-                .then(literal("clear")
-                    .executes(FMGCommands::townClear))
-                .then(literal("paint")
-                    .then(argument("townRadius", DoubleArgumentType.doubleArg(4.0, 512.0))
-                        .executes(ctx -> townPaint(ctx, ""))
-                        .then(argument("options", StringArgumentType.greedyString())
-                            .executes(ctx -> townPaint(ctx, StringArgumentType.getString(ctx, "options")))))))
             .then(literal("heightmap")
                 .requires(src -> src.hasPermissionLevel(2))
                 .then(argument("radius", IntegerArgumentType.integer(16, 4096))
@@ -82,14 +78,31 @@ public class FMGCommands {
                 .then(literal("province").executes(ctx -> toggleBorders(ctx, BorderMode.PROVINCE)))
                 .then(literal("state").executes(ctx -> toggleBorders(ctx, BorderMode.STATE)))
                 .then(literal("off").executes(ctx -> setBorders(ctx, BorderMode.OFF)))
-            )
-        );
+            );
+        if (TOWN_COMMAND) {
+            fmg.then(townCommand());
+        }
+        dispatcher.register(fmg);
     }
 
     // ===================================================================
     // /fmg town -- sample the world around the player, run the settlement
     // generator over it, and paint the layout in wool
     // ===================================================================
+
+    private static LiteralArgumentBuilder<ServerCommandSource> townCommand() {
+        return literal("town")
+            .requires(src -> src.hasPermissionLevel(2))
+            .then(literal("legend")
+                .executes(FMGCommands::townLegend))
+            .then(literal("clear")
+                .executes(FMGCommands::townClear))
+            .then(literal("paint")
+                .then(argument("townRadius", DoubleArgumentType.doubleArg(4.0, 512.0))
+                    .executes(ctx -> townPaint(ctx, ""))
+                    .then(argument("options", StringArgumentType.greedyString())
+                        .executes(ctx -> townPaint(ctx, StringArgumentType.getString(ctx, "options"))))));
+    }
 
     private static int townPaint(CommandContext<ServerCommandSource> context, String rawOptions) {
         ServerCommandSource source = context.getSource();
