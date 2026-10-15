@@ -27,7 +27,7 @@ batch with any keepers places only those.
 
 | Where (under `src/main/resources/data/fantasymapgenerator/`) | What | In git |
 |---|---|---|
-| `structures/treegen/<preset>/<name>.nbt` | 4,560 objects, air left out (21 MB) | **no** -- generated, gitignored |
+| `structures/treegen/<preset>/<name>.nbt` | 4,560 objects, air left out (21 MB) | yes -- generated, but committed so every checkout builds a jar with trees (the build stops if they are missing) |
 | `worldgen/configured_feature/treegen/preset/<preset>.json` | one per preset: its objects (template, size, paste point, radii) and where it may stand | yes |
 | `worldgen/configured_feature/treegen/<biome>/<layer>.json` | one per biome and layer: presets, weights, sizes, spacing | yes |
 | `worldgen/placed_feature/treegen/<biome>/<layer>.json` | `count`, `in_square`, `surface_water_depth_filter`, `heightmap OCEAN_FLOOR`, `biome`, as vanilla's `trees_plains` | yes |

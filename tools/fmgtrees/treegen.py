@@ -12,9 +12,9 @@ sizes), and writes under src/main/resources/data/fantasymapgenerator/:
     structures/treegen/<preset>/<name>.nbt
         One structure file per schematic, air left out, so a placement only ever
         writes the object's own blocks -- the same thing `//paste -a` does.
-        GENERATED and gitignored: thousands of files, rebuilt whenever the
-        generator runs. A checkout without them still loads, it just places
-        nothing (the feature logs which templates it could not find, once).
+        GENERATED, and committed: a jar without them still loads but places
+        no trees (the feature logs which templates it could not find, once),
+        so the Gradle build refuses to run when this folder is empty.
 
     worldgen/configured_feature/treegen/preset/<preset>.json
         One `fantasymapgenerator:treegen_object` per preset: its objects (template,

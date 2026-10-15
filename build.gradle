@@ -80,6 +80,16 @@ processResources {
 	filesMatching("fabric.mod.json") {
 		expand "version": inputs.properties.version
 	}
+
+	// The Conquest trees are structure files that tools/fmgtrees/treegen.py
+	// generates from TreeGenerator. A jar without them still loads but places no
+	// trees at all, so refuse to build one.
+	def trees = file("src/main/resources/data/fantasymapgenerator/structures/treegen")
+	doFirst {
+		if (fileTree(trees).matching { include "**/*.nbt" }.isEmpty()) {
+			throw new GradleException("No tree structures in ${trees}: run tools/fmgtrees/treegen.py first")
+		}
+	}
 }
 
 tasks.withType(JavaCompile).configureEach {
