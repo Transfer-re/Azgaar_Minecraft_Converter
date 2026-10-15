@@ -45,7 +45,7 @@ An FMG map (zoomable), and two more map examples:
 - **Region titles.** Entering another state or province shows its name on screen; `/fmg borders` shows the borders as walls.
 - **Caves**: vanilla 1.18-style noise caves under the map terrain.
 - **Self-contained worlds.** The map JSON is copied into the world folder, and the terrain, rivers, roads and biomes are prepared ("baked") once, on the first load.
-- **Export to a vanilla save** (`/fmg export`), for WorldPainter, Amulet, or playing without the mod.
+- **For WorldPainter and other editors**: `/fmg export` turns an area into a plain vanilla save that opens without the mod, and `/fmg heightmap` writes the terrain as a heightmap image.
 
 ## Setting up a client (singleplayer)
 
@@ -115,9 +115,8 @@ chunky start
 |---|---|---|
 | `/fmg borders [province\|state\|off]` | everyone | Shows the borders of the province (default) or state you are in as walls, or hides them. Needs the mod on the client. |
 | `/fmg biome report [step]` | op | Counts the biomes the map produces and checks the guaranteed rare biomes. |
-| `/fmg export <name> [radius] [generate]` | op | Copies the area around you (default radius 1024 blocks) into a standalone vanilla save `saves/<name>/`. Only chunks that already exist are copied; `generate` generates the missing ones first, which freezes the server while it runs. |
-| `/fmg heightmap <radius> [name]` | op | Writes the terrain around you to `fmg_heightmaps/` in the game folder (an `.fmgh` heightfield plus height and hillshade PNGs), for the terrain tools. |
-| `/fmg town paint <radius> [options]` | op | Debug: lays out a settlement around you and paints its plan in wool. `/fmg town legend` lists the colours and options, `/fmg town clear` removes the paint. |
+| `/fmg export <name> [radius] [generate]` | op | **For WorldPainter, Amulet and other world editors**, which can't open an FMG world: copies the area within `radius` blocks of you (default 1024) into a standalone vanilla save, `saves/<name>/`, that opens without the mod. Only chunks that already exist are copied; add `generate` to generate the missing ones first (this freezes the server while it runs). |
+| `/fmg heightmap <radius> [name]` | op | **For WorldPainter and other terrain tools**: writes the terrain within `radius` blocks of you to `fmg_heightmaps/` in the game folder: `<name>.height.png`, a 16-bit grayscale heightmap to import (black is the lowest and white the highest Y, both printed by the command), a hillshade preview and an `.fmgh` heightfield. |
 
 ## Configuration
 
