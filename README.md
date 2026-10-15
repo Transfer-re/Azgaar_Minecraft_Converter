@@ -70,7 +70,7 @@ An FMG map (zoomable), and two more map examples:
 - **Caves**: vanilla 1.18-style noise caves under the map terrain.
 - **Conquest Reforged content** (when Conquest Reforged is installed): 29 Conquest biomes, ground built from Conquest layer blocks that blends between biomes, the project's own TreeGenerator trees, Conquest sky and fog colours in FMG worlds, and vanilla and modded structures that also spawn in the Conquest biomes.
 - **Self-contained worlds.** The map JSON is copied into the world folder, and the terrain, rivers, roads and biomes are prepared ("baked") once, on the first load.
-- **Export to a vanilla save** (`/fmg export`), for WorldPainter, Amulet, or playing without the mod.
+- **For WorldPainter and other editors**: `/fmg export` turns an area into a plain vanilla save that opens without the mod, and `/fmg heightmap` writes the terrain as a heightmap image.
 
 ## Setting up a client (singleplayer)
 
@@ -141,9 +141,8 @@ chunky start
 |---|---|---|
 | `/fmg borders [province\|state\|off]` | everyone | Shows the borders of the province (default) or state you are in as walls, or hides them. Needs the mod on the client. |
 | `/fmg biome report [step]` | op | Counts the biomes the map produces and checks the guaranteed rare biomes. |
-| `/fmg export <name> [radius] [generate]` | op | Copies the area around you (default radius 1024 blocks) into a standalone vanilla save `saves/<name>/`. Only chunks that already exist are copied; `generate` generates the missing ones first, which freezes the server while it runs. |
-| `/fmg heightmap <radius> [name]` | op | Writes the terrain around you to `fmg_heightmaps/` in the game folder (an `.fmgh` heightfield plus height and hillshade PNGs), for the terrain tools. |
-| `/fmg town paint <radius> [options]` | op | Debug: lays out a settlement around you and paints its plan in wool. `/fmg town legend` lists the colours and options, `/fmg town clear` removes the paint. |
+| `/fmg export <name> [radius] [generate]` | op | **For WorldPainter, Amulet and other world editors**, which can't open an FMG world: copies the area within `radius` blocks of you (default 1024) into a standalone vanilla save, `saves/<name>/`, that opens without the mod. Only chunks that already exist are copied; add `generate` to generate the missing ones first (this freezes the server while it runs). |
+| `/fmg heightmap <radius> [name]` | op | **For WorldPainter and other terrain tools**: writes the terrain within `radius` blocks of you to `fmg_heightmaps/` in the game folder: `<name>.height.png`, a 16-bit grayscale heightmap to import (black is the lowest and white the highest Y, both printed by the command), a hillshade preview and an `.fmgh` heightfield. |
 | `/fmg trees stats` / `reset` | op | Tree placement statistics per biome layer (placed, refused and why), and resetting them. |
 
 ## Configuration
@@ -174,42 +173,14 @@ Changing `heightmap.json` or a profile makes worlds that use them prepare their 
 
 - Needs JDK 17. `gradlew build` writes the mod to `build/libs/fantasymapgenerator-1.0.0.jar`.
 - `gradlew runClient` and `gradlew runServer` start a development game. Their run folders are `../runs/fabric-1.20.1` and `../runs/fabric-1.20.1-server`, next to the repository rather than inside it.
-- **The Conquest trees are generated, not stored in git.** `tools/fmgtrees/treegen.py` builds `src/main/resources/data/fantasymapgenerator/structures/treegen/` from the TreeGenerator output (see `docs/conquest/trees.md`). A jar built without them places no Conquest trees.
+- The Conquest trees are structure files in `src/main/resources/data/fantasymapgenerator/structures/treegen/`, generated from TreeGenerator by `tools/fmgtrees/treegen.py` (see `docs/conquest/trees.md`) and committed. The build stops if that folder is empty, so a jar can't end up without trees.
 
 ## Credits
 
-The Conquest Reforged content variant is built on other people's work. Worldgen places this project's own trees, made with TreeGenerator; earlier versions used the tree packs below, converted locally to Conquest blocks. **None of them is redistributed in this repository**, and nothing third-party ends up in the jar. If you want any of these assets, get them from the original author.
-
-### Tree models
-
-| Pack | Author | Where |
-|---|---|---|
-| Regional tree packs (Africa, eastern North America, temperate Asia, South and Southeast Asia, South America, Florida/Caribbean) -- 1272 schematics | **paleozoey** | [profile](https://www.planetminecraft.com/member/paleozoey/), bundled with [Arnis](https://github.com/louis-e/arnis) by louis-e (Apache-2.0) |
-| QF Tree Repository -- 874 WorldEdit schematics, already built from Conquest blocks | **quitefrank_ly** | [profile](https://www.planetminecraft.com/member/quitefrank_ly) / [project](https://www.planetminecraft.com/project/conquest-reforged-larch-tree-bundle/) |
-| Axiom blueprint tree pack -- 440 blueprints, 30 species | **squarishbinkie** | credited in the blueprint `Author` field |
-| Ultimate Bush and Shrubs Pack for Conquest Reforged | see project page | [project](https://www.planetminecraft.com/project/ultimate-bush-and-shrubs-pack-for-conquest-reforged/) |
-
-**The QF Tree Repository readme asks specifically**, and it is worth repeating in full:
-
-> Feel free to use this for any of your projects, but make sure to provide a
-> link back to this page or my profile. Do not redistribute, but instead provide
-> a link to this page or my profile. Do not use for commercial purposes.
->
-> -- quitefrank_ly
-
-That is why the converted trees never went into `src/main/resources` or git. The same courtesy is extended to the other three packs.
-
-### Blocks and textures
-
-- **[Conquest Reforged](https://www.conquestreforged.com/)** -- the block set the Conquest content is built from. Mod id `conquest`.
-- **ACRP (ArdaCraft Resource Pack)** -- the vanilla-block textures the converted trees assume, by the [ArdaCraft](https://ardacraft.me/) team.
-
-### The map generator itself
-
 - **[Azgaar's Fantasy Map Generator](https://azgaar.github.io/Fantasy-Map-Generator/)** by Azgaar -- the map format this mod reads, and the reason it exists.
-
-The artistry in those tree models is entirely the authors' above.
+- **[Conquest Reforged](https://www.conquestreforged.com/)** -- the block set the Conquest content is built from (mod id `conquest`). It is not included in this mod; install it separately.
+- **The trees** are this project's own, built from Conquest Reforged blocks with TreeGenerator, the author's tree generator.
 
 ## License
 
-See `LICENSE`. This covers the code in this repository only -- the tree packs, Conquest Reforged and ACRP are each under their own terms, listed under **Credits**.
+See `LICENSE`. Conquest Reforged is under its own terms.
