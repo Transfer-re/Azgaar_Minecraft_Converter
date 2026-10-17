@@ -3,13 +3,13 @@
 	"id": "fantasymapgenerator",
 	"version": "${version}",
 	"name": "FantasyMapGenerator",
-	"description": "This is an example description! Tell everyone what your mod is about!",
+	"description": "Generates the overworld from an Azgaar's Fantasy Map Generator JSON export.",
 	"authors": [
-		"Me!"
+		"transferre"
 	],
 	"contact": {
-		"homepage": "https://fabricmc.net/",
-		"sources": "https://github.com/FabricMC/fabric-example-mod"
+		"homepage": "https://github.com/Transfer-re/Azgaar_Minecraft_Converter",
+		"sources": "https://github.com/Transfer-re/Azgaar_Minecraft_Converter"
 	},
 	"license": "CC0-1.0",
 	"icon": "assets/fantasymapgenerator/icon.png",
