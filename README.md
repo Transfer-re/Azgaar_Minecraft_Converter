@@ -171,7 +171,7 @@ Changing `heightmap.json` or a profile makes worlds that use them prepare their 
 
 ## Building from source
 
-- Needs JDK 17. `gradlew build` writes the mod to `build/libs/fantasymapgenerator-1.0.0.jar`.
+- Needs JDK 17. `gradlew build` writes the mod to `build/libs/fantasymapgenerator-1.1.0.jar`.
 - `gradlew runClient` and `gradlew runServer` start a development game. Their run folders are `../runs/forge-1.20.1` and `../runs/forge-1.20.1-server`, next to the repository rather than inside it.
 - The source uses Yarn names like the Fabric branches; it is built with [Architectury Loom](https://github.com/architectury/architectury-loom). Only the loader glue (events, registration, networking) differs from `fabric-1.20.1`, so changes carry over by cherry-picking.
 - Development runs pull Conquest Reforged and the Forgified Fabric API it bundles from Modrinth and Sinytra's maven (`modLocalRuntime` in `build.gradle`), because Forge development runs do not load jars dropped into `mods/`.
