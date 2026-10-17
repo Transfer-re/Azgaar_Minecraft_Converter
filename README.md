@@ -142,7 +142,7 @@ Changing `heightmap.json` or a profile makes worlds that use them prepare their 
 
 ## Building from source
 
-- Needs JDK 21. `gradlew build` writes the mod to `build/libs/fantasymapgenerator-1.0.0.jar`.
+- Needs JDK 21. `gradlew build` writes the mod to `build/libs/fantasymapgenerator-1.1.0.jar`.
 - `gradlew runClient` and `gradlew runServer` start a development game. Their run folders are `../runs/neoforge-1.21.1` and `../runs/neoforge-1.21.1-server`, next to the repository rather than inside it.
 - The source uses Yarn names like the Fabric branches; it is built with [Architectury Loom](https://github.com/architectury/architectury-loom). Only the loader glue (events, registration, networking) differs from `fabric-1.21.1`, so changes carry over by cherry-picking.
 

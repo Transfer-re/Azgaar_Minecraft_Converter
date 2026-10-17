@@ -6,7 +6,7 @@ license = "CC0-1.0"
 modId = "fantasymapgenerator"
 version = "${version}"
 displayName = "FantasyMapGenerator"
-authors = "Me!"
+authors = "transferre"
 description = '''Generates the overworld from an Azgaar's Fantasy Map Generator JSON export.'''
 logoFile = "assets/fantasymapgenerator/icon.png"
 
