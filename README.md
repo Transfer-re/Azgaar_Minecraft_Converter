@@ -171,7 +171,7 @@ Changing `heightmap.json` or a profile makes worlds that use them prepare their 
 
 ## Building from source
 
-- Needs JDK 17. `gradlew build` writes the mod to `build/libs/fantasymapgenerator-1.0.0.jar`.
+- Needs JDK 17. `gradlew build` writes the mod to `build/libs/fantasymapgenerator-1.1.0.jar`.
 - `gradlew runClient` and `gradlew runServer` start a development game. Their run folders are `../runs/fabric-1.20.1` and `../runs/fabric-1.20.1-server`, next to the repository rather than inside it.
 - The Conquest trees are structure files in `src/main/resources/data/fantasymapgenerator/structures/treegen/`, generated from TreeGenerator by `tools/fmgtrees/treegen.py` (see `docs/conquest/trees.md`) and committed. The build stops if that folder is empty, so a jar can't end up without trees.
 
